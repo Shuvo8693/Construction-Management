@@ -1,0 +1,138 @@
+import 'package:chat_bubbles/bubbles/bubble_normal_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:charteur/core/helpers/time_format.dart';
+import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/services/api_urls.dart';
+
+
+class ChatBubbleMessage extends StatelessWidget {
+  final String time;
+  final String? text;
+  final List<String>? images;
+  final bool isSeen;
+  final bool isMe;
+  final String status;
+  final String? profileImage;
+
+  const ChatBubbleMessage({
+    super.key,
+    required this.time,
+    this.text,
+    this.images,
+    required this.isMe,
+    this.isSeen = false,
+    this.status = 'offline', this.profileImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+      child: Column(
+        crossAxisAlignment:
+        isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              if(!isMe)
+                CustomImageAvatar(
+                  image: profileImage,
+                  right: 8.w,
+                  radius: 15.r,
+                ),
+              Flexible(
+                child: CustomContainer(
+                  paddingAll: 10.r,
+                  color: isMe ? const Color(0xff666978) : const Color(0xffE8E9EB),
+                  bottomRight: 10.r,
+                  bottomLeft: 10.r,
+                  topLeftRadius: isMe ? 10.r : 0,
+                  topRightRadius: !isMe ? 10.r : 0,
+                  child: _buildMessageContent(),
+                ),
+              ),
+            ],
+          ),
+          //SizedBox(height: 3.h),
+          Row(
+            mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              CustomText(
+                top: 3.h,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w400,
+                text: TimeFormatHelper.timeFormat(time),
+                left: isMe ? 0 : 44.w,
+                right: isMe ? 10.w : 0,
+                color: AppColors.appGreyColor,
+              ),
+             // SizedBox(width: 4.w),
+             // _buildMessageStatusIcon(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageContent() {
+    if (text?.isNotEmpty == true) {
+      return CustomText(
+        maxline: 10,
+        fontSize: 12.sp,
+        textAlign: TextAlign.left,
+        fontWeight: FontWeight.w400,
+        color: isMe ? Colors.white : Colors.grey.shade800,
+        text: text!,
+      );
+    } else if (images != null && images!.isNotEmpty) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: images!.map((url) {
+            return Padding(
+              padding: EdgeInsets.only(right: 5.h),
+              child: SizedBox(
+                width: 188.w,
+                child: BubbleNormalImage(
+                  id: url ?? '',
+                  image: CustomNetworkImage(imageUrl:
+                    url,
+                    fit: BoxFit.cover,
+                   // errorBuilder: (context, error, stackTrace) => Icon(Icons.broken_image),
+                   //  loadingBuilder: (context, child, loadingProgress) {
+                   //    if (loadingProgress == null) return child;
+                   //    return Center(child: CircularProgressIndicator());
+                   //  },
+                  ),
+                  color: Colors.transparent,
+                  tail: true,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+    return const SizedBox(); // If neither text nor image, return empty
+  }
+
+  // Widget _buildMessageStatusIcon() {
+  //   if (!isMe) return const SizedBox(); // No icon for received messages
+  //
+  //   if (isSeen) {
+  //     return Icon(Icons.done_all, size: 10.r, color: Colors.green); // Seen
+  //   }
+  //   else if (status == 'online') {
+  //     return Icon(Icons.done_all, size: 10.r, color: Colors.grey); // Delivered
+  //   } else {
+  //     return Icon(Icons.done_all, size: 10.r, color: Colors.grey); // Sent
+  //   }
+  // }
+}
