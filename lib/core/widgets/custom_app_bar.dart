@@ -44,7 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       elevation: 0,
       automaticallyImplyLeading: false,
-      backgroundColor: backgroundColor ?? Colors.white,
+      backgroundColor: backgroundColor ?? AppColors.bgColor,
       foregroundColor: Colors.white,
       scrolledUnderElevation: 0,
       flexibleSpace: flexibleSpace,
@@ -52,7 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ((showLeading && (parentRoute?.canPop ?? false))
               ? IconButton(
             icon:  Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
               size: 24.sp,
               color: Colors.black,
             ),

@@ -26,26 +26,26 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: 'Reset Password',),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         child: Form(
           key: _globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 24.h),
-              AuthTitleWidgets(title: 'Password  must have 8 characters.'),
-              SizedBox(height: 56.h),
+              SizedBox(height: 100.h),
+              AuthTitleWidgets(),
+              SizedBox(height: 70.h),
         
               CustomTextField(
-                //prefixIcon: Assets.icons.password.svg(),
+                prefixIcon: Assets.icons.lock.svg(),
                 controller: passController,
                 hintText: "New Password",
                 isPassword: true,
               ),
 
               CustomTextField(
-                //prefixIcon: Assets.icons.password.svg(),
+                prefixIcon: Assets.icons.lock.svg(),
                 controller: confirmPassController,
                 hintText: "Confirm Password",
                 isPassword: true,
@@ -78,7 +78,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void _onResetPassword()async{
     if(!_globalKey.currentState!.validate()) return;
-
+    context.router.popUntilRoot();
   }
 
 }

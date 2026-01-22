@@ -17,18 +17,34 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/email.svg
+  SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
+
+  /// File path: assets/icons/lock.svg
+  SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
+
   /// File path: assets/icons/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
 
   /// File path: assets/icons/person.svg
   SvgGenImage get person => const SvgGenImage('assets/icons/person.svg');
 
+  /// File path: assets/icons/phone.svg
+  SvgGenImage get phone => const SvgGenImage('assets/icons/phone.svg');
+
   /// File path: assets/icons/slpash_logo.svg
   SvgGenImage get slpashLogo =>
       const SvgGenImage('assets/icons/slpash_logo.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [logo, person, slpashLogo];
+  List<SvgGenImage> get values => [
+    email,
+    lock,
+    logo,
+    person,
+    phone,
+    slpashLogo,
+  ];
 }
 
 class $AssetsImagesGen {

@@ -164,10 +164,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               contentPadding: EdgeInsets.symmetric(
                   horizontal: widget.contentPaddingHorizontal ?? 20.w,
                   vertical: widget.contentPaddingVertical ?? 12.h),
-              fillColor: widget.filColor ?? Colors.transparent,
+              fillColor: widget.filColor ?? Colors.white,
               filled: true,
               prefixIcon: widget.prefixIcon != null ? Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 16.w),
+                padding:  EdgeInsets.only(left: 16.w,right: 8.w),
                 child: widget.prefixIcon,
               ) : null,
               suffixIcon: widget.isPassword
@@ -201,12 +201,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   _suffixIcon(IconData icon) {
     return Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Icon(icon, color: AppColors.appGreyColor));
+        child: Icon(icon , color: AppColors.appGreyColor, size: 20.sp,));
   }
 
   OutlineInputBorder focusedBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 8.r),
+      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 4.r),
       borderSide: BorderSide(
           width: 0.8, color: widget.borderColor ?? AppColors.grayShade100),
     );
@@ -214,7 +214,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   OutlineInputBorder enabledBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 8.r),
+      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 4.r),
       borderSide: BorderSide(
           width: 1, color: widget.borderColor ?? AppColors.grayShade100),
     );
@@ -222,7 +222,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   OutlineInputBorder errorBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 8.r),
+      borderRadius: BorderRadius.circular(widget.borderRadio?.r ?? 4.r),
       borderSide:
           BorderSide(color: widget.borderColor ?? Colors.red, width: 1),
     );

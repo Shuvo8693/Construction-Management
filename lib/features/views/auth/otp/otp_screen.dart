@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -23,15 +24,16 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: 'Verify'),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 24.h),
+            SizedBox(height: 50.h),
 
-            AuthTitleWidgets(title: 'Please enter the verification code sent to your e-mail'),
-            SizedBox(height: 44.h),
+            AuthTitleWidgets(title: 'Enter verification Code',
+            subtitle: 'Please enter the 6-digit verification code sent to your email'),
+            SizedBox(height: 50.h),
 
             ///==============Pin code Field============<>>>>
 
@@ -41,13 +43,24 @@ class _OtpScreenState extends State<OtpScreen> {
                   textEditingController: otpController),
             ),
 
+            SizedBox(height: 24.h),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(child: CustomText(
                   textAlign: TextAlign.start,
-                  text: 'Didn’t get the code?',top: 10.h,)),
+                  text: 'Didn’t get the code?',)),
+                InkWell(
+                  onTap: () {
+                    // Resend OTP logic here
+                  },
+                  child: CustomText(
+                    textAlign: TextAlign.end,
+                    text: 'Resend',
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),                ),
 
               ],
             ),
@@ -65,7 +78,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _onTapNextScreen()async {
-    if (!_globalKey.currentState!.validate()) return;
-
+    if (_globalKey.currentState!.validate()) return;
+    context.router.push(const ResetPasswordRoute());
   }
 }

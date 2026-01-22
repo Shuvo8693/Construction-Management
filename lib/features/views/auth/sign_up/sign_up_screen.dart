@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -27,31 +28,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: CustomAppBar(title: 'Sign Up'),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Form(
           key: _globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 20.h),
-              AuthTitleWidgets(title: 'Make sure your account keep secure'),
-              SizedBox(height: 16.h),
+              SizedBox(height: 44.h),
+              AuthTitleWidgets(),
+              SizedBox(height: 82.h),
               CustomTextField(
-                //prefixIcon: Assets.icons.person.svg(),
+                prefixIcon: Assets.icons.person.svg(),
                 controller: nameController,
                 hintText: "Name",
                 keyboardType: TextInputType.text,
               ),
               CustomTextField(
-                //prefixIcon: Assets.icons.number.svg(),
+                prefixIcon: Assets.icons.phone.svg(),
                 controller: numberController,
                 hintText: "number",
                 keyboardType: TextInputType.number,
               ),
 
               CustomTextField(
-                //prefixIcon: Assets.icons.email.svg(),
+                prefixIcon: Assets.icons.email.svg(),
                 controller: emailController,
                 hintText: "E-mail",
                 keyboardType: TextInputType.emailAddress,
@@ -60,13 +61,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
 
               CustomTextField(
-               // prefixIcon: Assets.icons.password.svg(),
+               prefixIcon: Assets.icons.lock.svg(),
                 controller: passwordController,
                 hintText: "Password",
                 isPassword: true,
               ),
               CustomTextField(
-                //prefixIcon: Assets.icons.password.svg(),
+                prefixIcon: Assets.icons.lock.svg(),
                 controller: confirmPasswordController,
                 hintText: "Confirm Password",
                 isPassword: true,
@@ -99,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       recognizer:
                           TapGestureRecognizer()
                             ..onTap = () {
-
+                        context.router.pop();
                             },
                     ),
                   ],

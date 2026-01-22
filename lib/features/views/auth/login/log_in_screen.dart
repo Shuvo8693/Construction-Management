@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:charteur/assets/assets.gen.dart';
+import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -21,19 +23,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: CustomAppBar(title: 'Sign In'),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Form(
           key: _globalKey,
           child: Column(
             children: [
-              SizedBox(height: 24.h),
-              AuthTitleWidgets(
-                title: 'Make sure that you already have an account.',
-              ),
-              SizedBox(height: 24.h),
+              SizedBox(height: 100.h),
+              AuthTitleWidgets(),
+              SizedBox(height: 82.h),
               CustomTextField(
-                //prefixIcon: Assets.icons.email.svg(),
+                prefixIcon: Assets.icons.email.svg(),
                 controller: emailController,
                 hintText: "Email",
                 keyboardType: TextInputType.emailAddress,
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               CustomTextField(
-                //prefixIcon: Assets.icons.password.svg(),
+                prefixIcon: Assets.icons.lock.svg(),
                 controller: passwordController,
                 hintText: "Password",
                 isPassword: true,
@@ -50,11 +50,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
+                    context.router.push(const ForgetRoute());
                   },
                   child: CustomText(text: "Forgot Password",decoration: TextDecoration.underline,),
                 ),
               ),
-              SizedBox(height: 111.h),
+              SizedBox(height: 32.h),
               CustomButton(label: "Sign In", onPressed: _onLogin),
               SizedBox(height: 18.h),
               RichText(text: TextSpan(
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       text: ' Sign Up',
                       recognizer: TapGestureRecognizer()..onTap = (){
-
+                        context.router.push(const SignUpRoute());
                       }
                   )
                 ]

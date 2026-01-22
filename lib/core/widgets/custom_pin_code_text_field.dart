@@ -26,17 +26,17 @@ class CustomPinCodeTextField extends StatelessWidget {
               return null;
             },
         focusNode: focusNode,
-
         controller: textEditingController,
         length: 6,
         defaultPinTheme: PinTheme(
+
           width: 46.w,
           height: 46.h,
           textStyle: TextStyle(color: AppColors.darkColor, fontSize: 16.sp),
           decoration: BoxDecoration(
             //shape: BoxShape.circle,
-            color: AppColors.bgColor,
-            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
             border: Border.all(color: AppColors.grayShade100),
           ),
         ),
@@ -45,10 +45,24 @@ class CustomPinCodeTextField extends StatelessWidget {
           height: 46.h,
           textStyle: const TextStyle(color: AppColors.darkColor, fontSize: 20),
           decoration: BoxDecoration(
+
             //shape: BoxShape.circle,
-            color: AppColors.bgColor,
+            color: Colors.white,
            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.grayShade100),
+            border: Border.all(color: Color(0xff797B7F)),
+          ),
+        ),
+
+        submittedPinTheme: PinTheme(
+          width: 46.w,
+          height: 46.h,
+          textStyle: const TextStyle(color: AppColors.darkColor, fontSize: 20),
+          decoration: BoxDecoration(
+
+            //shape: BoxShape.circle,
+            color: Colors.white,
+           borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.primaryColor),
           ),
         ),
         cursor: Column(
@@ -62,9 +76,9 @@ class CustomPinCodeTextField extends StatelessWidget {
           ],
         ),
         keyboardType: TextInputType.number,
-        //obscureText: true,
         autofocus: true,
         onChanged: (value) {},
-        obscuringCharacter: '-');
+        obscuringCharacter: '-'
+    );
   }
 }
