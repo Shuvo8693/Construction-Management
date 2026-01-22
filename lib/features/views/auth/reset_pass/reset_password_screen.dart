@@ -77,7 +77,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
 
   void _onResetPassword()async{
-    if(!_globalKey.currentState!.validate()) return;
+    if(_globalKey.currentState!.validate()) return;
     context.router.popUntilRoot();
   }
 
