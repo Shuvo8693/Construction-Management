@@ -14,9 +14,10 @@ class AppColors {
 
 
   /// solid colors
-  static const Color bgColor = Color(0xffF3EFEF);
-  static const Color primaryColor = Color(0xffEFBF04);
+  static const Color bgColor = Color(0xffF5F5F7);
+  static const Color primaryColor = Color(0xff117C6F);
   static const Color secondaryColor = Color(0xff305CDE);
+  static const Color textSecondary = Color(0xff454545);
   static const Color blue1 = Color(0xff59B5F7);
   static const Color grayShade100 = Color(0xffC0C0C0);
   static const Color appGreyColor = Color(0xff848484);
@@ -28,10 +29,10 @@ class AppColors {
   static const Color successColor = Color(0xff00A213);
   static const Color errorColor = Color(0xffF40000);
 
-  static List<Color> splashLinearColors = [
-    Color(0xffFFFFFF),
-    Color(0xffEAC75C).withOpacity(0.20),
 
+  static List<Color> onboardingLinear = [
+  const Color(0xffFFFFFF).withOpacity(0.6),
+  const Color(0xff117C6F).withOpacity(0.4),
   ];
 }
 
