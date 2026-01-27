@@ -11,6 +11,38 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AdminHomeScreen]
+class AdminHomeRoute extends PageRouteInfo<void> {
+  const AdminHomeRoute({List<PageRouteInfo>? children})
+    : super(AdminHomeRoute.name, initialChildren: children);
+
+  static const String name = 'AdminHomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AdminHomeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [BottomNavScreen]
+class BottomNavRoute extends PageRouteInfo<void> {
+  const BottomNavRoute({List<PageRouteInfo>? children})
+    : super(BottomNavRoute.name, initialChildren: children);
+
+  static const String name = 'BottomNavRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BottomNavScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ChangePasswordScreen]
 class ChangePasswordRoute extends PageRouteInfo<void> {
   const ChangePasswordRoute({List<PageRouteInfo>? children})
@@ -38,22 +70,6 @@ class ForgetRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ForgetScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [HomeScreen]
-class HomeRoute extends PageRouteInfo<void> {
-  const HomeRoute({List<PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
-
-  static const String name = 'HomeRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const HomeScreen();
     },
   );
 }
@@ -107,6 +123,22 @@ class OtpRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProfileScreen]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+    : super(ProfileRoute.name, initialChildren: children);
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ResetPasswordScreen]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
@@ -150,6 +182,38 @@ class SignUpRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const SignUpScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SiteAddScreen]
+class SiteAddRoute extends PageRouteInfo<void> {
+  const SiteAddRoute({List<PageRouteInfo>? children})
+    : super(SiteAddRoute.name, initialChildren: children);
+
+  static const String name = 'SiteAddRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SiteAddScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SitesScreen]
+class SitesRoute extends PageRouteInfo<void> {
+  const SitesRoute({List<PageRouteInfo>? children})
+    : super(SitesRoute.name, initialChildren: children);
+
+  static const String name = 'SitesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SitesScreen();
     },
   );
 }

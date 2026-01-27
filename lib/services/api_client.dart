@@ -8,7 +8,7 @@
 // import 'package:mime_type/mime_type.dart';
 //
 // import '../app/helpers/prefs_helper.dart';
-// import '../app/utils/app_constants.dart';
+// import '../app/provider/app_constants.dart';
 // import 'api_urls.dart';
 // import 'error_response.dart';
 // import 'logger.dart';

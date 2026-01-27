@@ -33,7 +33,7 @@ class CustomListTile extends StatelessWidget {
       //selectedColor: selectedColor,
      // selected: selectedColor != null ? true : false,
       contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingHorizontal ?? 6.h ,vertical: contentPaddingVertical ?? 0),
-      leading:  Stack(
+      leading:  image != null ? Stack(
         children: [
           CustomImageAvatar(
             radius: imageRadius.r,
@@ -49,21 +49,21 @@ class CustomListTile extends StatelessWidget {
                 color: Colors.white,
                   child: Icon(Icons.circle,color: activeColor,size: 12.r,))),
         ],
-      ),
+      ) : null,
       title: CustomText(
         color: titleColor,
         textAlign: TextAlign.left,
         text: title ?? '',
         fontSize: titleFontSize,
-        fontWeight:  FontWeight.w500,
+        fontWeight:  FontWeight.w400,
       ),
       subtitle: subTitle != null ? CustomText(
         left: 4,
         textAlign: TextAlign.left,
         text: subTitle ??'',
-        fontWeight:  FontWeight.w500,
+        fontWeight:  FontWeight.w400,
         fontSize: subtitleFontSize ?? 10.sp,
-        color: statusColor ?? AppColors.appGreyColor,
+        color: statusColor ?? AppColors.textPrimary,
       ) : null,
       trailing: trailing != null
           ? ConstrainedBox(

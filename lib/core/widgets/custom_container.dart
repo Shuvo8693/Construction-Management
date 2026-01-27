@@ -129,9 +129,9 @@ class CustomContainer extends StatelessWidget {
               (elevation
                   ? [
                       BoxShadow(
-                        color: elevationColor ?? Colors.black.withOpacity(0.06),
-                        blurRadius: 20,
-                        spreadRadius: 6,
+                        offset: Offset(0, 4),
+                        color: elevationColor ?? Colors.black.withAlpha(51),
+                        blurRadius: 4,
                       ),
                     ]
                   : null),

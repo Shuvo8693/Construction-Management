@@ -57,7 +57,7 @@ class CustomText extends StatelessWidget {
               fontSize: fontSize ?? 14.sp,
               //fontFamily: fontName ?? FontFamily.inter,
               fontWeight: fontWeight,
-              color: color ?? AppColors.darkColor),
+              color: color ?? AppColors.textPrimary),
         ),
       ),
     );

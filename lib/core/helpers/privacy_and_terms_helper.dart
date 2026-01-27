@@ -2,7 +2,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 //
-// import '../utils/app_colors.dart';
+// import '../provider/app_colors.dart';
 //
 // class PrivacyAndTermsHelper extends StatelessWidget {
 //   PrivacyAndTermsHelper({super.key});

@@ -17,8 +17,23 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/assing.svg
+  SvgGenImage get assing => const SvgGenImage('assets/icons/assing.svg');
+
+  /// File path: assets/icons/assing_f.svg
+  SvgGenImage get assingF => const SvgGenImage('assets/icons/assing_f.svg');
+
   /// File path: assets/icons/email.svg
   SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
+
+  /// File path: assets/icons/home.svg
+  SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
+
+  /// File path: assets/icons/home_f.svg
+  SvgGenImage get homeF => const SvgGenImage('assets/icons/home_f.svg');
+
+  /// File path: assets/icons/location.svg
+  SvgGenImage get location => const SvgGenImage('assets/icons/location.svg');
 
   /// File path: assets/icons/lock.svg
   SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
@@ -26,11 +41,24 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
 
+  /// File path: assets/icons/notification.svg
+  SvgGenImage get notification =>
+      const SvgGenImage('assets/icons/notification.svg');
+
   /// File path: assets/icons/person.svg
   SvgGenImage get person => const SvgGenImage('assets/icons/person.svg');
 
+  /// File path: assets/icons/person_f.svg
+  SvgGenImage get personF => const SvgGenImage('assets/icons/person_f.svg');
+
   /// File path: assets/icons/phone.svg
   SvgGenImage get phone => const SvgGenImage('assets/icons/phone.svg');
+
+  /// File path: assets/icons/plan.svg
+  SvgGenImage get plan => const SvgGenImage('assets/icons/plan.svg');
+
+  /// File path: assets/icons/plan_f.svg
+  SvgGenImage get planF => const SvgGenImage('assets/icons/plan_f.svg');
 
   /// File path: assets/icons/slpash_logo.svg
   SvgGenImage get slpashLogo =>
@@ -38,17 +66,30 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    assing,
+    assingF,
     email,
+    home,
+    homeF,
+    location,
     lock,
     logo,
+    notification,
     person,
+    personF,
     phone,
+    plan,
+    planF,
     slpashLogo,
   ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/get_start.png
+  AssetGenImage get getStart =>
+      const AssetGenImage('assets/images/get_start.png');
 
   /// File path: assets/images/onboarding_fast.png
   AssetGenImage get onboardingFast =>
@@ -68,6 +109,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<dynamic> get values => [
+    getStart,
     onboardingFast,
     onboardingLast,
     onboardingSecond,

@@ -69,8 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                           color: AppColors.primaryColor,
                       ),
-                      text: ' Sign Up',
-                      recognizer: TapGestureRecognizer()..onTap = (){
+                      text: ' Sign Up',                      recognizer: TapGestureRecognizer()..onTap = (){
                         context.router.push(const SignUpRoute());
                       }
                   )
@@ -86,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLogin() {
-    if (!_globalKey.currentState!.validate()) return;
+    if (_globalKey.currentState!.validate()) return;
+    context.router.replaceAll([BottomNavRoute()]);
   }
 }

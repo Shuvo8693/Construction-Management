@@ -100,9 +100,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           CustomText(
             text: widget.labelText ?? '',
             //fontName: FontFamily.inter,
-            color: AppColors.darkColor,
+            color: AppColors.textPrimary,
             bottom: 4.h,
-            fontSize: 14.sp,
+            fontSize: 12.sp,
             fontWeight: FontWeight.w500,
           ),
         SizedBox(
@@ -154,10 +154,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 return null;
               },
 
-          cursorColor: widget.cursorColor ?? AppColors.appGreyColor,
+          cursorColor: widget.cursorColor ?? AppColors.textPrimary,
           obscureText: widget.isPassword ? obscureText : false,
           style: TextStyle(
-              color: widget.hintextColor ?? AppColors.appGreyColor,
+              color: widget.hintextColor ?? AppColors.textPrimary,
               fontSize: widget.hintextSize ?? 12.h,
               fontFamily: widget.fontFamily),
           decoration: InputDecoration(
@@ -182,7 +182,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   BoxConstraints(minHeight: 24.w, minWidth: 24.w),
               hintText: widget.hintText,
               hintStyle: TextStyle(
-                  color: widget.hintextColor ?? AppColors.appGreyColor,
+                  color: widget.hintextColor ?? AppColors.textSecondary,
                   fontSize: widget.hintextSize ?? 12.h,
                   fontWeight: FontWeight.w400),
               focusedBorder: focusedBorder(),

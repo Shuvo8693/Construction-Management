@@ -17,6 +17,7 @@ class AppColors {
   static const Color bgColor = Color(0xffF5F5F7);
   static const Color primaryColor = Color(0xff117C6F);
   static const Color secondaryColor = Color(0xff305CDE);
+  static const Color textPrimary = Color(0xff161616);
   static const Color textSecondary = Color(0xff454545);
   static const Color blue1 = Color(0xff59B5F7);
   static const Color grayShade100 = Color(0xffFDFCFA);
@@ -31,8 +32,8 @@ class AppColors {
 
 
   static List<Color> onboardingLinear = [
-  const Color(0xffFFFFFF).withOpacity(0.6),
-  const Color(0xff117C6F).withOpacity(0.4),
+  const Color(0xffF5F5F7).withOpacity(0.4),
+  const Color(0xff117C6F).withOpacity(0.2),
   ];
 }
 
