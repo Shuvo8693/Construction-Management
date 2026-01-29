@@ -61,28 +61,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                _buildCustomListTile(title: 'Subscription', leadingIcon: Assets.icons.subscription.svg(), onTap: (){
                  context.router.push(const SubscriptionRoute());
                }),
-               _buildCustomListTile(title: 'Settings', leadingIcon: Assets.icons.settings.svg(), onTap: (){}),
-               _buildCustomListTile(title: 'Language', leadingIcon: Assets.icons.language.svg(), onTap: (){}),
+               _buildCustomListTile(title: 'Settings', leadingIcon: Assets.icons.settings.svg(), onTap: (){
+                  context.router.push(const SettingRoute());
+               }),
+               _buildCustomListTile(title: 'Language', leadingIcon: Assets.icons.language.svg(), onTap: (){
+                  context.router.push(const LanguageRoute());
+               }),
+
+
 
             ]
                ),
           ),
+
+          Spacer(),
+          _buildCustomListTile(title: 'Logout', leadingIcon: Assets.icons.logout.svg(),
+            color: AppColors.errorColor,
+            onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => CustomDialog(
+                title: "Do you want to logout your account?",
+                confirmButtonText: 'Logout',
+                confirmButtonColor: AppColors.errorColor,
+                onCancel: () {
+                },
+                onConfirm: () {
+                  //Get.offAllNamed(AppRoutes.signUpScreen);
+                },
+              ),
+            );
+          },
+          ),
+          SizedBox(height: 90.h),
         ],
       ),
     );
   }
 
-  Widget _buildCustomListTile({required String title, required Widget leadingIcon,required onTap}) {
+  Widget _buildCustomListTile({required String title, required Widget leadingIcon,required onTap,Color? color}) {
     return CustomContainer(
       paddingLeft: 8.r,
       radiusAll: 12.r,
-      bordersColor: AppColors.primaryColor,
+      bordersColor: color ?? AppColors.primaryColor,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         onTap: onTap,
         leading: leadingIcon,
-        trailing: Icon(Icons.arrow_right, color: AppColors.textSecondary,size: 24.r,),
+        trailing: Icon(Icons.arrow_right, color: color ?? AppColors.textSecondary,size: 24.r,),
         title: CustomText(
+          color: color,
           textAlign: TextAlign.start,
           text: title,
         ),

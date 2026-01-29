@@ -121,7 +121,20 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   fit: BoxFit.cover,
                 ),
               ),
+
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding:  EdgeInsets.all(16.w),
+          child: CustomButton(onPressed: (){
+            if(_globalKey.currentState!.validate()){
+
+            }
+          },
+            label: 'Add Site',
           ),
         ),
       ),

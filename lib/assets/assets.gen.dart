@@ -17,6 +17,9 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/about.svg
+  SvgGenImage get about => const SvgGenImage('assets/icons/about.svg');
+
   /// File path: assets/icons/add_image.svg
   SvgGenImage get addImage => const SvgGenImage('assets/icons/add_image.svg');
 
@@ -25,6 +28,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/assing_f.svg
   SvgGenImage get assingF => const SvgGenImage('assets/icons/assing_f.svg');
+
+  /// File path: assets/icons/delete.svg
+  SvgGenImage get delete => const SvgGenImage('assets/icons/delete.svg');
 
   /// File path: assets/icons/email.svg
   SvgGenImage get email => const SvgGenImage('assets/icons/email.svg');
@@ -47,6 +53,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logo.svg
   SvgGenImage get logo => const SvgGenImage('assets/icons/logo.svg');
 
+  /// File path: assets/icons/logout.svg
+  SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
+
   /// File path: assets/icons/notification.svg
   SvgGenImage get notification =>
       const SvgGenImage('assets/icons/notification.svg');
@@ -65,6 +74,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/plan_f.svg
   SvgGenImage get planF => const SvgGenImage('assets/icons/plan_f.svg');
+
+  /// File path: assets/icons/privacy.svg
+  SvgGenImage get privacy => const SvgGenImage('assets/icons/privacy.svg');
 
   /// File path: assets/icons/profile_edit.svg
   SvgGenImage get profileEdit =>
@@ -85,11 +97,16 @@ class $AssetsIconsGen {
   SvgGenImage get subscriptionIcon =>
       const SvgGenImage('assets/icons/subscription_icon.svg');
 
+  /// File path: assets/icons/terms.svg
+  SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
+    about,
     addImage,
     assing,
     assingF,
+    delete,
     email,
     home,
     homeF,
@@ -97,17 +114,20 @@ class $AssetsIconsGen {
     location,
     lock,
     logo,
+    logout,
     notification,
     person,
     personF,
     phone,
     plan,
     planF,
+    privacy,
     profileEdit,
     settings,
     slpashLogo,
     subscription,
     subscriptionIcon,
+    terms,
   ];
 }
 

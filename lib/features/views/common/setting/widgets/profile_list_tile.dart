@@ -11,7 +11,7 @@ class ProfileListTile extends StatelessWidget {
       this.textColor,
       this.noIcon,
       required this.title,
-      required this.onTap, required this.icon});
+      required this.onTap, required this.icon,  this.trailing});
 
   final Color? color;
   final Color? textColor;
@@ -19,17 +19,18 @@ class ProfileListTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
    final Widget icon;
+   final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
       onTap: onTap,
       verticalMargin: 7.h,
-      horizontalMargin: 24.w,
+      horizontalMargin: 16.w,
       paddingHorizontal: 10.w ,
       paddingVertical: 14.h,
      radiusAll: 12.r,
-     bordersColor: color ?? AppColors.primaryColor.withOpacity(0.2),
+     bordersColor: color ?? AppColors.primaryColor,
      color:  AppColors.bgColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,12 +41,14 @@ class ProfileListTile extends StatelessWidget {
             child: CustomText(
               text: title,
               textAlign: TextAlign.start,
-              color: textColor ?? Color(0xff999999),
+              color: textColor ?? AppColors.textSecondary,
               fontSize: 14.sp,
             ),
           ),
+          if (trailing != null) trailing!,
+
           if (noIcon != true)
-            Icon(Icons.arrow_right,color: color ??  Color(0xff999999),),
+            Icon(Icons.arrow_right,color: color ??  AppColors.textSecondary,),
         ],
       ),
     );

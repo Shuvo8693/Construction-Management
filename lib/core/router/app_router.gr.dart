@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AboutScreen]
+class AboutRoute extends PageRouteInfo<void> {
+  const AboutRoute({List<PageRouteInfo>? children})
+    : super(AboutRoute.name, initialChildren: children);
+
+  static const String name = 'AboutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AboutScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AdminHomeScreen]
 class AdminHomeRoute extends PageRouteInfo<void> {
   const AdminHomeRoute({List<PageRouteInfo>? children})
@@ -70,6 +86,22 @@ class ForgetRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ForgetScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [LanguageScreen]
+class LanguageRoute extends PageRouteInfo<void> {
+  const LanguageRoute({List<PageRouteInfo>? children})
+    : super(LanguageRoute.name, initialChildren: children);
+
+  static const String name = 'LanguageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LanguageScreen();
     },
   );
 }
@@ -139,6 +171,22 @@ class OtpRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PrivacyPolicyScreen]
+class PrivacyPolicyRoute extends PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<PageRouteInfo>? children})
+    : super(PrivacyPolicyRoute.name, initialChildren: children);
+
+  static const String name = 'PrivacyPolicyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PrivacyPolicyScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
@@ -182,6 +230,38 @@ class RoleRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const RoleScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SettingChangePasswordScreen]
+class SettingChangePasswordRoute extends PageRouteInfo<void> {
+  const SettingChangePasswordRoute({List<PageRouteInfo>? children})
+    : super(SettingChangePasswordRoute.name, initialChildren: children);
+
+  static const String name = 'SettingChangePasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingChangePasswordScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SettingScreen]
+class SettingRoute extends PageRouteInfo<void> {
+  const SettingRoute({List<PageRouteInfo>? children})
+    : super(SettingRoute.name, initialChildren: children);
+
+  static const String name = 'SettingRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingScreen();
     },
   );
 }
@@ -262,6 +342,38 @@ class SubscriptionRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const SubscriptionScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SupportScreen]
+class SupportRoute extends PageRouteInfo<void> {
+  const SupportRoute({List<PageRouteInfo>? children})
+    : super(SupportRoute.name, initialChildren: children);
+
+  static const String name = 'SupportRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SupportScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [TermsScreen]
+class TermsRoute extends PageRouteInfo<void> {
+  const TermsRoute({List<PageRouteInfo>? children})
+    : super(TermsRoute.name, initialChildren: children);
+
+  static const String name = 'TermsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TermsScreen();
     },
   );
 }

@@ -2,6 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:charteur/features/views/admin/home/admin_home_screen.dart';
 import 'package:charteur/features/views/admin/subscription/subscription_screen.dart';
 import 'package:charteur/features/views/common/notifications/notifications_screen.dart';
+import 'package:charteur/features/views/common/setting/about_screen.dart';
+import 'package:charteur/features/views/common/setting/change%20password/setting_change_password.dart';
+import 'package:charteur/features/views/common/setting/language_screen.dart';
+import 'package:charteur/features/views/common/setting/privacy_policy_screen.dart';
+import 'package:charteur/features/views/common/setting/setting_screen.dart';
+import 'package:charteur/features/views/common/setting/support_screen.dart';
+import 'package:charteur/features/views/common/setting/terms_screen.dart';
 import 'package:charteur/features/views/common/sites/site_add_screen.dart';
 import 'package:charteur/features/views/auth/change%20password/change_password.dart';
 import 'package:charteur/features/views/auth/forget/forget_screen.dart';
@@ -37,5 +44,12 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SiteAddRoute.page),
     AutoRoute(page: NotificationsRoute.page),
     AutoRoute(page: SubscriptionRoute.page),
+    AutoRoute(page: SettingRoute.page),
+    AutoRoute(page: AboutRoute.page),
+    AutoRoute(page: TermsRoute.page),
+    AutoRoute(page: PrivacyPolicyRoute.page),
+    AutoRoute(page: SupportRoute.page),
+    AutoRoute(page: SettingChangePasswordRoute.page),
+    AutoRoute(page: LanguageRoute.page),
   ];
 }

@@ -6,14 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 @RoutePage()
-class SettingChangePassword extends StatefulWidget {
-  const SettingChangePassword({super.key});
+class SettingChangePasswordScreen extends StatefulWidget {
+  const SettingChangePasswordScreen({super.key});
 
   @override
-  State<SettingChangePassword> createState() => _SettingChangePasswordState();
+  State<SettingChangePasswordScreen> createState() => _SettingChangePasswordScreenState();
 }
 
-class _SettingChangePasswordState extends State<SettingChangePassword> {
+class _SettingChangePasswordScreenState extends State<SettingChangePasswordScreen> {
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
