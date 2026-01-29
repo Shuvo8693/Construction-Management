@@ -60,6 +60,23 @@ class HelperData {
     },
   ];
 
+  static final List<SubscriptionPlan> plans = [
+    SubscriptionPlan(
+      duration: '1\nMonth',
+      price: '\$9.99',
+      pricePerMonth: '\$9.99/month',
+    ),
+    SubscriptionPlan(
+      duration: '3\nMonths',
+      price: '\$24.99',
+      pricePerMonth: '\$8.33/month',
+    ),
+    SubscriptionPlan(
+      duration: '1\nYear',
+      price: '\$79.99',
+      pricePerMonth: '\$6.67/month',
+    ),
+  ];
 
   static final List<Map<String, dynamic>> filteredItems = [
     {
@@ -75,4 +92,17 @@ class HelperData {
 
 
 
+}
+
+// Model Class
+class SubscriptionPlan {
+  final String duration;
+  final String price;
+  final String pricePerMonth;
+
+  SubscriptionPlan({
+    required this.duration,
+    required this.price,
+    required this.pricePerMonth,
+  });
 }

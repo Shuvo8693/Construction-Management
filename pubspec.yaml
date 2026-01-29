@@ -29,6 +29,8 @@ dependencies:
   flutter_svg: ^2.2.3
   smooth_page_indicator: ^2.0.1
   dio: ^5.9.0
+  flutter_widget_from_html: ^0.17.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

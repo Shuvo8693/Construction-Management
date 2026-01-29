@@ -75,11 +75,11 @@ class PhotoPickerHelper {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppColors.secondaryColor.withOpacity(0.2),
+              color: AppColors.primaryColor.withAlpha(51),
               shape: BoxShape.circle,
             ),
             padding:  EdgeInsets.all(16.r),
-            child: Icon(icon, size: 30.r, color: AppColors.secondaryColor),
+            child: Icon(icon, size: 30.r, color: AppColors.primaryColor),
           ),
            SizedBox(height: 8.h),
           CustomText(text:

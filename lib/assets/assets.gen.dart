@@ -17,6 +17,9 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/add_image.svg
+  SvgGenImage get addImage => const SvgGenImage('assets/icons/add_image.svg');
+
   /// File path: assets/icons/assing.svg
   SvgGenImage get assing => const SvgGenImage('assets/icons/assing.svg');
 
@@ -31,6 +34,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/home_f.svg
   SvgGenImage get homeF => const SvgGenImage('assets/icons/home_f.svg');
+
+  /// File path: assets/icons/language.svg
+  SvgGenImage get language => const SvgGenImage('assets/icons/language.svg');
 
   /// File path: assets/icons/location.svg
   SvgGenImage get location => const SvgGenImage('assets/icons/location.svg');
@@ -60,17 +66,34 @@ class $AssetsIconsGen {
   /// File path: assets/icons/plan_f.svg
   SvgGenImage get planF => const SvgGenImage('assets/icons/plan_f.svg');
 
+  /// File path: assets/icons/profile_edit.svg
+  SvgGenImage get profileEdit =>
+      const SvgGenImage('assets/icons/profile_edit.svg');
+
+  /// File path: assets/icons/settings.svg
+  SvgGenImage get settings => const SvgGenImage('assets/icons/settings.svg');
+
   /// File path: assets/icons/slpash_logo.svg
   SvgGenImage get slpashLogo =>
       const SvgGenImage('assets/icons/slpash_logo.svg');
 
+  /// File path: assets/icons/subscription.svg
+  SvgGenImage get subscription =>
+      const SvgGenImage('assets/icons/subscription.svg');
+
+  /// File path: assets/icons/subscription_icon.svg
+  SvgGenImage get subscriptionIcon =>
+      const SvgGenImage('assets/icons/subscription_icon.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
+    addImage,
     assing,
     assingF,
     email,
     home,
     homeF,
+    language,
     location,
     lock,
     logo,
@@ -80,7 +103,11 @@ class $AssetsIconsGen {
     phone,
     plan,
     planF,
+    profileEdit,
+    settings,
     slpashLogo,
+    subscription,
+    subscriptionIcon,
   ];
 }
 

@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/features/views/admin/home/admin_home_screen.dart';
-import 'package:charteur/features/views/admin/home/children/site_add_screen.dart';
+import 'package:charteur/features/views/admin/subscription/subscription_screen.dart';
+import 'package:charteur/features/views/common/notifications/notifications_screen.dart';
+import 'package:charteur/features/views/common/sites/site_add_screen.dart';
 import 'package:charteur/features/views/auth/change%20password/change_password.dart';
 import 'package:charteur/features/views/auth/forget/forget_screen.dart';
 import 'package:charteur/features/views/auth/login/log_in_screen.dart';
@@ -33,5 +35,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ChangePasswordRoute.page),
     AutoRoute(page: BottomNavRoute.page,initial: true),
     AutoRoute(page: SiteAddRoute.page),
+    AutoRoute(page: NotificationsRoute.page),
+    AutoRoute(page: SubscriptionRoute.page),
   ];
 }
