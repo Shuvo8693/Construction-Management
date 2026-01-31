@@ -1,8 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
+import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
-import 'package:charteur/core/widgets/custom_container.dart';
-import 'package:charteur/core/widgets/custom_network_image.dart';
-import 'package:charteur/core/widgets/custom_text.dart';
+import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,6 +12,9 @@ class SiteCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
+      onTap: (){
+        context.router.push(FilesRoute());
+      },
       marginTop: 10.h,
       radiusAll: 8.r,
       paddingAll: 12.r,
@@ -19,7 +22,6 @@ class SiteCardWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           CustomNetworkImage(
             border: Border.all(color: AppColors.primaryColor.withAlpha(20)),
             imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29uc3RydWN0aW9uJTIwc2l0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60', width: 90.w, height: 82.h, borderRadius: 12.r,),

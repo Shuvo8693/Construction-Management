@@ -20,6 +20,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/about.svg
   SvgGenImage get about => const SvgGenImage('assets/icons/about.svg');
 
+  /// File path: assets/icons/add_icon.svg
+  SvgGenImage get addIcon => const SvgGenImage('assets/icons/add_icon.svg');
+
   /// File path: assets/icons/add_image.svg
   SvgGenImage get addImage => const SvgGenImage('assets/icons/add_image.svg');
 
@@ -59,6 +62,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/notification.svg
   SvgGenImage get notification =>
       const SvgGenImage('assets/icons/notification.svg');
+
+  /// File path: assets/icons/pdf.svg
+  SvgGenImage get pdf => const SvgGenImage('assets/icons/pdf.svg');
 
   /// File path: assets/icons/person.svg
   SvgGenImage get person => const SvgGenImage('assets/icons/person.svg');
@@ -100,9 +106,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/terms.svg
   SvgGenImage get terms => const SvgGenImage('assets/icons/terms.svg');
 
+  /// File path: assets/icons/three_dot.svg
+  SvgGenImage get threeDot => const SvgGenImage('assets/icons/three_dot.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
     about,
+    addIcon,
     addImage,
     assing,
     assingF,
@@ -116,6 +126,7 @@ class $AssetsIconsGen {
     logo,
     logout,
     notification,
+    pdf,
     person,
     personF,
     phone,
@@ -128,6 +139,7 @@ class $AssetsIconsGen {
     subscription,
     subscriptionIcon,
     terms,
+    threeDot,
   ];
 }
 

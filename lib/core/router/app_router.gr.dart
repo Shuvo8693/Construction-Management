@@ -75,6 +75,38 @@ class ChangePasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [FileAddScreen]
+class FileAddRoute extends PageRouteInfo<void> {
+  const FileAddRoute({List<PageRouteInfo>? children})
+    : super(FileAddRoute.name, initialChildren: children);
+
+  static const String name = 'FileAddRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FileAddScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [FilesScreen]
+class FilesRoute extends PageRouteInfo<void> {
+  const FilesRoute({List<PageRouteInfo>? children})
+    : super(FilesRoute.name, initialChildren: children);
+
+  static const String name = 'FilesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FilesScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [ForgetScreen]
 class ForgetRoute extends PageRouteInfo<void> {
   const ForgetRoute({List<PageRouteInfo>? children})

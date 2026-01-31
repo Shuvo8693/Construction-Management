@@ -9,6 +9,8 @@ import 'package:charteur/features/views/common/setting/privacy_policy_screen.dar
 import 'package:charteur/features/views/common/setting/setting_screen.dart';
 import 'package:charteur/features/views/common/setting/support_screen.dart';
 import 'package:charteur/features/views/common/setting/terms_screen.dart';
+import 'package:charteur/features/views/common/sites/file_add_screen.dart';
+import 'package:charteur/features/views/common/sites/files_screen.dart';
 import 'package:charteur/features/views/common/sites/site_add_screen.dart';
 import 'package:charteur/features/views/auth/change%20password/change_password.dart';
 import 'package:charteur/features/views/auth/forget/forget_screen.dart';
@@ -51,5 +53,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SupportRoute.page),
     AutoRoute(page: SettingChangePasswordRoute.page),
     AutoRoute(page: LanguageRoute.page),
+    AutoRoute(page: FileAddRoute.page),
+    AutoRoute(page: FilesRoute.page),
   ];
 }
