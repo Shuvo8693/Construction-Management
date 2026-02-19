@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FileCardWidget extends StatelessWidget {
+  final String? fileUrl;
+  final String? title;
+  final VoidCallback onTap;
+
   const FileCardWidget({
-    super.key,
+    super.key, this.fileUrl, this.title, required this.onTap,
   });
 
   @override
@@ -33,7 +37,7 @@ class FileCardWidget extends StatelessWidget {
             ],
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: onTap,
             child: Assets.icons.threeDot.svg(),
           ),
         ],

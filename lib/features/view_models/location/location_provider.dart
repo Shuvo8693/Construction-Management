@@ -1,4 +1,5 @@
-import 'package:charteur/env/keys_env.dart';
+
+import 'package:charteur/sk_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -24,7 +25,7 @@ class LocationProvider extends ChangeNotifier {
   Future<void> _performSearch(String input, CancelToken cancelToken) async {
     final encodedInput = Uri.encodeComponent(input);
     final url =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$encodedInput&key=${KeysEnv.locationKeys}&language=en';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$encodedInput&key=${SKey.googleApiKey}&language=en';
 
     try {
       final response = await _dio.get(url, cancelToken: cancelToken);

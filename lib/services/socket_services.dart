@@ -5,13 +5,8 @@ import 'package:charteur/services/api_urls.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 
-
-
-
-
-
 class SocketServices {
-  static String token = '';
+  static String token ='';
   static IO.Socket? socket;
 
 

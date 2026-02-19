@@ -409,3 +409,51 @@ class TermsRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [ TaskScreen ]
+class TaskRoute extends PageRouteInfo<void> {
+  const TaskRoute({List<PageRouteInfo>? children})
+    : super(TaskRoute.name, initialChildren: children);
+
+  static const String name = 'TaskRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TaskScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [ CollaboratorDetailsScreen ]
+class CollaboratorDetailsRoute extends PageRouteInfo<void> {
+  const CollaboratorDetailsRoute({List<PageRouteInfo>? children})
+    : super(CollaboratorDetailsRoute.name, initialChildren: children);
+
+  static const String name = 'CollaboratorDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CollaboratorDetailsScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [ SiteDetailsScreen ]
+class SiteDetailsRoute extends PageRouteInfo<void> {
+  const SiteDetailsRoute({List<PageRouteInfo>? children})
+    : super(SiteDetailsRoute.name, initialChildren: children);
+
+  static const String name = 'SiteDetailsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SiteDetailsScreen();
+    },
+  );
+}

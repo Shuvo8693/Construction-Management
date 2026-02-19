@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/features/views/admin/home/admin_home_screen.dart';
+import 'package:charteur/features/views/admin/home/assign_task_screen.dart';
+import 'package:charteur/features/views/admin/home/collaborator_details_screen.dart';
+import 'package:charteur/features/views/admin/home/site_details_screen.dart';
 import 'package:charteur/features/views/admin/subscription/subscription_screen.dart';
 import 'package:charteur/features/views/common/notifications/notifications_screen.dart';
 import 'package:charteur/features/views/common/setting/about_screen.dart';
@@ -55,5 +58,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: LanguageRoute.page),
     AutoRoute(page: FileAddRoute.page),
     AutoRoute(page: FilesRoute.page),
+    AutoRoute(page: TaskRoute.page),
+    AutoRoute(page: CollaboratorDetailsRoute.page),
+    AutoRoute(page: SiteDetailsRoute.page),
   ];
 }

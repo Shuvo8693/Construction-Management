@@ -6,6 +6,7 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/search_bottom_sheet.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/admin/home/assign_task_screen.dart';
 import 'package:charteur/features/views/common/sites/widgets/file_card_widget.dart';
 import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -80,11 +81,11 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 // Files Tab
                 _buildFilesList(),
                 // To-do Tab
-                _buildTodoList(),
+                _buildTodoList(status: 'To-do'),
                 // In Progress Tab
-                _buildTodoList(),
+                _buildTodoList(status: 'In Progress'),
                 // Done Tab
-                _buildTodoList(),
+                _buildTodoList(status: 'Done'),
               ],
             ),
           ),
@@ -114,13 +115,17 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
         physics: BouncingScrollPhysics(),
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-          return FileCardWidget();
+          return FileCardWidget(
+              onTap: () {
+            context.router.push(TaskRoute());
+
+          });
         },
       ),
     );
   }
 
-  Widget _buildTodoList() {
+  Widget _buildTodoList({String? status}) {
     return RefreshIndicator(
       onRefresh: () async {
         // Refresh logic here
@@ -129,15 +134,20 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
         physics: BouncingScrollPhysics(),
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-          return TodoCardWidget(
-            title: 'Repair Living Room’s  Electric Line',
-            category: 'Design',
-            projectName: 'Downtown Mall Projects',
-            assigneeName: 'Leslie Alexander',
-            description: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling Applying a smooth or protective layer of cement, l',
-            status: 'In Progress',
-            imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29uc3RydWN0aW9uJTIwc2l0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60',
+          return GestureDetector(
+            onTap: () {
+              context.router.push(SiteDetailsRoute());
+            },
+            child: TodoCardWidget(
+              title: 'Repair Living Room’s  Electric Line',
+              category: 'Design',
+              projectName: 'Downtown Mall Projects',
+              assigneeName: 'Leslie Alexander',
+              description: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling Applying a smooth or protective layer of cement, l',
+              status: status,
+              imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29uc3RydWN0aW9uJTIwc2l0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60',
 
+            ),
           );
         },
       ),
