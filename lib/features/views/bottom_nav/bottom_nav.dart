@@ -3,7 +3,7 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
-import 'package:charteur/features/views/admin/home/admin_home_screen.dart';
+import 'package:charteur/features/views/admin/home/admin_home/admin_home_screen.dart';
 import 'package:charteur/features/views/common/profile/profile_screen.dart';
 import 'package:charteur/features/views/common/sites/sites_screen.dart';
 import 'package:flutter/material.dart';

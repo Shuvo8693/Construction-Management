@@ -1,12 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
-import 'package:charteur/core/helpers/menu_show_helper.dart';
-import 'package:charteur/core/helpers/photo_picker_helper.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
-import 'package:charteur/core/widgets/search_bottom_sheet.dart';
 import 'package:charteur/core/widgets/widgets.dart';
-import 'package:charteur/features/views/admin/home/assign_task_screen.dart';
+import 'package:charteur/features/views/admin/home/remarks/remarks_screen.dart';
 import 'package:charteur/features/views/common/sites/widgets/file_card_widget.dart';
 import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +23,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -69,6 +66,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 Tab(text: 'To-do'),
                 Tab(text: 'In Progress'),
                 Tab(text: 'Done'),
+                Tab(text: 'Remarks'),
               ],
             ),
           ),
@@ -86,22 +84,33 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 _buildTodoList(status: 'In Progress'),
                 // Done Tab
                 _buildTodoList(status: 'Done'),
+                // Remarks Tab
+                RemarksScreen(),
               ],
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.router.push(FileAddRoute());
+      floatingActionButton: AnimatedBuilder(
+        animation: _tabController,
+        builder: (context, _) {
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: _tabController.index == 4
+                ? const SizedBox.shrink()
+                : FloatingActionButton.extended(
+              key: const ValueKey('fab'),
+              onPressed: () => context.router.push(FileAddRoute()),
+              backgroundColor: AppColors.primaryColor,
+              label: const CustomText(
+                text: 'Add File',
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+              icon: Assets.icons.addIcon.svg(),
+            ),
+          );
         },
-        backgroundColor: AppColors.primaryColor,
-        label: CustomText(
-          text: 'Add  File',
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-        icon: Assets.icons.addIcon.svg(),
       ),
     );
   }
