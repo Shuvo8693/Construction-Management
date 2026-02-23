@@ -6,14 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter();
     return ScreenUtilInit(
         designSize: const Size(393, 852),
         minTextAdapt: true,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeMode.light,
             debugShowCheckedModeBanner: false,
             title: 'charteur',
-            routerConfig: appRouter.config(),
+            routerConfig: _appRouter.config(),
           ),
         );
       }
