@@ -5,11 +5,14 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
 import 'package:charteur/features/views/admin/home/admin_home/admin_home_screen.dart';
 import 'package:charteur/features/views/common/profile/profile_screen.dart';
-import 'package:charteur/features/views/common/sites/sites_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '../common/sites/sites_screen.dart';
+
+
 
 @RoutePage()
 class BottomNavScreen extends StatefulWidget {
@@ -23,7 +26,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
 
 
-  final List<Widget> _screens =  [
+  final List<Widget> screens = [
     AdminHomeScreen(),
     SitesScreen(),
     ProfileScreen(),
@@ -42,11 +45,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           Selector<BottomNavProvider,int>(
             selector: (context, provider) => provider.selectedIndex,
             builder: (context, selectedIndex, child) {
-              return _screens[selectedIndex];
+              return screens[selectedIndex];
             }
           ),
-
-
 
           Positioned(
             bottom: 20.h,

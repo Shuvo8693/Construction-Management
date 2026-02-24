@@ -19,9 +19,6 @@ class SitesScreen extends StatelessWidget {
             selectedValue: 'Assigned Task',
             categoryItem: HelperData.filteredItems,
           ),
-          
-          
-
 
           Expanded(
             child: RefreshIndicator(
