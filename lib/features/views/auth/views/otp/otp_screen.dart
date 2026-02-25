@@ -2,9 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/auth/view_models/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 
@@ -17,7 +20,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final TextEditingController otpController = TextEditingController();
+  final  _authController = Get.find<AuthController>();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
 
@@ -40,7 +43,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Form(
               key: _globalKey,
               child: CustomPinCodeTextField(
-                  textEditingController: otpController),
+                  textEditingController: _authController.otpCtrl),
             ),
 
             SizedBox(height: 24.h),
@@ -52,8 +55,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   textAlign: TextAlign.start,
                   text: 'Didn’t get the code?',)),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     // Resend OTP logic here
+                    await _authController.resendOtp();
                   },
                   child: CustomText(
                     textAlign: TextAlign.end,
@@ -66,9 +70,11 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
 
             SizedBox(height: 36.h),
-            CustomButton(
-              label: "Verify",
-              onPressed: _onTapNextScreen,
+            Obx(()=> CustomButton(
+              isLoading: _authController.isLoading.value,
+                label: "Verify",
+                onPressed: _onTapNextScreen,
+              ),
             ),
             SizedBox(height: 18.h),
           ],
@@ -78,7 +84,9 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _onTapNextScreen()async {
-    if (_globalKey.currentState!.validate()) return;
-    Get.toNamed(AppRoutes.resetPassword);
+    if (!_globalKey.currentState!.validate()) return;
+    // Get.toNamed(AppRoutes.resetPassword);
+    // Get.toNamed(AppRoutes.bottomNav);
+    await _authController.verifyOtp();
   }
 }

@@ -37,10 +37,10 @@ class RoleScreen extends StatelessWidget {
                     indent: 44.w,
                       color: AppColors.primaryColor.withAlpha(26)),
 
-
+                 /// "office_admin", "worker"
                   SizedBox(height: 44.h),
                   CustomButton(onPressed: (){
-                    Get.toNamed(AppRoutes.signUp);
+                    Get.toNamed(AppRoutes.signUp,arguments:{"role":"worker"});
                   },label: 'Collaborator'),
 
                   CustomText(
@@ -56,7 +56,7 @@ class RoleScreen extends StatelessWidget {
                       bordersColor: AppColors.primaryColor,
                       foregroundColor: AppColors.textSecondary,
                       onPressed: (){
-                        Get.toNamed(AppRoutes.signUp);
+                        Get.toNamed(AppRoutes.signUp,arguments:{"role":"office_admin"});
                       },label: 'Office Admin'),
 
                 ],

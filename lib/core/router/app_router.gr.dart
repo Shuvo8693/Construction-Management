@@ -461,6 +461,7 @@ class SiteDetailsRoute extends PageRouteInfo<void> {
 */
 
 
+import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
 import 'package:get/get.dart';
 
 import 'package:charteur/features/views/admin/home/admin_home/admin_home_screen.dart';
@@ -499,33 +500,160 @@ class AppPages {
   static const initial = AppRoutes.splash;
 
   static final routes = [
-    GetPage(name: AppRoutes.splash,              page: () => const SplashScreen()),
-    GetPage(name: AppRoutes.adminHome,           page: () => const AdminHomeScreen()),
-    GetPage(name: AppRoutes.onboarding,          page: () => const OnboardingScreen()),
-    GetPage(name: AppRoutes.role,                page: () => const RoleScreen()),
-    GetPage(name: AppRoutes.login,               page: () => const LoginScreen()),
-    GetPage(name: AppRoutes.otp,                 page: () => const OtpScreen()),
-    GetPage(name: AppRoutes.resetPassword,       page: () => const ResetPasswordScreen()),
-    GetPage(name: AppRoutes.signUp,              page: () => const SignUpScreen()),
-    GetPage(name: AppRoutes.forget,              page: () => const ForgetScreen()),
-    GetPage(name: AppRoutes.changePassword,      page: () => const ChangePasswordScreen()),
-    GetPage(name: AppRoutes.bottomNav,           page: () => const BottomNavScreen()),
-    GetPage(name: AppRoutes.siteAdd,             page: () => const SiteAddScreen()),
-    GetPage(name: AppRoutes.notifications,       page: () => const NotificationsScreen()),
-    GetPage(name: AppRoutes.subscription,        page: () => const SubscriptionScreen()),
-    GetPage(name: AppRoutes.setting,             page: () => const SettingScreen()),
-    GetPage(name: AppRoutes.about,               page: () => const AboutScreen()),
-    GetPage(name: AppRoutes.terms,               page: () => const TermsScreen()),
-    GetPage(name: AppRoutes.privacyPolicy,       page: () => const PrivacyPolicyScreen()),
-    GetPage(name: AppRoutes.support,             page: () => const SupportScreen()),
-    GetPage(name: AppRoutes.settingChangePassword, page: () => const SettingChangePasswordScreen()),
-    GetPage(name: AppRoutes.language,            page: () => const LanguageScreen()),
-    GetPage(name: AppRoutes.fileAdd,             page: () => const FileAddScreen()),
-    GetPage(name: AppRoutes.files,               page: () => const FilesScreen()),
-    GetPage(name: AppRoutes.task,                page: () => const TaskScreen()),
-    GetPage(name: AppRoutes.collaboratorDetails, page: () => const CollaboratorDetailsScreen()),
-    GetPage(name: AppRoutes.siteDetails,         page: () => const SiteDetailsScreen()),
-    GetPage(name: AppRoutes.profile,             page: () => const ProfileScreen()),
-    GetPage(name: AppRoutes.sites,               page: () => const SitesScreen()),
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+      // binding: SplashBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.adminHome,
+      page: () => const AdminHomeScreen(),
+      // binding: AdminHomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.onboarding,
+      page: () => const OnboardingScreen(),
+      // binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.role,
+      page: () => const RoleScreen(),
+      binding: AuthBinding(),
+    ),
+
+    // ── Auth ─────────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.login,
+      page: () => const LoginScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.otp,
+      page: () => const OtpScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.signUp,
+      page: () => const SignUpScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.forget,
+      page: () => const ForgetScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.resetPassword,
+      page: () => const ResetPasswordScreen(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.changePassword,
+      page: () => const ChangePasswordScreen(),
+      binding: AuthBinding(),
+    ),
+
+    // ── Main ─────────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.bottomNav,
+      page: () => const BottomNavScreen(),
+      // binding: BottomNavBinding(),
+    ),
+
+    // ── Sites ─────────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.sites,
+      page: () => const SitesScreen(),
+      // binding: SitesBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.siteAdd,
+      page: () => const SiteAddScreen(),
+      // binding: SitesBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.siteDetails,
+      page: () => const SiteDetailsScreen(),
+      // binding: SitesBinding(),
+    ),
+
+    // ── Files ─────────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.files,
+      page: () => const FilesScreen(),
+      // binding: FilesBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.fileAdd,
+      page: () => const FileAddScreen(),
+      // binding: FilesBinding(),
+    ),
+
+    // ── Task ──────────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.task,
+      page: () => const TaskScreen(),
+      // binding: TaskBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.collaboratorDetails,
+      page: () => const CollaboratorDetailsScreen(),
+      // binding: TaskBinding(),
+    ),
+
+    // ── Notifications ─────────────────────────────────────
+    GetPage(
+      name: AppRoutes.notifications,
+      page: () => const NotificationsScreen(),
+      // binding: NotificationsBinding(),
+    ),
+
+    // ── Profile ───────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => const ProfileScreen(),
+      // binding: ProfileBinding(),
+    ),
+
+    // ── Setting ───────────────────────────────────────────
+    GetPage(
+      name: AppRoutes.setting,
+      page: () => const SettingScreen(),
+      // binding: SettingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.settingChangePassword,
+      page: () => const SettingChangePasswordScreen(),
+      binding: AuthBinding(),               // reuse auth since it's a password operation
+    ),
+    GetPage(
+      name: AppRoutes.language,
+      page: () => const LanguageScreen(),
+      // binding: SettingBinding(),
+    ),
+
+    // ── Static / Info ─────────────────────────────────────
+    GetPage(
+      name: AppRoutes.subscription,
+      page: () => const SubscriptionScreen(),
+      // binding: SubscriptionBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.about,
+      page: () => const AboutScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.terms,
+      page: () => const TermsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.privacyPolicy,
+      page: () => const PrivacyPolicyScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.support,
+      page: () => const SupportScreen(),
+      // binding: SupportBinding(),
+    ),
   ];
 }

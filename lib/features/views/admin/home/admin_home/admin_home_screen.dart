@@ -4,13 +4,13 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
+import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
 

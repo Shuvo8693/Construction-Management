@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
+import 'package:charteur/core/config/app_constants.dart';
+import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/features/views/splash_onboarding/widgets/circle_loader.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToNextScreen() async {
+    String token = await PrefsHelper.getString(AppConstants.bearerToken);
     await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {
+    if(!mounted) return;
+    if (token.isNotEmpty) {
+      Get.offNamed(AppRoutes.bottomNav);
+    }else{
       Get.offNamed(AppRoutes.onboarding);
     }
   }
