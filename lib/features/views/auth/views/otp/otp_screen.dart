@@ -4,13 +4,13 @@ import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 
 @RoutePage()
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key,});
-
-
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -79,6 +79,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _onTapNextScreen()async {
     if (_globalKey.currentState!.validate()) return;
-    context.router.push(const ResetPasswordRoute());
+    Get.toNamed(AppRoutes.resetPassword);
   }
 }

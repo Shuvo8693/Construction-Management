@@ -217,3 +217,26 @@ class _ErrorInterceptor extends Interceptor {
     }
   }
 }
+
+/// ====================== example ===========================
+
+example()async{
+  // Simple GET
+  final response = await DioHelper.get('posts', queryParameters: {'page': 1});
+
+// POST with body
+  final response1 = await DioHelper.post('auth/login', data: {
+    'email': 'user@example.com',
+    'password': 'secret',
+  });
+
+// Set token after login
+  DioHelper.setAuthToken(response.data['token']);
+
+// Upload a file
+  await DioHelper.uploadFile(
+    'profile/avatar',
+    '/path/to/image.jpg',
+    onSendProgress: (sent, total) => print('${(sent / total * 100).toInt()}%'),
+  );
+}

@@ -5,6 +5,8 @@ import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 @RoutePage()
 class RoleScreen extends StatelessWidget {
@@ -38,7 +40,7 @@ class RoleScreen extends StatelessWidget {
 
                   SizedBox(height: 44.h),
                   CustomButton(onPressed: (){
-                    context.router.push(const LoginRoute());
+                    Get.toNamed(AppRoutes.signUp);
                   },label: 'Collaborator'),
 
                   CustomText(
@@ -54,7 +56,7 @@ class RoleScreen extends StatelessWidget {
                       bordersColor: AppColors.primaryColor,
                       foregroundColor: AppColors.textSecondary,
                       onPressed: (){
-                        context.router.push(const LoginRoute());
+                        Get.toNamed(AppRoutes.signUp);
                       },label: 'Office Admin'),
 
                 ],

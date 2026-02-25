@@ -4,6 +4,8 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class AssignWorkerSheet extends StatefulWidget {
   const AssignWorkerSheet({super.key});
@@ -260,7 +262,7 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      context.router.push(const CollaboratorDetailsRoute());
+                                      Get.toNamed(AppRoutes.collaboratorDetails);
                                     },
                                     child: Text(
                                       'Details',

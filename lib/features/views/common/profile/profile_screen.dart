@@ -6,6 +6,8 @@ import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -59,13 +61,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                _buildCustomListTile(title: 'Edit Profile', leadingIcon: Assets.icons.profileEdit.svg(), onTap: (){}),
                _buildCustomListTile(title: 'Subscription', leadingIcon: Assets.icons.subscription.svg(), onTap: (){
-                 context.router.push(const SubscriptionRoute());
+                 Get.toNamed(AppRoutes.subscription);
                }),
                _buildCustomListTile(title: 'Settings', leadingIcon: Assets.icons.settings.svg(), onTap: (){
-                  context.router.push(const SettingRoute());
+                 Get.toNamed(AppRoutes.setting);
                }),
                _buildCustomListTile(title: 'Language', leadingIcon: Assets.icons.language.svg(), onTap: (){
-                  context.router.push(const LanguageRoute());
+                 Get.toNamed(AppRoutes.language);
                }),
 
 

@@ -6,6 +6,8 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 @RoutePage()
 class LoginScreen extends StatefulWidget {
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    context.router.push(const ForgetRoute());
+                    Get.toNamed(AppRoutes.forget);
                   },
                   child: CustomText(text: "Forgot Password",decoration: TextDecoration.underline,),
                 ),
@@ -69,8 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                           color: AppColors.primaryColor,
                       ),
-                      text: ' Sign Up',                      recognizer: TapGestureRecognizer()..onTap = (){
-                        context.router.push(const SignUpRoute());
+                      text: ' Sign Up',
+                      recognizer: TapGestureRecognizer()..onTap = (){
+                        Get.toNamed(AppRoutes.signUp);
                       }
                   )
                 ]
@@ -86,6 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onLogin() {
     if (_globalKey.currentState!.validate()) return;
-    context.router.replaceAll([BottomNavRoute()]);
+    Get.offAllNamed(AppRoutes.bottomNav);
   }
 }

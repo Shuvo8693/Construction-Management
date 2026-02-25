@@ -9,6 +9,8 @@ import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.da
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 @RoutePage()
 class FilesScreen extends StatefulWidget {
@@ -101,7 +103,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 ? const SizedBox.shrink()
                 : FloatingActionButton.extended(
               key: const ValueKey('fab'),
-              onPressed: () => context.router.push(FileAddRoute()),
+              onPressed: () => Get.toNamed(AppRoutes.fileAdd),
               backgroundColor: AppColors.primaryColor,
               label: const CustomText(
                 text: 'Add File',
@@ -127,7 +129,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
         itemBuilder: (BuildContext context, int index) {
           return FileCardWidget(
               onTap: () {
-            context.router.push(TaskRoute());
+                Get.toNamed(AppRoutes.task);
 
           });
         },
@@ -146,7 +148,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              context.router.push(SiteDetailsRoute());
+              Get.toNamed(AppRoutes.siteDetails);
             },
             child: TodoCardWidget(
               title: 'Repair Living Room’s  Electric Line',

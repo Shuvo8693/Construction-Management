@@ -1,3 +1,4 @@
+/*
 // dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
@@ -456,4 +457,75 @@ class SiteDetailsRoute extends PageRouteInfo<void> {
       return const SiteDetailsScreen();
     },
   );
+}
+*/
+
+
+import 'package:get/get.dart';
+
+import 'package:charteur/features/views/admin/home/admin_home/admin_home_screen.dart';
+import 'package:charteur/features/views/admin/home/assign_task/assign_task_screen.dart';
+import 'package:charteur/features/views/admin/home/collaborator_details/collaborator_details_screen.dart';
+import 'package:charteur/features/views/admin/home/site_details/site_details_screen.dart';
+import 'package:charteur/features/views/admin/subscription/subscription_screen.dart';
+import 'package:charteur/features/views/auth/views/change%20password/change_password.dart';
+import 'package:charteur/features/views/auth/views/forget/forget_screen.dart';
+import 'package:charteur/features/views/auth/views/login/log_in_screen.dart';
+import 'package:charteur/features/views/auth/views/otp/otp_screen.dart';
+import 'package:charteur/features/views/auth/views/reset_pass/reset_password_screen.dart';
+import 'package:charteur/features/views/auth/views/sign_up/sign_up_screen.dart';
+import 'package:charteur/features/views/common/notifications/notifications_screen.dart';
+import 'package:charteur/features/views/common/setting/about_screen.dart';
+import 'package:charteur/features/views/common/setting/change%20password/setting_change_password.dart';
+import 'package:charteur/features/views/common/setting/language_screen.dart';
+import 'package:charteur/features/views/common/setting/privacy_policy_screen.dart';
+import 'package:charteur/features/views/common/setting/setting_screen.dart';
+import 'package:charteur/features/views/common/setting/support_screen.dart';
+import 'package:charteur/features/views/common/setting/terms_screen.dart';
+import 'package:charteur/features/views/common/sites/file_add_screen.dart';
+import 'package:charteur/features/views/common/sites/files_screen.dart';
+import 'package:charteur/features/views/common/sites/site_add_screen.dart';
+import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
+import 'package:charteur/features/views/common/profile/profile_screen.dart';
+import 'package:charteur/features/views/common/sites/sites_screen.dart';
+import 'package:charteur/features/views/splash_onboarding/onboarding_screen.dart';
+import 'package:charteur/features/views/splash_onboarding/role_screen.dart';
+import 'package:charteur/features/views/splash_onboarding/splash_screen.dart';
+
+import 'app_router.dart';
+
+
+class AppPages {
+  static const initial = AppRoutes.splash;
+
+  static final routes = [
+    GetPage(name: AppRoutes.splash,              page: () => const SplashScreen()),
+    GetPage(name: AppRoutes.adminHome,           page: () => const AdminHomeScreen()),
+    GetPage(name: AppRoutes.onboarding,          page: () => const OnboardingScreen()),
+    GetPage(name: AppRoutes.role,                page: () => const RoleScreen()),
+    GetPage(name: AppRoutes.login,               page: () => const LoginScreen()),
+    GetPage(name: AppRoutes.otp,                 page: () => const OtpScreen()),
+    GetPage(name: AppRoutes.resetPassword,       page: () => const ResetPasswordScreen()),
+    GetPage(name: AppRoutes.signUp,              page: () => const SignUpScreen()),
+    GetPage(name: AppRoutes.forget,              page: () => const ForgetScreen()),
+    GetPage(name: AppRoutes.changePassword,      page: () => const ChangePasswordScreen()),
+    GetPage(name: AppRoutes.bottomNav,           page: () => const BottomNavScreen()),
+    GetPage(name: AppRoutes.siteAdd,             page: () => const SiteAddScreen()),
+    GetPage(name: AppRoutes.notifications,       page: () => const NotificationsScreen()),
+    GetPage(name: AppRoutes.subscription,        page: () => const SubscriptionScreen()),
+    GetPage(name: AppRoutes.setting,             page: () => const SettingScreen()),
+    GetPage(name: AppRoutes.about,               page: () => const AboutScreen()),
+    GetPage(name: AppRoutes.terms,               page: () => const TermsScreen()),
+    GetPage(name: AppRoutes.privacyPolicy,       page: () => const PrivacyPolicyScreen()),
+    GetPage(name: AppRoutes.support,             page: () => const SupportScreen()),
+    GetPage(name: AppRoutes.settingChangePassword, page: () => const SettingChangePasswordScreen()),
+    GetPage(name: AppRoutes.language,            page: () => const LanguageScreen()),
+    GetPage(name: AppRoutes.fileAdd,             page: () => const FileAddScreen()),
+    GetPage(name: AppRoutes.files,               page: () => const FilesScreen()),
+    GetPage(name: AppRoutes.task,                page: () => const TaskScreen()),
+    GetPage(name: AppRoutes.collaboratorDetails, page: () => const CollaboratorDetailsScreen()),
+    GetPage(name: AppRoutes.siteDetails,         page: () => const SiteDetailsScreen()),
+    GetPage(name: AppRoutes.profile,             page: () => const ProfileScreen()),
+    GetPage(name: AppRoutes.sites,               page: () => const SitesScreen()),
+  ];
 }

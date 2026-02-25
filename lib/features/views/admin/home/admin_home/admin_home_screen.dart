@@ -7,6 +7,7 @@ import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dar
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -28,7 +29,7 @@ class AdminHomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.router.push(NotificationsRoute());
+              Get.toNamed(AppRoutes.notifications);
             },
             icon: Assets.icons.notification.svg(),
           ),
@@ -77,7 +78,7 @@ class AdminHomeScreen extends StatelessWidget {
                         height: 34.h,
                         elevation: true,
                         onPressed: (){
-                          context.router.push(SiteAddRoute());
+                          Get.toNamed(AppRoutes.siteAdd);
                         },label: 'Get Start',)
                     ],
                   ),

@@ -6,6 +6,8 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/common/setting/widgets/profile_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 
 @RoutePage()
@@ -34,7 +36,7 @@ class SettingScreen extends StatelessWidget {
                   icon: Assets.icons.lock.svg(),
                   title: 'Change Password',
                   onTap: () {
-                    context.router.push(const SettingChangePasswordRoute());
+                    Get.toNamed(AppRoutes.settingChangePassword);
                   },
                 ),
 
@@ -44,7 +46,7 @@ class SettingScreen extends StatelessWidget {
                   icon: Assets.icons.terms.svg(),
                   title: 'Terms & Condition',
                   onTap: () {
-                    context.router.push(const TermsRoute());
+                    Get.toNamed(AppRoutes.terms);
                   },
                 ),
 
@@ -54,7 +56,7 @@ class SettingScreen extends StatelessWidget {
                   icon: Assets.icons.privacy.svg(),
                   title: 'Privacy Policy',
                   onTap: () {
-                    context.router.push(const PrivacyPolicyRoute());
+                    Get.toNamed(AppRoutes.privacyPolicy);
                   },
                 ),
 
@@ -64,7 +66,7 @@ class SettingScreen extends StatelessWidget {
                   icon: Assets.icons.about.svg(),
                   title: 'About Us',
                   onTap: () {
-                    context.router.push(const AboutRoute());
+                    Get.toNamed(AppRoutes.about);
                   },
                 ),
               ],

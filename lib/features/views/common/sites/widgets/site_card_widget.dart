@@ -5,6 +5,8 @@ import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class SiteCardWidget extends StatelessWidget {
   const SiteCardWidget({super.key});
@@ -13,7 +15,7 @@ class SiteCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomContainer(
       onTap: (){
-        context.router.push(FilesRoute());
+        Get.toNamed(AppRoutes.files);
       },
       marginTop: 10.h,
       radiusAll: 8.r,
