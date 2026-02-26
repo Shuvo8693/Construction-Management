@@ -87,10 +87,6 @@ class HelperData {
       "title": "My Task",
       "items": []
     },
-    {
-      "title": "Reassign Task",
-      "items": []
-    },
   ];
 
 

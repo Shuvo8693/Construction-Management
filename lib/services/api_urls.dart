@@ -27,6 +27,7 @@ class ApiUrls {
   static  const String  updateProfile = '/users/update-profile';
   static  const String  parentCreate = '/parents/parent';
   static  const String  siteUrl = '$baseUrl/site/';
-  static   String  sendMessage(String conversationID) => '/messages/$conversationID/send-message';
+  static  const String  assignedSiteUrl = '$baseUrl/office-admin/assigned-sites';
+  static  String  sendMessage(String conversationID) => '/messages/$conversationID/send-message';
 
 }

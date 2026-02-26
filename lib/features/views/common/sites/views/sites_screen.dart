@@ -4,6 +4,7 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
+import 'package:charteur/features/views/common/sites/repository/sites_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -18,13 +19,13 @@ class SitesScreen extends StatefulWidget {
 }
 
 class _SitesScreenState extends State<SitesScreen> {
-  final  _homeController = Get.find<HomeController>();
+  final  _sitesController = Get.find<SitesController>();
 
 
   @override
   void initState() {
     super.initState();
-    _homeController.getSite();
+    _sitesController.getAssignedSite();
   }
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,8 @@ class _SitesScreenState extends State<SitesScreen> {
           ),
 
       Obx((){
-        final siteData = _homeController.siteListModel.value?.data;
-        if(_homeController.isLoading.value){
+        final siteData = _sitesController.siteListModel.value?.data;
+        if(_sitesController.isLoading.value){
           return Center(child: CircularProgressIndicator());
         }else if(siteData == null && siteData!.isEmpty){
           return Center(child: Text('No Data Found'));
@@ -49,7 +50,7 @@ class _SitesScreenState extends State<SitesScreen> {
         return  Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
-              await _homeController.getSite();
+              await _sitesController.getAssignedSite();
             },
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
