@@ -1,5 +1,6 @@
-import 'package:charteur/features/views/admin/home/remarks/widgets/bottom_input_bar.dart';
-import 'package:charteur/features/views/admin/home/remarks/widgets/chat_bubble.dart';
+
+import 'package:charteur/features/views/admin/home/views/remarks/widgets/bottom_input_bar.dart';
+import 'package:charteur/features/views/admin/home/views/remarks/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

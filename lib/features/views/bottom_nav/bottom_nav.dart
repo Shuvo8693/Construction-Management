@@ -61,21 +61,24 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.bgColor,
-          borderRadius: BorderRadius.circular(100.r),
-          border: Border.all(
-            color: AppColors.primaryColor,
-            width: 1,
+      child: Padding(
+        padding: EdgeInsets.all(8.0.sp),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.bgColor,
+            borderRadius: BorderRadius.circular(100.r),
+            border: Border.all(
+              color: AppColors.primaryColor,
+              width: 1,
+            ),
           ),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(
-            _navItems.length,
-                (index) => _buildNavItem(index),
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              _navItems.length,
+                  (index) => _buildNavItem(index),
+            ),
           ),
         ),
       ),

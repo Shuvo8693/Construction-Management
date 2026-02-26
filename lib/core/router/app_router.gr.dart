@@ -461,13 +461,15 @@ class SiteDetailsRoute extends PageRouteInfo<void> {
 */
 
 
+import 'package:charteur/features/views/admin/home/view_models/home_bindings.dart';
+import 'package:charteur/features/views/admin/home/views/admin_home/admin_home_screen.dart';
+import 'package:charteur/features/views/admin/home/views/assign_task/assign_task_screen.dart';
+import 'package:charteur/features/views/admin/home/views/collaborator_details/collaborator_details_screen.dart';
+import 'package:charteur/features/views/admin/home/views/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
+import 'package:charteur/features/views/common/sites/view_models/sites_bindings.dart';
 import 'package:get/get.dart';
 
-import 'package:charteur/features/views/admin/home/admin_home/admin_home_screen.dart';
-import 'package:charteur/features/views/admin/home/assign_task/assign_task_screen.dart';
-import 'package:charteur/features/views/admin/home/collaborator_details/collaborator_details_screen.dart';
-import 'package:charteur/features/views/admin/home/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/admin/subscription/subscription_screen.dart';
 import 'package:charteur/features/views/auth/views/change%20password/change_password.dart';
 import 'package:charteur/features/views/auth/views/forget/forget_screen.dart';
@@ -509,6 +511,7 @@ class AppPages {
       name: AppRoutes.adminHome,
       page: () => const AdminHomeScreen(),
       transition: Transition.noTransition,
+      binding: HomeBinding()
     ),
     GetPage(
       name: AppRoutes.onboarding,
@@ -572,6 +575,7 @@ class AppPages {
       name: AppRoutes.sites,
       page: () => const SitesScreen(),
       transition: Transition.noTransition,
+      binding: SitesBinding(),
     ),
     GetPage(
       name: AppRoutes.siteAdd,

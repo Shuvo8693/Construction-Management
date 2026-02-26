@@ -3,13 +3,15 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class SiteCardWidget extends StatelessWidget {
-  const SiteCardWidget({super.key});
+  final SiteData _siteData;
+  const SiteCardWidget({super.key, required SiteData siteData}) : _siteData = siteData;
 
   @override
   Widget build(BuildContext context) {
@@ -26,28 +28,31 @@ class SiteCardWidget extends StatelessWidget {
         children: [
           CustomNetworkImage(
             border: Border.all(color: AppColors.primaryColor.withAlpha(20)),
-            imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29uc3RydWN0aW9uJTIwc2l0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60', width: 90.w, height: 82.h, borderRadius: 12.r,),
+            imageUrl: _siteData.photos.first, width: 90.w, height: 82.h, borderRadius: 12.r,),
 
           SizedBox(width: 12.w,),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // site title
                 CustomText(
                   maxline: 2,
                     textOverflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w500,
-                    text: 'Downtown Mall Projects'),
+                    text: _siteData.siteTitle),
                 SizedBox(height: 6.h,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    //building type
                     CustomText(
                       color: AppColors.textSecondary,
                         fontSize: 12.sp,
                         textAlign: TextAlign.start,
-                        text: 'Apartment'),
+                        text: _siteData.buildingType),
+                    // status
                     CustomContainer(
                       paddingAll: 4.r,
                       radiusAll: 11.r,
@@ -55,10 +60,11 @@ class SiteCardWidget extends StatelessWidget {
                       color: AppColors.primaryColor.withAlpha(77),
                         child: CustomText(
                           textAlign: TextAlign.end,
-                          text: 'In Progress',fontSize: 10.sp)),
+                          text: _siteData.status ,fontSize: 10.sp)),
                   ],
                 ),
                 SizedBox(height: 8.h,),
+                // site location
                 Row(
                   children: [
                     Flexible(
@@ -67,7 +73,7 @@ class SiteCardWidget extends StatelessWidget {
                         textOverflow: TextOverflow.ellipsis,
                           right: 8.w,
                           textAlign: TextAlign.start,
-                          text: '36 Park Street Road'),
+                          text: _siteData.location.address),
                     ),
                     Assets.icons.location.svg(),
                   ],

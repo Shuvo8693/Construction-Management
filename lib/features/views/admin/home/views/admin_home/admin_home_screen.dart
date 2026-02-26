@@ -3,6 +3,7 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
+import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class AdminHomeScreen extends StatelessWidget {
+class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
 
+  @override
+  State<AdminHomeScreen> createState() => _AdminHomeScreenState();
+}
+
+class _AdminHomeScreenState extends State<AdminHomeScreen> {
+
+  final  _homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _homeController.getSite();
+  }
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -24,7 +38,7 @@ class AdminHomeScreen extends StatelessWidget {
           subtitleFontSize: 16.sp,
           titleColor: AppColors.appGreyColor,
           title: 'Welcome back,',
-          subTitle: 'Savannah Nguyen',
+          subTitle: 'Billal',
         ),
         actions: [
           IconButton(
@@ -103,25 +117,34 @@ class AdminHomeScreen extends StatelessWidget {
             ],
           ),
 
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {},
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return AnimatedListItemWraper(
-                    index: index,
-                    child: SiteCardWidget(),
-                  );
+          Obx((){
+           final siteData = _homeController.siteListModel.value?.data;
+            if(_homeController.isLoading.value){
+              return Center(child: CircularProgressIndicator());
+            }else if(siteData == null && siteData!.isEmpty){
+              return Center(child: Text('No Data Found'));
+            }
+            return  Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                 await _homeController.getSite();
                 },
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: siteData.length,
+                  itemBuilder: (context, index) {
+                    return AnimatedListItemWraper(
+                      index: index,
+                      child: SiteCardWidget(siteData: siteData[index],),
+                    );
+                  },
+                ),
               ),
-            ),
+            );
+          }
           ),
         ],
       ),
     );
   }
-
-
 }

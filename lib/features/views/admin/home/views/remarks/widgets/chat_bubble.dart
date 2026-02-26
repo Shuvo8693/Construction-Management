@@ -1,15 +1,15 @@
 import 'package:charteur/core/widgets/custom_network_image.dart';
-import 'package:charteur/features/views/admin/home/remarks/remarks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../remarks_screen.dart';
 import 'avatar.dart';
 
 
 class ChatBubble extends StatelessWidget {
   final ChatMessage message;
 
-  const ChatBubble({required this.message});
+  const ChatBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

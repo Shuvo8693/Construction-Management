@@ -1,11 +1,10 @@
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
-import 'package:charteur/features/views/admin/home/site_details/widgets/comment_tile.dart';
-import 'package:charteur/features/views/admin/home/site_details/widgets/show-status_bottom_sheet.dart';
+import 'package:charteur/features/views/admin/home/views/site_details/widgets/comment_tile.dart';
+import 'package:charteur/features/views/admin/home/views/site_details/widgets/show-status_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-@RoutePage()
 class SiteDetailsScreen extends StatefulWidget {
   const SiteDetailsScreen({super.key});
 
