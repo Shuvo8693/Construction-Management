@@ -25,7 +25,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _homeController.getSite();
+    WidgetsBinding.instance.addPostFrameCallback((__)async{
+      await _homeController.getSite();
+    });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -111,7 +114,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               Spacer(),
               InkWell(
                   onTap: () {
-                    context.read<BottomNavProvider>().setSelectedIndex(1);
+                    // context.read<BottomNavProvider>().setSelectedIndex(1);
                   },
                   child: CustomText(text: 'See All', fontSize: 16.sp, color: AppColors.textPrimary)),
             ],
@@ -121,7 +124,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
            final siteData = _homeController.siteListModel.value?.data;
             if(_homeController.isLoading.value){
               return Center(child: CircularProgressIndicator());
-            }else if(siteData == null && siteData!.isEmpty){
+            }else if(siteData == null || siteData.isEmpty){
               return Center(child: Text('No Data Found'));
             }
             return  Expanded(
@@ -131,11 +134,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 },
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
-                  itemCount: siteData.length,
+                  itemCount: siteData.length  ,
                   itemBuilder: (context, index) {
+                    final siteDataIndex = siteData[index];
                     return AnimatedListItemWraper(
                       index: index,
-                      child: SiteCardWidget(siteData: siteData[index],),
+                      child: SiteCardWidget(siteData: siteDataIndex),
                     );
                   },
                 ),

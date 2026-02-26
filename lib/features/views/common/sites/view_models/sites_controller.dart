@@ -105,4 +105,23 @@ class SitesController extends GetxController {
     }
   }
 
+  // ──Upload Site file ─────────────────────────────────────────────
+  Future<void> uploadSiteFile({String? fileName , String? filePath}) async {
+    final siteId = Get.arguments['siteId'] ?? '';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.uploadSiteFile();
+
+      switch (result) {
+        case Success<String>():
+          showSuccess(result.data);
+        case Failure<String>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 }

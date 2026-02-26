@@ -45,4 +45,16 @@ class SitesRepository {
     return ApiResult.failure(response.errorMassage ?? 'Registration failed');
   }
 
+  // ──Add Site file ──────────────────────────────────────────
+  Future<ApiResult<String>> uploadSiteFile({String? fileName , String? filePath}) async {
+    final response = await _network.multipartRequest(
+      url: ApiUrls.siteTaskUrl(''),
+      body: {}
+    );
+    if (response.isSuccess) {
+      return ApiResult.success(response.responseBody['data']['message']);
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Registration failed');
+  }
+
 }

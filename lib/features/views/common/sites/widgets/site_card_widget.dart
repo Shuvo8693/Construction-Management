@@ -28,7 +28,7 @@ class SiteCardWidget extends StatelessWidget {
         children: [
           CustomNetworkImage(
             border: Border.all(color: AppColors.primaryColor.withAlpha(20)),
-            imageUrl: _siteData.photos.first, width: 90.w, height: 82.h, borderRadius: 12.r,),
+            imageUrl: _siteData.photos.isNotEmpty?_siteData.photos.first:'', width: 90.w, height: 82.h, borderRadius: 12.r,),
 
           SizedBox(width: 12.w,),
           Expanded(
