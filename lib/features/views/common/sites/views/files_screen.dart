@@ -4,15 +4,17 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/admin/home/views/remarks/remarks_screen.dart';
+import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/file_card_widget.dart';
 import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
-@RoutePage()
 class FilesScreen extends StatefulWidget {
   const FilesScreen({super.key});
 
@@ -22,11 +24,15 @@ class FilesScreen extends StatefulWidget {
 
 class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final  _sitesController = Get.find<SitesController>();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((__)async{
+      await _sitesController.getSiteFiles();
+    });
   }
 
   @override
@@ -119,24 +125,34 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
   }
 
   Widget _buildFilesList() {
-    return RefreshIndicator(
-      onRefresh: () async {
-        // Refresh logic here
-      },
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemCount: 20,
-        itemBuilder: (BuildContext context, int index) {
-          return FileCardWidget(
-              onTap: () {
-                Get.toNamed(AppRoutes.task);
-
-          });
+    return Obx((){
+      final fileData = _sitesController.fileListModel.value?.data;
+      if(_sitesController.isLoading.value){
+        return Center(child: CircularProgressIndicator());
+      }
+      else if(fileData == null && fileData!.isEmpty){
+        return Center(child: Text('No Data Found'));
+      }
+      return RefreshIndicator(
+        onRefresh: () async {
+          await _sitesController.getSiteFiles();
         },
-      ),
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: fileData.length,
+          itemBuilder: (BuildContext context, int index) {
+            return FileCardWidget(
+                onTap: () {
+                  Get.toNamed(AppRoutes.task);
+
+                }, fileData: fileData[index]
+            );
+          },
+        ),
+      );
+     }
     );
   }
-
   Widget _buildTodoList({String? status}) {
     return RefreshIndicator(
       onRefresh: () async {
@@ -165,5 +181,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
       ),
     );
   }
+
+
 }
 

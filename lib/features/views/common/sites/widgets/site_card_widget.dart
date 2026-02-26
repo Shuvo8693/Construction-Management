@@ -17,7 +17,7 @@ class SiteCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomContainer(
       onTap: (){
-        Get.toNamed(AppRoutes.files);
+        Get.toNamed(AppRoutes.files,arguments: {"siteId":_siteData.id});
       },
       marginTop: 10.h,
       radiusAll: 8.r,

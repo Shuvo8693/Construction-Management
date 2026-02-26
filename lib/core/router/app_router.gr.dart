@@ -132,6 +132,7 @@ class AppPages {
       name: AppRoutes.files,
       page: () => const FilesScreen(),
       transition: Transition.noTransition,
+      binding: SitesBinding(),
     ),
     GetPage(
       name: AppRoutes.fileAdd,

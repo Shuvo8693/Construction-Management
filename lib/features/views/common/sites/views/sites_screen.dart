@@ -4,7 +4,7 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
-import 'package:charteur/features/views/common/sites/repository/sites_controller.dart';
+import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';

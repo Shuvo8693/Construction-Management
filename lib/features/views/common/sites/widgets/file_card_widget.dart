@@ -1,15 +1,15 @@
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/common/sites/models/filelist_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FileCardWidget extends StatelessWidget {
-  final String? fileUrl;
-  final String? title;
+  final FileData fileData;
   final VoidCallback onTap;
 
   const FileCardWidget({
-    super.key, this.fileUrl, this.title, required this.onTap,
+    super.key, required this.onTap, required this.fileData,
   });
 
   @override
@@ -32,7 +32,7 @@ class FileCardWidget extends StatelessWidget {
               SizedBox(width: 12.w),
               CustomText(
                 fontWeight: FontWeight.w500,
-                text: 'Project Plan.pdf',
+                text: fileData.fileName,
               ),
             ],
           ),
