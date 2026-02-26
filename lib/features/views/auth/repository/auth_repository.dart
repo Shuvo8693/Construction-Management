@@ -10,7 +10,7 @@ class AuthRepository {
   final _network = NetworkCaller.instance;
 
   // ── Login ─────────────────────────────────────────────
-  Future<ApiResult<UserModel>> login({
+  Future<ApiResult<String>> login({
     required String email,
     required String password,
   }) async {
@@ -20,7 +20,7 @@ class AuthRepository {
     );
 
     if (response.isSuccess) {
-      return ApiResult.success(UserModel.fromJson(response.responseBody));
+      return ApiResult.success(response.responseBody['data']['accessToken']);
     }
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }

@@ -55,24 +55,23 @@ class AuthController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
 
-    final result = await _repository.login(
-      email: emailCtrl.text.trim(),
-      password: passCtrl.text.trim(),
-    );
+    try {
+      final result = await _repository.login(
+        email: emailCtrl.text.trim(),
+        password: passCtrl.text.trim(),
+      );
 
-    switch (result) {
-      case Success<UserModel>():
-        user.value = result.data;
-        // Save token then update NetworkCaller
-        await PrefsHelper.setString(AppConstants.bearerToken, result.data.token!);
-        await NetworkCaller.instance.updateToken();
-        Get.offAllNamed(AppRoutes.bottomNav);
-
-      case Failure<UserModel>():
-        _showError(result.message);
+      switch (result) {
+        case Success<String>():
+          // Save token then update NetworkCaller
+          await PrefsHelper.setString(AppConstants.bearerToken, result.data);
+          Get.offAllNamed(AppRoutes.adminHome);
+        case Failure<String>():
+          _showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
     }
-
-    isLoading.value = false;
   }
 
   // ── Register ──────────────────────────────────────────

@@ -11,7 +11,6 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 
-@RoutePage()
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key,});
 

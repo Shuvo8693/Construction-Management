@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';

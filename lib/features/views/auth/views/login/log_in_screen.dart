@@ -3,9 +3,11 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/auth/view_models/auth_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
@@ -18,8 +20,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final  _authController = Get.find<AuthController>();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   @override
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 82.h),
               CustomTextField(
                 prefixIcon: Assets.icons.email.svg(),
-                controller: emailController,
+                controller: _authController.emailCtrl,
                 hintText: "Email",
                 keyboardType: TextInputType.emailAddress,
                 isEmail: true,
@@ -44,9 +45,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
               CustomTextField(
                 prefixIcon: Assets.icons.lock.svg(),
-                controller: passwordController,
+                controller: _authController.passCtrl,
                 hintText: "Password",
                 isPassword: true,
+                validator: (value){
+                  if(value!.isEmpty){
+                    return "Password is required";
+                  }
+                  return null;
+                },
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -58,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 32.h),
-              CustomButton(label: "Sign In", onPressed: _onLogin),
+              Obx(()=> CustomButton(isLoading: _authController.isLoading.value,label: "Sign In", onPressed: _onLogin)),
               SizedBox(height: 18.h),
               RichText(text: TextSpan(
                 style: TextStyle(
@@ -87,8 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _onLogin() {
-    if (_globalKey.currentState!.validate()) return;
-    Get.offAllNamed(AppRoutes.bottomNav);
+  void _onLogin() async{
+    if (!_globalKey.currentState!.validate()) return;
+   await _authController.login();
   }
 }
