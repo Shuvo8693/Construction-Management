@@ -24,7 +24,8 @@ class ChatMessage {
 }
 
 class RemarksScreen extends StatelessWidget {
-  const RemarksScreen({super.key});
+  final String status;
+  const RemarksScreen({super.key,  required this.status});
 
   static const _loremText =
       'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling '

@@ -5,6 +5,7 @@ import 'package:charteur/features/views/admin/home/models/sitelist_response_mode
 
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/features/views/common/sites/models/filelist_response_model.dart';
+import 'package:charteur/features/views/common/sites/models/tasklist_response_model.dart';
 import 'package:charteur/services/api_urls.dart';
 
 class SitesRepository {
@@ -29,6 +30,17 @@ class SitesRepository {
     );
     if (response.isSuccess) {
       return ApiResult.success(FileListResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Registration failed');
+  }
+
+  // ── Site Task ──────────────────────────────────────────
+  Future<ApiResult<TaskListResponseModel>> getSiteTask({String status = ''}) async {
+    final response = await _network.getRequest(
+      url: ApiUrls.siteTaskUrl(status),
+    );
+    if (response.isSuccess) {
+      return ApiResult.success(TaskListResponseModel.fromJson(response.responseBody));
     }
     return ApiResult.failure(response.errorMassage ?? 'Registration failed');
   }

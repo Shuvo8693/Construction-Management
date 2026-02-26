@@ -31,7 +31,23 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((__)async{
-      await _sitesController.getSiteFiles();
+     await _sitesController.getSiteFiles();
+      _tabController.addListener((){
+        switch (_tabController.index) {
+          case 0:
+            _sitesController.getSiteFiles();
+            break;
+          case 1:
+            _sitesController.getSiteTask(status: "To-Do");
+            break;
+          case 2:
+            _sitesController.getSiteTask(status: "In-Progress");
+            break;
+          case 3:
+            _sitesController.getSiteTask(status: "Done");
+            break;
+        }
+      });
     });
   }
 
@@ -88,13 +104,13 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 // Files Tab
                 _buildFilesList(),
                 // To-do Tab
-                _buildTodoList(status: 'To-do'),
+                _buildTodoList(status: 'To-Do'),
                 // In Progress Tab
-                _buildTodoList(status: 'In Progress'),
+                _buildTodoList(status: 'In-Progress'),
                 // Done Tab
                 _buildTodoList(status: 'Done'),
                 // Remarks Tab
-                RemarksScreen(),
+                RemarksScreen(status: 'Remarks'),
               ],
             ),
           ),
@@ -153,33 +169,47 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
      }
     );
   }
-  Widget _buildTodoList({String? status}) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        // Refresh logic here
-      },
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemCount: 20,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.siteDetails);
-            },
-            child: TodoCardWidget(
-              title: 'Repair Living Room’s  Electric Line',
-              category: 'Design',
-              projectName: 'Downtown Mall Projects',
-              assigneeName: 'Leslie Alexander',
-              description: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling Applying a smooth or protective layer of cement, l',
-              status: status,
-              imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29uc3RydWN0aW9uJTIwc2l0ZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60',
+  Widget _buildTodoList({String? status }) {
+    return Obx(() {
+      // Get task list from controller
+      final taskData = _sitesController.taskListModel.value?.data ?? [];
 
-            ),
-          );
+      // Show empty indicator if no tasks
+      if (_sitesController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (taskData.isEmpty) {
+        return const Center(child: Text("No tasks available"));
+      }
+
+      return RefreshIndicator(
+        onRefresh: () async {
+          // Call API again to refresh tasks
+          await _sitesController.getSiteTask(status: status??'');
         },
-      ),
-    );
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: taskData.length,
+          itemBuilder: (BuildContext context, int index) {
+            final task = taskData[index];
+
+            return GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoutes.siteDetails);
+              },
+              child: TodoCardWidget(
+                title: task.title,
+                category: task.fileId.fileType,
+                projectName: task.siteId.siteTitle,
+                assigneeName: task.assignedTo.name,
+                description: task.description,
+                status: task.status,
+                imageUrl: task.images.isNotEmpty ? task.images.first : '',
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 
 

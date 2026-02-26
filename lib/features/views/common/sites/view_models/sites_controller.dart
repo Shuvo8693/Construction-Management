@@ -11,6 +11,7 @@ import 'package:charteur/features/views/admin/home/repository/home_repository.da
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/features/views/auth/repository/auth_repository.dart';
 import 'package:charteur/features/views/common/sites/models/filelist_response_model.dart';
+import 'package:charteur/features/views/common/sites/models/tasklist_response_model.dart';
 import 'package:charteur/features/views/common/sites/repository/sites_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -32,6 +33,7 @@ class SitesController extends GetxController {
   final role         = ''.obs;
   final siteListModel = Rxn<SiteListResponseModel>();
   final fileListModel = Rxn<FileListResponseModel>();
+  final taskListModel = Rxn<TaskListResponseModel>();
 
   // ── Lifecycle ─────────────────────────────────────────
   @override
@@ -77,6 +79,25 @@ class SitesController extends GetxController {
         case Success<FileListResponseModel>():
           fileListModel.value = result.data;
         case Failure<FileListResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── Site Task ─────────────────────────────────────────────
+  Future<void> getSiteTask({String status = ''}) async {
+    final siteId = Get.arguments['siteId'] ?? '';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getSiteTask(status: status);
+
+      switch (result) {
+        case Success<TaskListResponseModel>():
+          taskListModel.value = result.data;
+        case Failure<TaskListResponseModel>():
           showError(result.message);
       }
     } finally {
