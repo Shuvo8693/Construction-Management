@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
+import 'package:charteur/core/config/app_constants.dart';
+import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
@@ -24,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      bottomNavigationBar: BottomNavScreen(menuIndex: 3),
       appBar: CustomAppBar(title: 'Profile'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,9 +91,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 confirmButtonText: 'Logout',
                 confirmButtonColor: AppColors.errorColor,
                 onCancel: () {
+                  Get.back();
                 },
-                onConfirm: () {
-                  //Get.offAllNamed(AppRoutes.signUpScreen);
+                onConfirm: () async{
+                 await PrefsHelper.remove(AppConstants.bearerToken);
+                  Get.offAllNamed(AppRoutes.login);
                 },
               ),
             );

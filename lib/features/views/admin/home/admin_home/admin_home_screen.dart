@@ -17,6 +17,7 @@ class AdminHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      bottomNavigationBar: BottomNavScreen(menuIndex: 0),
       appBar: CustomAppBar(
         titleWidget: CustomListTile(
           contentPaddingHorizontal: 16.w,

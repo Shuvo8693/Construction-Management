@@ -7,12 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../admin/home/admin_home/admin_home_screen.dart';
-import '../common/profile/profile_screen.dart';
-import '../common/sites/sites_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+  final int menuIndex;
+  const BottomNavScreen({super.key, this.menuIndex = 0});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -21,17 +19,10 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   late int _selectedIndex;
 
-  final List<Widget> screens = [
-    AdminHomeScreen(),
-    SitesScreen(),
-    ProfileScreen(),
-    ProfileScreen(),
-  ];
-
   @override
   void initState() {
     super.initState();
-    _selectedIndex = 0;
+    _selectedIndex = widget.menuIndex;
   }
 
   void _onItemTapped(int index) {
@@ -48,9 +39,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         Get.offAllNamed(AppRoutes.sites);
         break;
       case 2:
-        Get.offAllNamed(AppRoutes.task);
-        break;
-      case 3:
         Get.offAllNamed(AppRoutes.profile);
         break;
     }
@@ -59,51 +47,37 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final List<Map<String, dynamic>> _navItems = [
     {"icon": Assets.icons.home.path, "label": "Home"},
     {"icon": Assets.icons.plan.path, "label": "Sites"},
-    {"icon": Assets.icons.assing.path, "label": "Assign Task"},
+    // {"icon": Assets.icons.assing.path, "label": "Assign Task"},
     {"icon": Assets.icons.person.path, "label": "Profile"},
   ];
 
   final List<Map<String, dynamic>> _navItemsF = [
     {"icon": Assets.icons.homeF.path, "label": "Home"},
     {"icon": Assets.icons.planF.path, "label": "Sites"},
-    {"icon": Assets.icons.assingF.path, "label": "Assign Task"},
+    // {"icon": Assets.icons.assingF.path, "label": "Assign Task"},
     {"icon": Assets.icons.personF.path, "label": "Profile"},
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      body: Stack(
-        children: [
-          // Main screen content
-          screens[_selectedIndex],
-
-          // Bottom Nav Bar
-          Positioned(
-            bottom: 20.h,
-            left: 6.w,
-            right: 6.w,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.bgColor,
-                borderRadius: BorderRadius.circular(100.r),
-                border: Border.all(
-                  color: AppColors.primaryColor,
-                  width: 1,
-                ),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  _navItems.length,
-                      (index) => _buildNavItem(index),
-                ),
-              ),
-            ),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.bgColor,
+          borderRadius: BorderRadius.circular(100.r),
+          border: Border.all(
+            color: AppColors.primaryColor,
+            width: 1,
           ),
-        ],
+        ),
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(
+            _navItems.length,
+                (index) => _buildNavItem(index),
+          ),
+        ),
       ),
     );
   }

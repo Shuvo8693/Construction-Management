@@ -3,6 +3,7 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/config/app_constants.dart';
 import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/router/app_router.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/splash_onboarding/widgets/circle_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,8 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
     String token = await PrefsHelper.getString(AppConstants.bearerToken);
     await Future.delayed(const Duration(seconds: 3));
     if(!mounted) return;
-    if (token.isNotEmpty) {
-      Get.offNamed(AppRoutes.bottomNav);
+    if ( token.isNotEmpty) {
+      final value = await getPayloadValue();
+      String role = value['role']??'';
+      Get.offAllNamed(AppRoutes.adminHome);
     }else{
       Get.offNamed(AppRoutes.onboarding);
     }

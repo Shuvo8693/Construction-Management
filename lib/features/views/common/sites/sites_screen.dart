@@ -11,6 +11,7 @@ class SitesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      bottomNavigationBar: BottomNavScreen(menuIndex: 1),
       appBar: CustomAppBar(title: 'Sites'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

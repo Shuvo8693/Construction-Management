@@ -4,12 +4,12 @@ import 'dart:ui' as ui;
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
 import 'package:charteur/features/views/admin/home/widgets/assign_worker_sheet.dart';
+import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 
-@RoutePage()
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
   @override

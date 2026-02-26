@@ -112,7 +112,7 @@ class AuthController extends GetxController {
       case Success():
        if(result.data.isNotEmpty){
          await PrefsHelper.setString(AppConstants.bearerToken, result.data);
-         Get.offAllNamed(AppRoutes.bottomNav);
+         Get.offAllNamed(AppRoutes.adminHome);
        }
       case Failure():
         _showError((result as Failure).message);

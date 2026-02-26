@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (_, __) {
         return GetMaterialApp(
+          defaultTransition: Transition.noTransition,
           theme: AppThemeData.lightThemeData,
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
