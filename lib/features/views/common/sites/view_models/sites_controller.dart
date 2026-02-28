@@ -107,11 +107,11 @@ class SitesController extends GetxController {
 
   // ──Upload Site file ─────────────────────────────────────────────
   Future<void> uploadSiteFile({String? fileName , String? filePath}) async {
-    final siteId = Get.arguments['siteId'] ?? '';
+    final siteId = Get.arguments['siteId'] ?? '' ;
     isLoading.value = true;
 
     try {
-      final result = await _repository.uploadSiteFile();
+      final result = await _repository.uploadSiteFile(fileName: fileName, siteId: siteId, filePath: filePath);
 
       switch (result) {
         case Success<String>():

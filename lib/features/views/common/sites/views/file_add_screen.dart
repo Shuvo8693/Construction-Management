@@ -1,11 +1,13 @@
-import 'package:auto_route/auto_route.dart';
+
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/helpers/photo_picker_helper.dart';
+import 'package:charteur/core/widgets/files/filepath_container.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-@RoutePage()
 class FileAddScreen extends StatefulWidget {
   const FileAddScreen({super.key});
 
@@ -14,10 +16,12 @@ class FileAddScreen extends StatefulWidget {
 }
 
 class _FileAddScreenState extends State<FileAddScreen> {
+  final  _sitesController = Get.find<SitesController>();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   final TextEditingController _fileNameController = TextEditingController();
 
+  String _filePath = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +34,14 @@ class _FileAddScreenState extends State<FileAddScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTextField(
-                label: 'File Name',
-                hint: 'Enter File Name',
-                controller: _fileNameController,
+              CustomTextField(
+                  labelText: 'File Name',
+                  hintText: 'Enter File Name',
+                borderColor: Color(0xFFEDEDED),
+                  controller: _fileNameController,
+                filColor : Colors.transparent,
+
               ),
-            
               SizedBox(height: 8.h,),
               CustomText(
                 fontSize: 12.sp,
@@ -45,7 +51,9 @@ class _FileAddScreenState extends State<FileAddScreen> {
                   PhotoPickerHelper.showPicker(
                     context: context,
                     onImagePicked: (file) {
-        
+                       setState(() {
+                         _filePath = file.path;
+                       });
                     });
                 },
                 child: Assets.icons.addImage.svg(
@@ -54,6 +62,13 @@ class _FileAddScreenState extends State<FileAddScreen> {
                   fit: BoxFit.cover,
                 ),
               ),
+               SizedBox(height: 10.h,),
+              if(_filePath.isNotEmpty)
+                buildFilePathContainer(_filePath, (){
+                  setState(() {
+                    _filePath = '';
+                  });
+                })
 
             ],
           ),
@@ -62,34 +77,22 @@ class _FileAddScreenState extends State<FileAddScreen> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding:  EdgeInsets.all(16.w),
-          child: CustomButton(onPressed: (){
-            if(_globalKey.currentState!.validate()){
-
-            }
-          },
-            label: 'Upload File',
+          child: Obx(()=>
+             CustomButton(
+              isLoading: _sitesController.isLoading.value,
+              onPressed: ()async{
+              if(_globalKey.currentState!.validate()){
+                await _sitesController.uploadSiteFile(fileName: _fileNameController.text, filePath: _filePath);
+              }
+            },
+              label: 'Upload File',
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-     Widget? suffixIcon,
-    required TextEditingController controller,
-  }) {
-    return CustomTextField(
-      suffixIcon: suffixIcon,
-      borderRadio: 12.r,
-      controller: controller,
-      labelText: label,
-      hintText: hint,
-      borderColor: Color(0xFFEDEDED),
-      filColor: Colors.transparent,
-    );
-  }
 
 
   @override

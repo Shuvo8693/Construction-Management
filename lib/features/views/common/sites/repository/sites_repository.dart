@@ -1,12 +1,15 @@
 
+import 'dart:convert';
+
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 
-import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/features/views/common/sites/models/filelist_response_model.dart';
 import 'package:charteur/features/views/common/sites/models/tasklist_response_model.dart';
 import 'package:charteur/services/api_urls.dart';
+import 'package:dio/dio.dart';
+
 
 class SitesRepository {
   final _network = NetworkCaller.instance;
@@ -46,15 +49,27 @@ class SitesRepository {
   }
 
   // ──Add Site file ──────────────────────────────────────────
-  Future<ApiResult<String>> uploadSiteFile({String? fileName , String? filePath}) async {
+  Future<ApiResult<String>> uploadSiteFile({
+    String? fileName,
+    String? siteId,
+    String? filePath,
+  }) async {
+
     final response = await _network.multipartRequest(
-      url: ApiUrls.siteTaskUrl(''),
-      body: {}
+      url: ApiUrls.siteFileUploadUrl,
+      body: {
+        "files": await _network.toMultipartFile(filePath!,fileName: fileName),
+        "data": jsonEncode({
+          "siteId": siteId,
+          "fileName": fileName,
+        }),
+      },
     );
+
     if (response.isSuccess) {
-      return ApiResult.success(response.responseBody['data']['message']);
+      return ApiResult.success(response.responseBody['data'][0]['fileUrl']);
     }
-    return ApiResult.failure(response.errorMassage ?? 'Registration failed');
+    return ApiResult.failure(response.errorMassage ?? 'Upload failed');
   }
 
 }

@@ -28,6 +28,7 @@ class ApiUrls {
   static  const String  parentCreate = '/parents/parent';
   static  const String  siteUrl = '$baseUrl/site/';
   static  const String  assignedSiteUrl = '$baseUrl/office-admin/assigned-sites';
+  static  const String  siteFileUploadUrl = '$baseUrl/site-file/upload';
   static  String  siteFileUrl(String siteId) => '$baseUrl/site-file/$siteId';
   static  String  siteTaskUrl(String siteStatus) => '$baseUrl/task/?status=$siteStatus';
   static  String  sendMessage(String conversationID) => '/messages/$conversationID/send-message';

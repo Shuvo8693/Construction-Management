@@ -459,6 +459,41 @@ class NetworkCaller {
     log.i('Body Keys: ${body.keys.toList()} | Files: $fileCount');
   }
 
+  // ── Create MultipartFile from path ────────────────────
+   Future<MultipartFile> toMultipartFile(String filePath, {String? fileName}) async {
+    final name = fileName ?? filePath.split('/').last;
+    final mimeType = _getMimeType(filePath);
+
+    return MultipartFile.fromFile(
+      filePath,
+      filename: name,
+      contentType: DioMediaType.parse(mimeType),
+    );
+  }
+
+  // ── Detect mime type from extension ──────────────────
+   String _getMimeType(String filePath) {
+    final ext = filePath.split('.').last.toLowerCase();
+
+    return switch (ext) {
+      'jpg' || 'jpeg' => 'image/jpeg',
+      'png'           => 'image/png',
+      'gif'           => 'image/gif',
+      'webp'          => 'image/webp',
+      'pdf'           => 'application/pdf',
+      'mp4'           => 'video/mp4',
+      'mov'           => 'video/quicktime',
+      'mp3'           => 'audio/mpeg',
+      'doc'           => 'application/msword',
+      'docx'          => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'xls'           => 'application/vnd.ms-excel',
+      'xlsx'          => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'zip'           => 'application/zip',
+      'txt'           => 'text/plain',
+      _               => 'application/octet-stream',
+    };
+  }
+
   // ==========================================================================
   // FILE DOWNLOAD
   // ==========================================================================

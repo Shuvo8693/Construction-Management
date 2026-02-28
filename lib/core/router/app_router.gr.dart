@@ -138,6 +138,7 @@ class AppPages {
       name: AppRoutes.fileAdd,
       page: () => const FileAddScreen(),
       transition: Transition.noTransition,
+      binding: SitesBinding(),
     ),
 
     // ── Task ──────────────────────────────────────────────

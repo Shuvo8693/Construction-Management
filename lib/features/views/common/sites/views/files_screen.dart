@@ -11,9 +11,7 @@ import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+
 
 class FilesScreen extends StatefulWidget {
   const FilesScreen({super.key});
@@ -25,7 +23,7 @@ class FilesScreen extends StatefulWidget {
 class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final  _sitesController = Get.find<SitesController>();
-
+  String _siteId = '';
   @override
   void initState() {
     super.initState();
@@ -48,6 +46,14 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
             break;
         }
       });
+      getSiteId();
+    });
+  }
+
+  getSiteId(){
+    String siteId = Get.arguments['siteId'] ?? '' ;
+    setState(() {
+      _siteId = siteId;
     });
   }
 
@@ -125,7 +131,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 ? const SizedBox.shrink()
                 : FloatingActionButton.extended(
               key: const ValueKey('fab'),
-              onPressed: () => Get.toNamed(AppRoutes.fileAdd),
+              onPressed: () => Get.toNamed(AppRoutes.fileAdd,arguments: {"siteId": _siteId}),
               backgroundColor: AppColors.primaryColor,
               label: const CustomText(
                 text: 'Add File',
