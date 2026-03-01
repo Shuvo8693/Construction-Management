@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
   }
 
   // ── Login ─────────────────────────────────────────────
-  Future<void> getAssignedSite() async {
+  Future<void> getProfile() async {
     isLoading.value = true;
 
     try {
