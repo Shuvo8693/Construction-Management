@@ -34,6 +34,7 @@ import 'package:charteur/features/views/splash_onboarding/onboarding_screen.dart
 import 'package:charteur/features/views/splash_onboarding/role_screen.dart';
 import 'package:charteur/features/views/splash_onboarding/splash_screen.dart';
 
+import '../../features/views/admin/home/views/company_profile/company_profile.dart';
 import 'app_router.dart';
 
 
@@ -49,6 +50,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.adminHome,
       page: () => const AdminHomeScreen(),
+      transition: Transition.noTransition,
+      binding: HomeBinding()
+    ),
+    GetPage(
+      name: AppRoutes.companyProfile,
+      page: () =>  CompanyInformationScreen(),
       transition: Transition.noTransition,
       binding: HomeBinding()
     ),

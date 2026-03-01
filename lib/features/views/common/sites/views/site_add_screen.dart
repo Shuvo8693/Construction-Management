@@ -199,15 +199,4 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
       filColor: Colors.transparent,
     );
   }
-
-
-  // @override
-  // void dispose() {
-  //   _sitesController.siteOwnerController.dispose();
-  //   _sitesController.siteTitleController.dispose();
-  //   _sitesController.siteStatusController.dispose();
-  //   _sitesController.siteLocationController.dispose();
-  //   _sitesController.buildingTypeController.dispose();
-  //   super.dispose();
-  // }
 }

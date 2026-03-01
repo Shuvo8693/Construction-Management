@@ -90,7 +90,7 @@ class SitesRepository {
       body: {
         "images": await _network.toMultipartFile(filePath!,fileName: fileName),
         "data": jsonEncode({
-          "createdBy": "698b1621cccb4360a572649d",
+          "createdBy": createdBy,
           "siteOwner": siteOwner,
           "siteTitle": siteTitle,
           "buildingType": buildingType,
@@ -102,7 +102,7 @@ class SitesRepository {
             }
           },
           "status": siteStatus,
-          "endDate": "2026-12-31T00:00:00.000Z"
+          "endDate": "2027-12-31T00:00:00.000Z"
         }
         ),
       },

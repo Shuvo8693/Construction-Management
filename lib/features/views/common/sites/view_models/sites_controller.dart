@@ -6,6 +6,7 @@ import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/core/router/app_router.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
@@ -138,12 +139,14 @@ class SitesController extends GetxController {
 
   // ──Upload Site file ─────────────────────────────────────────────
   Future<void> addSite({String? fileName, String? filePath}) async {
+    final value = await getPayloadValue();
+    String userId =value['userId'];
     isLoading.value = true;
 
     try {
       final result = await _repository.addSite(
         fileName: fileName,
-        createdBy: '',
+        createdBy: userId,
         siteTitle: siteTitleController.text,
         siteOwner: siteOwnerController.text,
         siteStatus: siteStatusController.text,

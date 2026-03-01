@@ -29,5 +29,6 @@ abstract class AppRoutes {
   static const siteDetails = '/site-details';
   static const profile = '/profile';
   static const sites = '/sites';
+  static const companyProfile = '/company-profile';
 }
 

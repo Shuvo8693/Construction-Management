@@ -20,9 +20,14 @@ class HomeController extends GetxController {
   final HomeRepository _repository;
   HomeController(this._repository);
 
-  // ── Form Controllers ──────────────────────────────────
-  final nameCtrl    = TextEditingController();
-  final emailCtrl   = TextEditingController();
+  // ── Office Info Controllers ────────────────────────────
+  final companyNameCtrl  = TextEditingController();
+  final locationCtrl     = TextEditingController();
+  final phoneCtrl        = TextEditingController();
+  final emailCtrl        = TextEditingController();
+  final websiteCtrl      = TextEditingController();
+  final descriptionCtrl  = TextEditingController();
+  final selectedWorkType = TextEditingController();
 
 
   // ── Observables ───────────────────────────────────────
@@ -39,8 +44,12 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
-    nameCtrl.dispose();
+    companyNameCtrl.dispose();
+    locationCtrl.dispose();
+    phoneCtrl.dispose();
     emailCtrl.dispose();
+    websiteCtrl.dispose();
+    descriptionCtrl.dispose();
     super.onClose();
   }
 
@@ -61,5 +70,35 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
+
+
+// ── Update Office Info ─────────────────────────────────
+  Future<void> addCompanyInfo() async {
+    isLoading.value = true;
+    try {
+      final result = await _repository.addCompanyInfo(
+        name: companyNameCtrl.text.trim(),
+        address: locationCtrl.text.trim(),
+        workType: selectedWorkType.text.trim(),
+        email: emailCtrl.text.trim(),
+        phone: phoneCtrl.text.trim(),
+        website: websiteCtrl.text.trim(),
+        description: descriptionCtrl.text.trim(),
+      );
+
+      switch (result) {
+        case Success():
+          Get.back();
+          showSuccess('Profile updated successfully');
+        case Failure():
+          showError((result as Failure).message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
 
 }

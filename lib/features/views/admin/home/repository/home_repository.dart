@@ -23,29 +23,33 @@ class HomeRepository {
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }
 
-  // ── Register ──────────────────────────────────────────
-  Future<ApiResult<String>> home({
+  // ── add company info ──────────────────────────────────────────
+  Future<ApiResult<String>> addCompanyInfo({
     required String name,
+    required String address,
+    required String workType,
     required String email,
-    required String password,
-    required String role,
-    required String phoneNumber,
+    required String phone,
+    required String website,
+    required String description,
   }) async {
     final response = await _network.postRequest(
-      url: ApiUrls.register,
+      url: ApiUrls.addCompanyUrl,
       body: {
-        "email": email,
-        "password": password,
         "name": name,
-        "phoneNumber": phoneNumber,
-        "role": role
+        "address": address,
+        "workType": workType,
+        "email": email,
+        "phone": phone,
+        "website": website,
+        "description": description,
       },
     );
 
     if (response.isSuccess) {
       return ApiResult.success(response.responseBody['data']['email']);
     }
-    return ApiResult.failure(response.errorMassage ?? 'Registration failed');
+    return ApiResult.failure(response.errorMassage ?? 'Failed to update company info');
   }
 
 }
