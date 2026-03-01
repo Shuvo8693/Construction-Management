@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
@@ -52,4 +54,35 @@ class HomeRepository {
     return ApiResult.failure(response.errorMassage ?? 'Failed to update company info');
   }
 
+
+
+  // ── Assign Task ──────────────────────────────────────────
+  Future<ApiResult<String>> assignTask({
+    String? filePath,
+    String? fileName,
+    String? fileId,
+    String? title,
+    String? description,
+    String? assignedTo,
+    String? dueDate,
+  }) async {
+
+    final response = await _network.multipartRequest(
+      url: ApiUrls.assignTaskUrl(fileId ?? ''),
+      body: {
+        "files": await _network.toMultipartFile(filePath!, fileName: fileName),
+        "data": jsonEncode({
+          "title": title,
+          "description": description,
+          "assignedTo": assignedTo,
+          "dueDate": dueDate,
+        }),
+      },
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success('Task assigned successfully');
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Upload failed');
+  }
 }

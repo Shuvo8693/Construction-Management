@@ -115,7 +115,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     children: [
                       // Floor plan image (network placeholder — replace with AssetImage)
                       Image.network(
-                        'https://scontent.fdac207-1.fna.fbcdn.net/v/t39.30808-6/601870974_122229358898093772_9041680976896915001_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=13d280&_nc_ohc=QeCVQC-KvrgQ7kNvwEQqc9k&_nc_oc=AdlIG56DoB1UVaZ2leI25wNuPldp_YQrLpSBrT-75pVTFGQRHkmAwFh3tBHKigOsm8s&_nc_zt=23&_nc_ht=scontent.fdac207-1.fna&_nc_gid=fQ8EjAFlsk4d6C2XQvPpZg&oh=00_Afs6_ieuixNZDJjEf4DelHnwCG2RmFQIYwYbXhU_QdzOAw&oe=699C658C',
+                        'https://images.homify.com/v1500268052/p/photo/image/2126623/3D_Floor_Plan_Sample1.jpg',
                         fit: BoxFit.cover,
                         loadingBuilder: (_, child, progress) =>
                         progress == null

@@ -6,6 +6,7 @@ import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/core/router/app_router.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
@@ -20,7 +21,8 @@ class HomeController extends GetxController {
   final HomeRepository _repository;
   HomeController(this._repository);
 
-  // ── Office Info Controllers ────────────────────────────
+  // ──  Controllers ────────────────────────────
+  // ---- Office Info ---
   final companyNameCtrl  = TextEditingController();
   final locationCtrl     = TextEditingController();
   final phoneCtrl        = TextEditingController();
@@ -29,6 +31,11 @@ class HomeController extends GetxController {
   final descriptionCtrl  = TextEditingController();
   final selectedWorkType = TextEditingController();
 
+  // -- Assign Task -----
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final assignedToController = TextEditingController();
+  final dueDateController = TextEditingController();
 
   // ── Observables ───────────────────────────────────────
   final isLoading    = false.obs;
@@ -50,6 +57,11 @@ class HomeController extends GetxController {
     emailCtrl.dispose();
     websiteCtrl.dispose();
     descriptionCtrl.dispose();
+    //----assign task ----
+    titleController.dispose();
+    descriptionController.dispose();
+    assignedToController.dispose();
+    dueDateController.dispose();
     super.onClose();
   }
 
@@ -93,6 +105,33 @@ class HomeController extends GetxController {
           showSuccess('Profile updated successfully');
         case Failure():
           showError((result as Failure).message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+  // ── Assign Task ─────────────────────────────────────────────
+  Future<void> assignTask({String? fileName, String? filePath, String? fileId}) async {
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.assignTask(
+        filePath: filePath,
+        fileName: fileName,
+        fileId: fileId,
+        title: titleController.text,
+        description: descriptionController.text,
+        assignedTo: assignedToController.text,
+        dueDate: dueDateController.text,
+      );
+
+      switch (result) {
+        case Success<String>():
+          showSuccess(result.data);
+        case Failure<String>():
+          showError(result.message);
       }
     } finally {
       isLoading.value = false;
