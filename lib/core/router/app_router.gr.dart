@@ -28,7 +28,7 @@ import 'package:charteur/features/views/common/setting/terms_screen.dart';
 import 'package:charteur/features/views/common/sites/views/files_screen.dart';
 import 'package:charteur/features/views/common/sites/views/site_add_screen.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
-import 'package:charteur/features/views/common/profile/profile_screen.dart';
+import 'package:charteur/features/views/common/profile/views/profile_screen.dart';
 import 'package:charteur/features/views/common/sites/views/sites_screen.dart';
 import 'package:charteur/features/views/splash_onboarding/onboarding_screen.dart';
 import 'package:charteur/features/views/splash_onboarding/role_screen.dart';
