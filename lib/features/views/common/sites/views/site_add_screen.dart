@@ -3,10 +3,15 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/helpers/menu_show_helper.dart';
 import 'package:charteur/core/helpers/photo_picker_helper.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/files/filepath_container.dart';
 import 'package:charteur/core/widgets/search_bottom_sheet.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 
 class SiteAddScreen extends StatefulWidget {
   const SiteAddScreen({super.key});
@@ -16,13 +21,11 @@ class SiteAddScreen extends StatefulWidget {
 }
 
 class _SiteAddScreenState extends State<SiteAddScreen> {
-  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
-  final TextEditingController _siteOwnerController = TextEditingController();
-  final TextEditingController _siteTitleController = TextEditingController();
-  final TextEditingController _siteStatusController = TextEditingController();
-  final TextEditingController _siteLocationController = TextEditingController();
-  final TextEditingController _buildingTypeController = TextEditingController();
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final  _sitesController = Get.find<SitesController>();
+
+  String _filePath ='';
 
   @override
   Widget build(BuildContext context) {
@@ -38,22 +41,22 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
               _buildTextField(
                 label: 'Site Owner',
                 hint: 'Chartear Company',
-                controller: _siteOwnerController,
+                controller: _sitesController.siteOwnerController,
               ),
               _buildTextField(
                 label: 'Site Tittle',
                 hint: 'Downtown Mall Projects',
-                controller: _siteTitleController,
+                controller: _sitesController.siteTitleController,
               ),
               GestureDetector(
                 onTapDown: (details) async {
                   final value = await MenuShowHelper.showCustomMenu(
                     context: context,
                     details: details,
-                    options: ['Start', 'In Progress'],
+                    options: ['To-Do', 'In-Progress'],
                   );
                   if (value != null) {
-                    _siteStatusController.text = value;
+                    _sitesController.siteStatusController.text = value;
                   }
         
                 },
@@ -61,7 +64,7 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   child: _buildTextField(
                     label: 'Site Current Status',
                     hint: 'Select Status',
-                    controller: _siteStatusController,
+                    controller: _sitesController.siteStatusController,
                     suffixIcon: Icon(
                       Icons.keyboard_arrow_down,
                       size: 24.r,
@@ -70,31 +73,57 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   ),
                 ),
               ),
+              _buildTextField(
+                label: 'Location',
+                hint: 'Enter Location',
+                controller: _sitesController.siteLocationController,
+              ),
+              // GestureDetector(
+              //   onTap: (){
+              //     searchBottomSheet(
+              //       context,
+              //       controller: _siteLocationController,
+              //       hintText: 'Search location',
+              //     );
+              //   },
+              //   child: AbsorbPointer(
+              //     child: _buildTextField(
+              //       label: 'Site Location',
+              //       hint: 'Enter Location',
+              //       controller: _siteLocationController,
+              //       suffixIcon: Icon(
+              //         Icons.location_on_outlined,
+              //         size: 24.r,
+              //         color: AppColors.textSecondary,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
               GestureDetector(
-                onTap: (){
-                  searchBottomSheet(
-                    context,
-                    controller: _siteLocationController,
-                    hintText: 'Search location',
+                onTapDown: (details) async {
+                  final value = await MenuShowHelper.showCustomMenu(
+                    context: context,
+                    details: details,
+                    options: ['Residential', 'Commercial', 'Industrial', 'Mixed-Use', 'Infrastructure', 'Other'],      // enumValues: [Residential, Commercial, Industrial, Mixed-Use, Infrastructure, Other]
                   );
+                  if (value != null) {
+                    _sitesController.buildingTypeController.text = value;
+                  }
+
                 },
                 child: AbsorbPointer(
                   child: _buildTextField(
-                    label: 'Site Location',
-                    hint: 'Enter Location',
-                    controller: _siteLocationController,
+                    label: 'Types of Building',
+                    hint: 'Apartment',
+                    controller: _sitesController.buildingTypeController,
                     suffixIcon: Icon(
-                      Icons.location_on_outlined,
+                      Icons.keyboard_arrow_down,
                       size: 24.r,
                       color: AppColors.textSecondary,
                     ),
                   ),
                 ),
-              ),
-              _buildTextField(
-                label: 'Types of Building',
-                hint: 'Apartment',
-                controller: _buildingTypeController,
               ),
         
               SizedBox(height: 8.h,),
@@ -111,6 +140,9 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   PhotoPickerHelper.showPicker(
                     context: context,
                     onImagePicked: (file) {
+                      setState(() {
+                        _filePath = file.path;
+                      });
         
                     });
                 },
@@ -120,6 +152,13 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   fit: BoxFit.cover,
                 ),
               ),
+              SizedBox(height: 10.h,),
+              if(_filePath.isNotEmpty)
+                buildFilePathContainer(_filePath, (){
+                  setState(() {
+                    _filePath = '';
+                  });
+                })
 
             ],
           ),
@@ -128,12 +167,16 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding:  EdgeInsets.all(16.w),
-          child: CustomButton(onPressed: (){
-            if(_globalKey.currentState!.validate()){
-
-            }
-          },
-            label: 'Add Site',
+          child: Obx(()=>
+             CustomButton(
+               isLoading: _sitesController.isLoading.value,
+               onPressed: (){
+              if(_globalKey.currentState!.validate()){
+                _sitesController.addSite(filePath: _filePath,fileName: 'shuvo');
+              }
+            },
+              label: 'Add Site',
+            ),
           ),
         ),
       ),
@@ -158,13 +201,13 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
   }
 
 
-  @override
-  void dispose() {
-    _siteOwnerController.dispose();
-    _siteTitleController.dispose();
-    _siteStatusController.dispose();
-    _siteLocationController.dispose();
-    _buildingTypeController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _sitesController.siteOwnerController.dispose();
+  //   _sitesController.siteTitleController.dispose();
+  //   _sitesController.siteStatusController.dispose();
+  //   _sitesController.siteLocationController.dispose();
+  //   _sitesController.buildingTypeController.dispose();
+  //   super.dispose();
+  // }
 }

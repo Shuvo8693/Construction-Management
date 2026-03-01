@@ -68,7 +68,7 @@ class NetworkCaller {
 
   /// Initialize or refresh bearer token from storage
   Future<void> updateToken() async {
-    _cachedBearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+    _cachedBearerToken = await PrefsHelper.getString('token');
     log.i('🔑 Token updated');
   }
 
@@ -84,8 +84,8 @@ class NetworkCaller {
 
   /// Build request headers with optional bearer token
   Future<Map<String, String>> _getHeaders([Map<String, String>? customHeaders]) async {
-    _cachedBearerToken ??= await PrefsHelper.getString(AppConstants.bearerToken);
-
+    _cachedBearerToken = await PrefsHelper.getString('token');
+    print(_cachedBearerToken);
     final headers = <String, String>{
       'Content-Type': 'application/json',
       if (_cachedBearerToken?.isNotEmpty ?? false)

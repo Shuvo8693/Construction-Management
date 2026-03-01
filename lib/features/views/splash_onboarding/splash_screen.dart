@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToNextScreen() async {
-    String token = await PrefsHelper.getString(AppConstants.bearerToken);
+    String token = await PrefsHelper.getString('token');
     await Future.delayed(const Duration(seconds: 3));
     if(!mounted) return;
     if ( token.isNotEmpty) {

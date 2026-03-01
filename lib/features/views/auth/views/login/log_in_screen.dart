@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       text: ' Sign Up',
                       recognizer: TapGestureRecognizer()..onTap = (){
-                        Get.toNamed(AppRoutes.signUp);
+                        Get.toNamed(AppRoutes.role);
                       }
                   )
                 ]

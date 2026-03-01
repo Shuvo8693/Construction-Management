@@ -72,4 +72,46 @@ class SitesRepository {
     return ApiResult.failure(response.errorMassage ?? 'Upload failed');
   }
 
+
+  // ──Add Site ──────────────────────────────────────────
+  Future<ApiResult<String>> addSite({
+    String? fileName,
+    String? createdBy,
+    String? siteTitle,
+    String? siteOwner,
+    String? siteStatus,
+    String? siteLocation,
+    String? buildingType,
+    String? filePath,
+  }) async {
+
+    final response = await _network.multipartRequest(
+      url: ApiUrls.siteCreateUrl,
+      body: {
+        "images": await _network.toMultipartFile(filePath!,fileName: fileName),
+        "data": jsonEncode({
+          "createdBy": "698b1621cccb4360a572649d",
+          "siteOwner": siteOwner,
+          "siteTitle": siteTitle,
+          "buildingType": buildingType,
+          "location": {
+            "address": siteLocation,
+            "coordinates": {
+              "lat": 40.7128,
+              "lng": -74.0060
+            }
+          },
+          "status": siteStatus,
+          "endDate": "2026-12-31T00:00:00.000Z"
+        }
+        ),
+      },
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success('Site Added Successfully');
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Upload failed');
+  }
+
 }

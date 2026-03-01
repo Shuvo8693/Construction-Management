@@ -1,4 +1,5 @@
 
+import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
@@ -10,6 +11,8 @@ class HomeRepository {
 
   // ── Login ─────────────────────────────────────────────
   Future<ApiResult<SiteListResponseModel>> getSites() async {
+  String token = await PrefsHelper.getString('token');
+  print(token);
     final response = await _network.getRequest(
       url: ApiUrls.siteUrl,
     );

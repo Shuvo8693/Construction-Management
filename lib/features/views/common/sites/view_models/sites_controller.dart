@@ -21,16 +21,21 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class SitesController extends GetxController {
   final SitesRepository _repository;
+
   SitesController(this._repository);
 
   // ── Form Controllers ──────────────────────────────────
-  final nameCtrl    = TextEditingController();
-  final emailCtrl   = TextEditingController();
-
+  //--- Add Site ----
+  final siteOwnerController = TextEditingController();
+  final siteTitleController = TextEditingController();
+  final siteStatusController = TextEditingController();
+  final siteLocationController = TextEditingController();
+  final buildingTypeController = TextEditingController();
+  final createdByController = TextEditingController();
 
   // ── Observables ───────────────────────────────────────
-  final isLoading    = false.obs;
-  final role         = ''.obs;
+  final isLoading = false.obs;
+  final role = ''.obs;
   final siteListModel = Rxn<SiteListResponseModel>();
   final fileListModel = Rxn<FileListResponseModel>();
   final taskListModel = Rxn<TaskListResponseModel>();
@@ -44,8 +49,11 @@ class SitesController extends GetxController {
 
   @override
   void onClose() {
-    nameCtrl.dispose();
-    emailCtrl.dispose();
+    siteOwnerController.dispose();
+    siteTitleController.dispose();
+    siteStatusController.dispose();
+    siteLocationController.dispose();
+    buildingTypeController.dispose();
     super.onClose();
   }
 
@@ -106,12 +114,16 @@ class SitesController extends GetxController {
   }
 
   // ──Upload Site file ─────────────────────────────────────────────
-  Future<void> uploadSiteFile({String? fileName , String? filePath}) async {
-    final siteId = Get.arguments['siteId'] ?? '' ;
+  Future<void> uploadSiteFile({String? fileName, String? filePath}) async {
+    final siteId = Get.arguments['siteId'] ?? '';
     isLoading.value = true;
 
     try {
-      final result = await _repository.uploadSiteFile(fileName: fileName, siteId: siteId, filePath: filePath);
+      final result = await _repository.uploadSiteFile(
+        fileName: fileName,
+        siteId: siteId,
+        filePath: filePath,
+      );
 
       switch (result) {
         case Success<String>():
@@ -124,4 +136,30 @@ class SitesController extends GetxController {
     }
   }
 
+  // ──Upload Site file ─────────────────────────────────────────────
+  Future<void> addSite({String? fileName, String? filePath}) async {
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.addSite(
+        fileName: fileName,
+        createdBy: '',
+        siteTitle: siteTitleController.text,
+        siteOwner: siteOwnerController.text,
+        siteStatus: siteStatusController.text,
+        siteLocation: siteLocationController.text,
+        buildingType: buildingTypeController.text,
+        filePath: filePath,
+      );
+
+      switch (result) {
+        case Success<String>():
+          showSuccess(result.data);
+        case Failure<String>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

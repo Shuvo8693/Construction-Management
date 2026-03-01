@@ -120,6 +120,7 @@ class AppPages {
       name: AppRoutes.siteAdd,
       page: () => const SiteAddScreen(),
       transition: Transition.noTransition,
+      binding: SitesBinding(),
     ),
     GetPage(
       name: AppRoutes.siteDetails,

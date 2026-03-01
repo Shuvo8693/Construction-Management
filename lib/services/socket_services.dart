@@ -12,7 +12,7 @@ class SocketServices {
 
   static Future<void> init() async {
     // Fetch the token from preferences
-    token = await PrefsHelper.getString(AppConstants.bearerToken);
+    token = await PrefsHelper.getString('token');
 
     // Check if the token is available
     if (token.isEmpty) {

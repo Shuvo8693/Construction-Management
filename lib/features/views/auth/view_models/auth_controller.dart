@@ -64,7 +64,8 @@ class AuthController extends GetxController {
       switch (result) {
         case Success<String>():
           // Save token then update NetworkCaller
-          await PrefsHelper.setString(AppConstants.bearerToken, result.data);
+          print(result.data);
+          await PrefsHelper.setString('token', result.data);
           Get.offAllNamed(AppRoutes.adminHome);
         case Failure<String>():
           _showError(result.message);
@@ -110,7 +111,7 @@ class AuthController extends GetxController {
     switch (result) {
       case Success():
        if(result.data.isNotEmpty){
-         await PrefsHelper.setString(AppConstants.bearerToken, result.data);
+         await PrefsHelper.setString('token', result.data);
          Get.offAllNamed(AppRoutes.adminHome);
        }
       case Failure():
@@ -196,8 +197,8 @@ class AuthController extends GetxController {
 
   // ── Logout ────────────────────────────────────────────
   Future<void> logout() async {
-    await _repository.logout();
-    await PrefsHelper.remove(AppConstants.bearerToken);
+    // await _repository.logout();
+    await PrefsHelper.remove('token');
     NetworkCaller.instance.clearToken();          // ← your NetworkCaller method
     Get.offAllNamed(AppRoutes.login);
   }

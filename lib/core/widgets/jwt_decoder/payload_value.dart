@@ -5,7 +5,7 @@ import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'jwt_decoder.dart';
 
 Future<Map<String, dynamic>> getPayloadValue()async{
-  final token = await PrefsHelper.getString(AppConstants.bearerToken);
+  final token = await PrefsHelper.getString('token');
 
   final payloads = decodeJWT(token);
   String id = payloads['user'] ?? '';
