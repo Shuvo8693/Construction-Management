@@ -5,6 +5,8 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
+import 'package:charteur/features/views/common/profile/repository/profile_repository.dart';
+import 'package:charteur/features/views/common/profile/view_models/profile_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,12 +23,14 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   final  _homeController = Get.find<HomeController>();
+  final _profileController = Get.put(ProfileController(ProfileRepository()));
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((__)async{
       await _homeController.getSite();
+      await _profileController.getProfile();
     });
 
   }
@@ -35,13 +39,19 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     return CustomScaffold(
       bottomNavigationBar: BottomNavScreen(menuIndex: 0),
       appBar: CustomAppBar(
-        titleWidget: CustomListTile(
-          contentPaddingHorizontal: 16.w,
-          titleFontSize: 14.sp,
-          subtitleFontSize: 16.sp,
-          titleColor: AppColors.appGreyColor,
-          title: 'Welcome back,',
-          subTitle: 'Billal',
+        titleWidget: Obx((){
+         final  profileData = _profileController.profileModel.value?.data;
+         _profileController.isCompanyAdded.value = profileData?.isCompanyAdded?? false;
+          return CustomListTile(
+            contentPaddingHorizontal: 16.w,
+            titleFontSize: 14.sp,
+            subtitleFontSize: 16.sp,
+            titleColor: AppColors.appGreyColor,
+            title: 'Welcome back,',
+            subTitle: profileData?.name,
+          );
+        }
+
         ),
         actions: [
           IconButton(
@@ -95,7 +105,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         height: 34.h,
                         elevation: true,
                         onPressed: (){
-                          Get.toNamed(AppRoutes.siteAdd);
+                          if( _profileController.isCompanyAdded.value){
+                            Get.toNamed(AppRoutes.siteAdd);
+                          }else{
+                            Get.toNamed(AppRoutes.companyProfile);
+                          }
                         },label: 'Get Start',)
                     ],
                   ),

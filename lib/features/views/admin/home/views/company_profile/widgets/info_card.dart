@@ -31,6 +31,7 @@ class InfoCard extends StatelessWidget {
             controller: controller.companyNameCtrl,
             hintText: 'Charteur',
             validator: (v) => v!.isEmpty ? 'Required' : null,
+            borderColor: Colors.grey,
           ),
           SizedBox(height: 12.h),
 
@@ -41,12 +42,16 @@ class InfoCard extends StatelessWidget {
             hintText: '123/45 Street Road, UK',
             validator: (v) => v!.isEmpty ? 'Required' : null,
             suffixIcon: const Icon(Icons.location_on_outlined),
+            borderColor: Colors.grey,
             onTap: () {
               // open your searchBottomSheet here
               searchBottomSheet(
                 context,
                 controller: controller.locationCtrl,
                 hintText: 'Search location...',
+                onSelected: (String description) {
+                    print('Selected description: $description');
+                  },
               );
             },
             readOnly: true,
@@ -60,6 +65,7 @@ class InfoCard extends StatelessWidget {
             hintText: '+012 234 567',
             keyboardType: TextInputType.phone,
             validator: (v) => v!.isEmpty ? 'Required' : null,
+            borderColor: Colors.grey,
           ),
           SizedBox(height: 12.h),
 
@@ -70,6 +76,7 @@ class InfoCard extends StatelessWidget {
             hintText: 'example@email.com',
             keyboardType: TextInputType.emailAddress,
             validator: (v) => v!.isEmpty ? 'Required' : null,
+            borderColor: Colors.grey,
           ),
           SizedBox(height: 12.h),
 
@@ -92,6 +99,7 @@ class InfoCard extends StatelessWidget {
               labelText: 'Types of Building',
               hintText: 'Apartment',
               controller: controller.selectedWorkType,
+              borderColor: Colors.grey,
               suffixIcon: Icon(
                 Icons.keyboard_arrow_down,
                 size: 24.r,
@@ -109,6 +117,7 @@ class InfoCard extends StatelessWidget {
             hintText: 'example@email.com',
             keyboardType: TextInputType.url,
             validator: (_) => null,
+            borderColor: Colors.grey,
           ),
           SizedBox(height: 12.h),
 
@@ -117,6 +126,7 @@ class InfoCard extends StatelessWidget {
           CustomTextField(
             controller: controller.descriptionCtrl,
             hintText: 'Our company is dedicated to...',
+            borderColor: Colors.grey,
             maxLines: 5,
             maxLength: 100,
             validator: (_) => null,

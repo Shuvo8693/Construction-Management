@@ -35,6 +35,8 @@ class ProfileController extends GetxController {
   // ── Observables ───────────────────────────────────────
   final isLoading = false.obs;
   final role = ''.obs;
+  final isVerified = false.obs;
+  final isCompanyAdded = false.obs;
   final profileModel = Rxn<ProfileResponseModel>();
 
 

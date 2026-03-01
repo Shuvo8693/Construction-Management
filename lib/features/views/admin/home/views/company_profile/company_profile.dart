@@ -59,10 +59,9 @@ final controller = Get.find<HomeController>();
 
             // ── Update Button ──────────────────────────────
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w)
-                  .copyWith(bottom: 24.h, top: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w).copyWith(bottom: 24.h, top: 12.h),
               child: Obx(() => CustomButton(
-                label: 'Update Profile',
+                label: 'Add Company Profile',
                 isLoading: controller.isLoading.value,
                 onPressed: (){
                   if(_globalKey.currentState!.validate()){

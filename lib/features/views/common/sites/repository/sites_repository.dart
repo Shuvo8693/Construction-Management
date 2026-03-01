@@ -17,7 +17,7 @@ class SitesRepository {
   // ── Get Assign Sites ─────────────────────────────────────────────
   Future<ApiResult<SiteListResponseModel>> getAssignedSites() async {
     final response = await _network.getRequest(
-      url: ApiUrls.assignedSiteUrl,
+      url: ApiUrls.siteUrl,
     );
 
     if (response.isSuccess) {
