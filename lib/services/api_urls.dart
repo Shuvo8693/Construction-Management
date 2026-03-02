@@ -32,6 +32,8 @@ class ApiUrls {
   static  const String  siteCreateUrl = '$baseUrl/site/create';
   static  const String  addCompanyUrl = '$baseUrl/company/add';
   static  const String  profileUrl = '$baseUrl/users/me';
+  static  const String  allWorkersUrl = '$baseUrl/users/';
+  static  String  workersOrAdminsUrl(String role) => '$baseUrl/users/?role=$role';
   static  String  assignTaskUrl(String fileId) => '$baseUrl/task/assign/$fileId';
   static  String  siteFileViewUrl(String fileId) => '$baseUrl/site-file/view/$fileId';
   static  String  siteFileUrl(String siteId) => '$baseUrl/site-file/$siteId';

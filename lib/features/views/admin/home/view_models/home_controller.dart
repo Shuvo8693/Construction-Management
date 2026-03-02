@@ -9,6 +9,7 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
+import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/features/views/auth/repository/auth_repository.dart';
@@ -41,9 +42,13 @@ class HomeController extends GetxController {
 
   // ── Observables ───────────────────────────────────────
   final isLoading    = false.obs;
+  Map<int, bool> isAssignLoading = <int, bool>{}.obs;
   final role         = ''.obs;
   final siteListModel     = Rxn<SiteListResponseModel>();
   final fileDetailsModel  = Rxn<FileDetailsResponseModel>();
+  final workerListModel  = Rxn<WorkerListResponseModel>();
+  String? savedPath;
+  DateTime date = DateTime(2025, 6, 29);
 
   // ── Lifecycle ─────────────────────────────────────────
   @override
@@ -111,6 +116,26 @@ class HomeController extends GetxController {
 
   }
 
+  // ── get file details ─────────────────────────────────────────────
+  Future<void> getWorkersOrAdmins({String role = 'all'}) async {
+
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getWorkersOrAdmins(role: role);
+
+      switch (result) {
+        case Success<WorkerListResponseModel>():
+          workerListModel.value = result.data;
+        case Failure<WorkerListResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
 
 // ── Update Office Info ─────────────────────────────────
   Future<void> addCompanyInfo() async {
@@ -140,18 +165,18 @@ class HomeController extends GetxController {
 
 
   // ── Assign Task ─────────────────────────────────────────────
-  Future<void> assignTask({String? fileName, String? filePath, String? fileId}) async {
-    isLoading.value = true;
+  Future<void> assignTask({String? fileName, String? fileId,String? assignedTo,int i=0}) async {
+    isAssignLoading[i] = true;
 
     try {
       final result = await _repository.assignTask(
-        filePath: filePath,
+        filePath: savedPath,
         fileName: fileName,
         fileId: fileId,
         title: workTitleController.text,
         description: descriptionController.text,
-        assignedTo: assignedToController.text,
-        dueDate: dueDateController.text,
+        assignedTo: assignedTo,
+        dueDate: date.toString(),
       );
 
       switch (result) {
@@ -161,7 +186,7 @@ class HomeController extends GetxController {
           showError(result.message);
       }
     } finally {
-      isLoading.value = false;
+      isAssignLoading[i] = false;
     }
   }
 

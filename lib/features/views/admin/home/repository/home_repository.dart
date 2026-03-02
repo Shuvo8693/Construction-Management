@@ -6,6 +6,7 @@ import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
+import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/services/api_urls.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -35,6 +36,18 @@ class HomeRepository {
 
     if (response.isSuccess) {
       return ApiResult.success(FileDetailsResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Login failed');
+  }
+
+  // ── Get workers/office_admin ─────────────────────────────────────────────
+  Future<ApiResult<WorkerListResponseModel>> getWorkersOrAdmins({String? role}) async {
+    final response = await _network.getRequest(
+      url:role?.contains('all')==true ? ApiUrls.allWorkersUrl :ApiUrls.workersOrAdminsUrl(role??'worker'),
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(WorkerListResponseModel.fromJson(response.responseBody));
     }
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }

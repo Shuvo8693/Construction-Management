@@ -22,14 +22,6 @@ class _TaskScreenState extends State<TaskScreen> {
   Offset _pinOffset = const Offset(180, 120);
   final GlobalKey _repaintKey = GlobalKey();
 
-  // final _siteTitleCtrl = TextEditingController(text: 'Downtown Mall Project');
-  // final _workTitleCtrl = TextEditingController(text: 'Paint Living Room Walls');
-  // final _roleCtrl = TextEditingController(text: 'Painter');
-  // final _descCtrl = TextEditingController(
-  //     text: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling.');
-  DateTime _date = DateTime(2025, 6, 29);
-
-  String? _savedPath;
   bool _pinDragging = false;
   final _transFormationCtrl = TransformationController();
 
@@ -46,13 +38,25 @@ class _TaskScreenState extends State<TaskScreen> {
       final file = File('${dir.path}/task_${DateTime.now().millisecondsSinceEpoch}.png');
       await file.writeAsBytes(bytes);
 
-      setState(() => _savedPath = file.path);
+      setState(() => _homeController.savedPath = file.path);
       WidgetsBinding.instance.addPostFrameCallback((__){
+        /// ===========Bottom Sheet===========
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (_) => AssignWorkerSheet(),
+          builder: (_) {
+            if(_homeController.savedPath != null
+                && _homeController.savedPath!.isNotEmpty
+                && _homeController.workTitleController.text.isNotEmpty
+                && _homeController.descriptionController.text.isNotEmpty
+                && _homeController.date.day > 0){
+
+              return AssignWorkerSheet();
+            }else {
+             return SafeArea(child: Scaffold(body: Center(child: Text('Fill all the fields'))));
+            }
+          }
         );
       });
 
@@ -74,16 +78,16 @@ class _TaskScreenState extends State<TaskScreen> {
   Future<void> _pickDate() async {
     final d = await showDatePicker(
       context: context,
-      initialDate: _date,
+      initialDate: _homeController.date,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
-    if (d != null) setState(() => _date = d);
+    if (d != null) setState(() => _homeController.date = d);
   }
 
   String get _formattedDate {
     const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return '${m[_date.month - 1]} ${_date.day}, ${_date.year}';
+    return '${m[_homeController.date.month - 1]} ${_homeController.date.day}, ${_homeController.date.year}';
   }
   final _homeController = Get.find<HomeController>();
 
@@ -248,7 +252,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     SizedBox(height: 12.h),
                     _field('Description', _homeController.descriptionController, maxLines: 4),
 
-                    if (_savedPath != null) ...[
+                    if (_homeController.savedPath != null) ...[
                       SizedBox(height: 12.h),
                       Container(
                         padding: const EdgeInsets.all(10),
@@ -262,7 +266,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             SizedBox(width: 8.h),
                             Expanded(
                               child: Text(
-                                'Saved: $_savedPath',
+                                'Saved: ${_homeController.savedPath}',
                                 style: const TextStyle(fontSize: 11, color: Color(0xFF2E7D6B)),
                                 overflow: TextOverflow.ellipsis,
                               ),

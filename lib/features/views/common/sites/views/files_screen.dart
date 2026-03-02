@@ -148,11 +148,11 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
 
   Widget _buildFilesList() {
     return Obx((){
-      final fileData = _sitesController.fileListModel.value?.data;
+      final fileData = _sitesController.fileListModel.value?.data??[];
       if(_sitesController.isLoading.value){
         return Center(child: CircularProgressIndicator());
       }
-      else if(fileData == null && fileData!.isEmpty){
+      else if( fileData.isEmpty){
         return Center(child: Text('No Data Found'));
       }
       return RefreshIndicator(
