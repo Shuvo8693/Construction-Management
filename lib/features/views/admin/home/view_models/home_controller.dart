@@ -7,6 +7,7 @@ import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
+import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
@@ -32,7 +33,8 @@ class HomeController extends GetxController {
   final selectedWorkType = TextEditingController();
 
   // -- Assign Task -----
-  final titleController = TextEditingController();
+  final workTitleController = TextEditingController();
+  final siteTitleController = TextEditingController();
   final descriptionController = TextEditingController();
   final assignedToController = TextEditingController();
   final dueDateController = TextEditingController();
@@ -40,7 +42,8 @@ class HomeController extends GetxController {
   // ── Observables ───────────────────────────────────────
   final isLoading    = false.obs;
   final role         = ''.obs;
-  final siteListModel         = Rxn<SiteListResponseModel>();
+  final siteListModel     = Rxn<SiteListResponseModel>();
+  final fileDetailsModel  = Rxn<FileDetailsResponseModel>();
 
   // ── Lifecycle ─────────────────────────────────────────
   @override
@@ -58,14 +61,14 @@ class HomeController extends GetxController {
     websiteCtrl.dispose();
     descriptionCtrl.dispose();
     //----assign task ----
-    titleController.dispose();
+    workTitleController.dispose();
     descriptionController.dispose();
     assignedToController.dispose();
     dueDateController.dispose();
     super.onClose();
   }
 
-  // ── Login ─────────────────────────────────────────────
+  // ── get site ─────────────────────────────────────────────
   Future<void> getSite() async {
     isLoading.value = true;
 
@@ -83,6 +86,30 @@ class HomeController extends GetxController {
     }
   }
 
+  // ── get file details ─────────────────────────────────────────────
+  Future<void> getFileDetails() async {
+   String fileId = Get.arguments?['fileId'] ?? '' ;
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getFileDetails(fileId: fileId);
+
+      switch (result) {
+        case Success<FileDetailsResponseModel>():
+          fileDetailsModel.value = result.data;
+          getFileData(fileDetailsModel.value??FileDetailsResponseModel());
+        case Failure<FileDetailsResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  getFileData(FileDetailsResponseModel data){
+    siteTitleController.text = data.data?.siteId?.siteTitle ?? '';
+
+  }
 
 
 // ── Update Office Info ─────────────────────────────────
@@ -121,7 +148,7 @@ class HomeController extends GetxController {
         filePath: filePath,
         fileName: fileName,
         fileId: fileId,
-        title: titleController.text,
+        title: workTitleController.text,
         description: descriptionController.text,
         assignedTo: assignedToController.text,
         dueDate: dueDateController.text,

@@ -3,11 +3,13 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/admin/home/widgets/assign_worker_sheet.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 class TaskScreen extends StatefulWidget {
@@ -20,11 +22,11 @@ class _TaskScreenState extends State<TaskScreen> {
   Offset _pinOffset = const Offset(180, 120);
   final GlobalKey _repaintKey = GlobalKey();
 
-  final _siteTitleCtrl = TextEditingController(text: 'Downtown Mall Project');
-  final _workTitleCtrl = TextEditingController(text: 'Paint Living Room Walls');
-  final _roleCtrl = TextEditingController(text: 'Painter');
-  final _descCtrl = TextEditingController(
-      text: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling.');
+  // final _siteTitleCtrl = TextEditingController(text: 'Downtown Mall Project');
+  // final _workTitleCtrl = TextEditingController(text: 'Paint Living Room Walls');
+  // final _roleCtrl = TextEditingController(text: 'Painter');
+  // final _descCtrl = TextEditingController(
+  //     text: 'Applying a smooth or protective layer of cement, lime, or gypsum on a wall or ceiling.');
   DateTime _date = DateTime(2025, 6, 29);
 
   String? _savedPath;
@@ -83,6 +85,15 @@ class _TaskScreenState extends State<TaskScreen> {
     const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return '${m[_date.month - 1]} ${_date.day}, ${_date.year}';
   }
+  final _homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((__)async{
+      await _homeController.getFileDetails();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,189 +105,196 @@ class _TaskScreenState extends State<TaskScreen> {
         foregroundColor: const Color(0xFF1A1A2E),
         elevation: 0.5,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.sp),
-        child: Column(
-          children: [
-            // ── Floor Plan with draggable SVG pin ────────────────────────
-            RepaintBoundary(
-              key: _repaintKey,
-              child: Container(
-                // height: 400.h,
+      body: Obx((){
+       final fileDetailsData = _homeController.fileDetailsModel.value?.data;
+        if(_homeController.isLoading.value){
+          return const Center(child: CircularProgressIndicator());
+        }
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16.sp),
+          child: Column(
+            children: [
+              // ── Floor Plan with draggable SVG pin ────────────────────────
+              RepaintBoundary(
+                key: _repaintKey,
+                child: Container(
+                  // height: 400.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: const Color(0xFFDDE1EC)),
+                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Stack(
+                      children: [
+                        // Floor plan image (network placeholder — replace with AssetImage)
+                        Image.network(fileDetailsData?.fileUrl ?? '',
+                          fit: BoxFit.cover,
+                          loadingBuilder: (_, child, progress) =>
+                          progress == null
+                              ? child
+                              : const Center(child: CircularProgressIndicator()),
+                          errorBuilder: (_, __, ___) => Container(
+                            color: const Color(0xFFF0F0F0),
+                            child:  Center(
+                              child: Icon(Icons.image_not_supported, size: 48.sp, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+
+                        //----------- Drag area ---------------
+                        Positioned.fill(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onPanUpdate: (d) {
+                              final box = context.findRenderObject() as RenderBox;
+                              setState(() {
+                                _pinOffset = Offset(
+                                  (_pinOffset.dx + d.delta.dx).clamp(16, box.size.width - 16),
+                                  (_pinOffset.dy + d.delta.dy).clamp(16, box.size.height - 16),
+                                );
+                              });
+                            },
+                            onTapDown: (d) {
+                              setState(() => _pinOffset = d.localPosition);
+                            },
+                          ),
+                        ),
+
+                        //----------- Pin ------ SVG-style navigation pin drawn via CustomPaint
+                        Positioned(
+                          left: _pinOffset.dx - 16,
+                          top: _pinOffset.dy - 40,
+                          child: GestureDetector(
+                            onPanUpdate: (d) {
+                              final box = context.findRenderObject() as RenderBox;
+                              setState(() {
+                                _pinOffset = Offset(
+                                  (_pinOffset.dx + d.delta.dx).clamp(16, box.size.width - 16),
+                                  (_pinOffset.dy + d.delta.dy).clamp(16, box.size.height -16),
+                                );
+                              });
+                            },
+                            child: SizedBox(
+                              width: 32.h,
+                              height: 44.w,
+                              child: CustomPaint(painter: _PinPainter()),
+                            ),
+                          ),
+                        ),
+
+                        // Hint label
+                        Positioned(
+                          top: 8,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Container(
+                              padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                              decoration: BoxDecoration(
+                                color: Colors.black54,
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              child: const Text(
+                                'Drag pin to mark location',
+                                style: TextStyle(color: Colors.white, fontSize: 11),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 16.h),
+
+              // ── Form card ────────────────────────────────────────────────
+              Container(
+                padding:  EdgeInsets.all(16.sp),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: const Color(0xFFDDE1EC)),
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Stack(
-                    children: [
-                      // Floor plan image (network placeholder — replace with AssetImage)
-                      Image.network(
-                        'https://images.homify.com/v1500268052/p/photo/image/2126623/3D_Floor_Plan_Sample1.jpg',
-                        fit: BoxFit.cover,
-                        loadingBuilder: (_, child, progress) =>
-                        progress == null
-                            ? child
-                            : const Center(child: CircularProgressIndicator()),
-                        errorBuilder: (_, __, ___) => Container(
-                          color: const Color(0xFFF0F0F0),
-                          child:  Center(
-                            child: Icon(Icons.image_not_supported, size: 48.sp, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-
-                      //----------- Drag area ---------------
-                      Positioned.fill(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onPanUpdate: (d) {
-                            final box = context.findRenderObject() as RenderBox;
-                            setState(() {
-                              _pinOffset = Offset(
-                                (_pinOffset.dx + d.delta.dx).clamp(16, box.size.width - 16),
-                                (_pinOffset.dy + d.delta.dy).clamp(16, box.size.height - 16),
-                              );
-                            });
-                          },
-                          onTapDown: (d) {
-                            setState(() => _pinOffset = d.localPosition);
-                          },
-                        ),
-                      ),
-
-                      //----------- Pin ------ SVG-style navigation pin drawn via CustomPaint
-                      Positioned(
-                        left: _pinOffset.dx - 16,
-                        top: _pinOffset.dy - 40,
-                        child: GestureDetector(
-                          onPanUpdate: (d) {
-                            final box = context.findRenderObject() as RenderBox;
-                            setState(() {
-                              _pinOffset = Offset(
-                                (_pinOffset.dx + d.delta.dx).clamp(16, box.size.width - 16),
-                                (_pinOffset.dy + d.delta.dy).clamp(16, box.size.height -16),
-                              );
-                            });
-                          },
-                          child: SizedBox(
-                            width: 32.h,
-                            height: 44.w,
-                            child: CustomPaint(painter: _PinPainter()),
-                          ),
-                        ),
-                      ),
-
-                      // Hint label
-                      Positioned(
-                        top: 8,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                            decoration: BoxDecoration(
-                              color: Colors.black54,
-                              borderRadius: BorderRadius.circular(20.r),
-                            ),
-                            child: const Text(
-                              'Drag pin to mark location',
-                              style: TextStyle(color: Colors.white, fontSize: 11),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _field('Site Title', _homeController.siteTitleController,isReadOnly: true),
+                    SizedBox(height: 12.h),
+                    _field('Work Title', _homeController.workTitleController),
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: [
+                        // Expanded(child: _field('Role', _roleCtrl)),
+                        SizedBox(width: 12.h),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _pickDate,
+                            child: AbsorbPointer(
+                              child: _field(
+                                'Date',
+                                TextEditingController(text: _formattedDate),
+                                suffix: const Icon(Icons.calendar_today, size: 16, color: Color(0xFF2E7D6B)),
+                              ),
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    _field('Description', _homeController.descriptionController, maxLines: 4),
+
+                    if (_savedPath != null) ...[
+                      SizedBox(height: 12.h),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE8F5E9),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle, color: Color(0xFF2E7D6B), size: 18),
+                            SizedBox(width: 8.h),
+                            Expanded(
+                              child: Text(
+                                'Saved: $_savedPath',
+                                style: const TextStyle(fontSize: 11, color: Color(0xFF2E7D6B)),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ),
+                  ],
                 ),
               ),
-            ),
 
-            SizedBox(height: 16.h),
+              SizedBox(height: 20.h),
 
-            // ── Form card ────────────────────────────────────────────────
-            Container(
-              padding:  EdgeInsets.all(16.sp),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+              // ── Assign button ─────────────────────────────────────────────
+              CustomButton(
+                  label: 'Assign the Task',
+                  backgroundColor: const Color(0xFF2E7D6B),
+                  onPressed: _assignTask
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _field('Site Title', _siteTitleCtrl),
-                   SizedBox(height: 12.h),
-                  _field('Work Title', _workTitleCtrl),
-                   SizedBox(height: 12.h),
-                  Row(
-                    children: [
-                      Expanded(child: _field('Role', _roleCtrl)),
-                       SizedBox(width: 12.h),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: _pickDate,
-                          child: AbsorbPointer(
-                            child: _field(
-                              'Date',
-                              TextEditingController(text: _formattedDate),
-                              suffix: const Icon(Icons.calendar_today, size: 16, color: Color(0xFF2E7D6B)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                   SizedBox(height: 12.h),
-                  _field('Description', _descCtrl, maxLines: 4),
+              SizedBox(height: 32.h),
+            ],
+          ),
+        );
+      }
 
-                  if (_savedPath != null) ...[
-                     SizedBox(height: 12.h),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE8F5E9),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.check_circle, color: Color(0xFF2E7D6B), size: 18),
-                           SizedBox(width: 8.h),
-                          Expanded(
-                            child: Text(
-                              'Saved: $_savedPath',
-                              style: const TextStyle(fontSize: 11, color: Color(0xFF2E7D6B)),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-
-            SizedBox(height: 20.h),
-
-            // ── Assign button ─────────────────────────────────────────────
-            CustomButton(
-              label: 'Assign the Task',
-                backgroundColor: const Color(0xFF2E7D6B),
-                onPressed: _assignTask
-            ),
-             SizedBox(height: 32.h),
-          ],
-        ),
       ),
     );
   }
 
   Widget _field(String label, TextEditingController ctrl,
-      {int maxLines = 1, Widget? suffix}) {
+      {int maxLines = 1, Widget? suffix, isReadOnly = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,6 +305,7 @@ class _TaskScreenState extends State<TaskScreen> {
         TextFormField(
           controller: ctrl,
           maxLines: maxLines,
+          readOnly: isReadOnly,
           style: const TextStyle(fontSize: 13, color: Color(0xFF1A1A2E)),
           decoration: InputDecoration(
             filled: true,

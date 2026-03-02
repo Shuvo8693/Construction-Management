@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/core/helpers/helper_data.dart';
 import 'package:charteur/core/widgets/widgets.dart';
-import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
-import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/site_card_widget.dart';
@@ -41,10 +39,10 @@ class _SitesScreenState extends State<SitesScreen> {
           ),
 
       Obx((){
-        final siteData = _sitesController.siteListModel.value?.data;
+        final siteData = _sitesController.siteListModel.value?.data??[];
         if(_sitesController.isLoading.value){
           return Center(child: CircularProgressIndicator());
-        }else if(siteData == null && siteData!.isEmpty){
+        }else if(_sitesController.siteListModel.value == null || siteData.isEmpty){
           return Center(child: Text('No Data Found'));
         }
         return  Expanded(

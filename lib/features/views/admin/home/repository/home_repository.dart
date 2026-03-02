@@ -4,14 +4,16 @@ import 'dart:convert';
 import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
+import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/services/api_urls.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class HomeRepository {
   final _network = NetworkCaller.instance;
 
-  // ── Login ─────────────────────────────────────────────
+  // ── sites ─────────────────────────────────────────────
   Future<ApiResult<SiteListResponseModel>> getSites() async {
   String token = await PrefsHelper.getString('token');
   print(token);
@@ -21,6 +23,18 @@ class HomeRepository {
 
     if (response.isSuccess) {
       return ApiResult.success(SiteListResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Login failed');
+  }
+
+  // ── Get files ─────────────────────────────────────────────
+  Future<ApiResult<FileDetailsResponseModel>> getFileDetails({String? fileId}) async {
+    final response = await _network.getRequest(
+      url: ApiUrls.siteFileViewUrl(fileId??''),
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(FileDetailsResponseModel.fromJson(response.responseBody));
     }
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }
@@ -85,4 +99,6 @@ class HomeRepository {
     }
     return ApiResult.failure(response.errorMassage ?? 'Upload failed');
   }
+
+
 }

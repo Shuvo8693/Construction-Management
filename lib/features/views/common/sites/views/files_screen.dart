@@ -165,8 +165,9 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
           itemBuilder: (BuildContext context, int index) {
             return FileCardWidget(
                 onTap: () {
-                  Get.toNamed(AppRoutes.task,arguments: {});
-                }, fileData: fileData[index]
+                  Get.toNamed(AppRoutes.task,arguments: {"fileId": fileData[index].id});
+                },
+                fileData: fileData[index]
             );
           },
         ),

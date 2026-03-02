@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
@@ -84,7 +85,8 @@ class SitesRepository {
     String? buildingType,
     String? filePath,
   }) async {
-
+    String  token = await PrefsHelper.getString('token');
+    print(token);
     final response = await _network.multipartRequest(
       url: ApiUrls.siteCreateUrl,
       body: {
