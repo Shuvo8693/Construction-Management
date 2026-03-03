@@ -1,19 +1,15 @@
 // features/auth/view_models/auth_controller.dart
 
-import 'package:charteur/core/config/app_constants.dart';
-import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
-import 'package:charteur/core/network/dio_api_client.dart';
-import 'package:charteur/core/router/app_router.dart';
-import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
-import 'package:charteur/features/views/auth/models/user_model.dart';
-import 'package:charteur/features/views/auth/repository/auth_repository.dart';
+import 'package:charteur/features/views/common/profile/repository/profile_repository.dart';
+import 'package:charteur/features/views/common/profile/view_models/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -155,6 +151,7 @@ class HomeController extends GetxController {
         case Success():
           Get.back();
           showSuccess('Profile updated successfully');
+          Get.put(ProfileController(ProfileRepository())).getProfile();
         case Failure():
           showError((result as Failure).message);
       }

@@ -9,7 +9,7 @@ import '../widgets/widgets.dart';
 
 
 class CustomTextField extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool? isObscureText;
   final String? obscure;
@@ -120,12 +120,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               widget.onTap?.call();
             }
           },
-          readOnly: widget.readOnly!,
+          readOnly: widget.readOnly??false,
           controller: widget.controller ?? TextEditingController(),
           keyboardType: widget.keyboardType,
           inputFormatters: widget.inputFormatter,
           textInputAction: widget.textInputAction,
-          obscuringCharacter: widget.obscure!,
+          obscuringCharacter: widget.obscure??'',
           autovalidateMode: AutovalidateMode.onUserInteraction,
           minLines: widget.isPassword ? 1 : (widget.minLines ?? 1),
           maxLines: widget.isPassword ? 1 : (widget.maxLines ?? 8),
@@ -135,10 +135,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               (value) {
                 if (widget.isEmail == false) {
                   if (value!.isEmpty) {
-                    return "Please  ${widget.hintText!.toLowerCase()}";
+                    return "Please  ${widget.hintText?.toLowerCase()??'enter the field'}";
                   } else if (widget.isPassword) {
                     if (value.isEmpty) {
-                      return "Please  ${widget.hintText!.toLowerCase()}";
+                      return "Please  ${widget.hintText?.toLowerCase()??'enter the field'}";
                     } else if (value.length < 8) {
                       return "Password: 8 characters min!";
                     }

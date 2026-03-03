@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         spacing: 12.h,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildCustomListTile(title: 'Edit Profile', leadingIcon: Assets.icons.profileEdit.svg(), onTap: (){}),
+                          _buildCustomListTile(title: 'Edit Profile', leadingIcon: Assets.icons.profileEdit.svg(), onTap: ()=> Get.toNamed(AppRoutes.updateProfile)),
                           _buildCustomListTile(title: 'Subscription', leadingIcon: Assets.icons.subscription.svg(), onTap: (){
                             Get.toNamed(AppRoutes.subscription);
                           }),

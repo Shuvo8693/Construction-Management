@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/admin/home/widgets/assign_worker_sheet.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
@@ -89,7 +90,7 @@ class _TaskScreenState extends State<TaskScreen> {
     const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return '${m[_homeController.date.month - 1]} ${_homeController.date.day}, ${_homeController.date.year}';
   }
-  final _homeController = Get.find<HomeController>();
+  final _homeController = Get.put(HomeController(HomeRepository()));
 
   @override
   void initState() {

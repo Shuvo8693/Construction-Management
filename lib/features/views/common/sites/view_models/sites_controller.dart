@@ -102,6 +102,7 @@ class SitesController extends GetxController {
 
     try {
       final result = await _repository.getSiteTask(status: status);
+      print('$result');
 
       switch (result) {
         case Success<TaskListResponseModel>():

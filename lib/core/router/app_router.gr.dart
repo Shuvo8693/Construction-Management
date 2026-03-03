@@ -6,6 +6,7 @@ import 'package:charteur/features/views/admin/home/views/collaborator_details/co
 import 'package:charteur/features/views/admin/home/views/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
 import 'package:charteur/features/views/common/profile/view_models/profile_bindings.dart';
+import 'package:charteur/features/views/common/profile/views/edit_profile_screen.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_bindings.dart';
 import 'package:charteur/features/views/common/sites/views/file_add_screen.dart';
 import 'package:get/get.dart';
@@ -173,6 +174,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfileScreen(),
+      transition: Transition.noTransition,
+      binding: ProfileBindings(),
+    ),
+    GetPage(
+      name: AppRoutes.updateProfile,
+      page: () => const EditProfileScreen(),
       transition: Transition.noTransition,
       binding: ProfileBindings(),
     ),

@@ -13,15 +13,17 @@ class TaskListResponseModel {
 
   factory TaskListResponseModel.fromJson(Map<String, dynamic> json) {
     return TaskListResponseModel(
-      success: json['success'],
-      message: json['message'],
-      meta: Meta.fromJson(json['meta']),
-      data: List<TaskData>.from(
-        json['data'].map((x) => TaskData.fromJson(x)),
-      ),
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
+      meta: Meta.fromJson(json['meta'] ?? {}),
+      data: (json['data'] as List? ?? [])
+          .map((e) => TaskData.fromJson(e))
+          .toList(),
     );
   }
 }
+
+/* ================= META ================= */
 
 class Meta {
   final int total;
@@ -38,16 +40,17 @@ class Meta {
 
   factory Meta.fromJson(Map<String, dynamic> json) {
     return Meta(
-      total: json['total'],
-      page: json['page'],
-      limit: json['limit'],
-      totalPage: json['totalPage'],
+      total: json['total'] ?? 0,
+      page: json['page'] ?? 0,
+      limit: json['limit'] ?? 0,
+      totalPage: json['totalPage'] ?? 0,
     );
   }
 }
 
+/* ================= TASK DATA ================= */
+
 class TaskData {
-  final PinLocation pinLocation;
   final String id;
   final SiteSummary siteId;
   final FileSummary fileId;
@@ -65,7 +68,6 @@ class TaskData {
   final DateTime updatedAt;
 
   TaskData({
-    required this.pinLocation,
     required this.id,
     required this.siteId,
     required this.fileId,
@@ -85,45 +87,26 @@ class TaskData {
 
   factory TaskData.fromJson(Map<String, dynamic> json) {
     return TaskData(
-      pinLocation: PinLocation.fromJson(json['pinLocation']),
-      id: json['_id'],
-      siteId: SiteSummary.fromJson(json['siteId']),
-      fileId: FileSummary.fromJson(json['fileId']),
-      title: json['title'],
-      description: json['description'],
-      images: List<String>.from(json['images']),
-      assignedTo: UserSummary.fromJson(json['assignedTo']),
-      assignedBy: UserSummary.fromJson(json['assignedBy']),
+      id: json['_id'] ?? '',
+      siteId: SiteSummary.fromJson(json['siteId'] ?? {}),
+      fileId: FileSummary.fromJson(json['fileId'] ?? {}),
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      images: List<String>.from(json['images'] ?? []),
+      assignedTo: UserSummary.fromJson(json['assignedTo'] ?? {}),
+      assignedBy: UserSummary.fromJson(json['assignedBy'] ?? {}),
       assignedAt: DateTime.parse(json['assignedAt']),
-      status: json['status'],
+      status: json['status'] ?? '',
       dueDate: DateTime.parse(json['dueDate']),
-      attachments: List<dynamic>.from(json['attachments']),
-      isDeleted: json['isDeleted'],
+      attachments: json['attachments'] ?? [],
+      isDeleted: json['isDeleted'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
 
-class PinLocation {
-  final double x;
-  final double y;
-  final int pageNumber;
-
-  PinLocation({
-    required this.x,
-    required this.y,
-    required this.pageNumber,
-  });
-
-  factory PinLocation.fromJson(Map<String, dynamic> json) {
-    return PinLocation(
-      x: (json['x'] as num).toDouble(),
-      y: (json['y'] as num).toDouble(),
-      pageNumber: json['pageNumber'],
-    );
-  }
-}
+/* ================= SITE ================= */
 
 class SiteSummary {
   final SiteLocation location;
@@ -140,10 +123,10 @@ class SiteSummary {
 
   factory SiteSummary.fromJson(Map<String, dynamic> json) {
     return SiteSummary(
-      location: SiteLocation.fromJson(json['location']),
-      id: json['_id'],
-      siteTitle: json['siteTitle'],
-      status: json['status'],
+      location: SiteLocation.fromJson(json['location'] ?? {}),
+      id: json['_id'] ?? '',
+      siteTitle: json['siteTitle'] ?? '',
+      status: json['status'] ?? '',
     );
   }
 }
@@ -159,8 +142,8 @@ class SiteLocation {
 
   factory SiteLocation.fromJson(Map<String, dynamic> json) {
     return SiteLocation(
-      coordinates: Coordinates.fromJson(json['coordinates']),
-      address: json['address'],
+      coordinates: Coordinates.fromJson(json['coordinates'] ?? {}),
+      address: json['address'] ?? '',
     );
   }
 }
@@ -176,11 +159,13 @@ class Coordinates {
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
     return Coordinates(
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
+      lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
+      lng: (json['lng'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
+
+/* ================= FILE ================= */
 
 class FileSummary {
   final String id;
@@ -197,13 +182,15 @@ class FileSummary {
 
   factory FileSummary.fromJson(Map<String, dynamic> json) {
     return FileSummary(
-      id: json['_id'],
-      fileName: json['fileName'],
-      fileType: json['fileType'],
-      fileUrl: json['fileUrl'],
+      id: json['_id'] ?? '',
+      fileName: json['fileName'] ?? '',
+      fileType: json['fileType'] ?? '',
+      fileUrl: json['fileUrl'] ?? '',
     );
   }
 }
+
+/* ================= USER ================= */
 
 class UserSummary {
   final String id;
@@ -218,9 +205,9 @@ class UserSummary {
 
   factory UserSummary.fromJson(Map<String, dynamic> json) {
     return UserSummary(
-      id: json['_id'],
-      email: json['email'],
-      name: json['name'],
+      id: json['_id'] ?? '',
+      email: json['email'] ?? '',
+      name: json['name'] ?? '',
     );
   }
 }
