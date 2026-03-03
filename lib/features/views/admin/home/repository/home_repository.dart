@@ -1,29 +1,36 @@
 
 import 'dart:convert';
 
-import 'package:charteur/core/helpers/prefs_helper.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
+import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
-import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/services/api_urls.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class HomeRepository {
   final _network = NetworkCaller.instance;
 
   // ── sites ─────────────────────────────────────────────
   Future<ApiResult<SiteListResponseModel>> getSites() async {
-  String token = await PrefsHelper.getString('token');
-  print(token);
     final response = await _network.getRequest(
       url: ApiUrls.siteUrl,
     );
 
     if (response.isSuccess) {
       return ApiResult.success(SiteListResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Login failed');
+  }
+  // ── sites Details ─────────────────────────────────────────────
+  Future<ApiResult<TaskDetailsResponseModel>> getSiteDetails({String taskId = ''}) async {
+    final response = await _network.getRequest(
+      url: ApiUrls.siteDetailsUrl(taskId),
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(TaskDetailsResponseModel.fromJson(response.responseBody));
     }
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }
@@ -77,6 +84,24 @@ class HomeRepository {
 
     if (response.isSuccess) {
       return ApiResult.success(response.responseBody['data']['email']);
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Failed to update company info');
+  }
+
+  // ── update work ──────────────────────────────────────────
+  Future<ApiResult<String>> updateWorkStatus({
+    required String status,
+    required String taskId,
+  }) async {
+    final response = await _network.patchRequest(
+      url: ApiUrls.updateWorkStatusUrl(taskId: taskId),
+      body: {
+        "status": status
+      },
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(response.responseBody['data']['message']);
     }
     return ApiResult.failure(response.errorMassage ?? 'Failed to update company info');
   }

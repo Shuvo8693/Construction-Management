@@ -34,6 +34,8 @@ class ApiUrls {
   static  const String  profileUrl = '$baseUrl/users/me';
   static  const String  allWorkersUrl = '$baseUrl/users/';
   static  const String  updateProfileUrl = '$baseUrl/users/edit-profile';
+  static   String  updateWorkStatusUrl({String? taskId}) => '$baseUrl/task/status/$taskId';
+  static  String  siteDetailsUrl(String taskId) => '$baseUrl/task/$taskId';
   static  String  workersOrAdminsUrl(String role) => '$baseUrl/users/?role=$role';
   static  String  assignTaskUrl(String fileId) => '$baseUrl/task/assign/$fileId';
   static  String  siteFileViewUrl(String fileId) => '$baseUrl/site-file/view/$fileId';

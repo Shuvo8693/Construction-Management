@@ -135,6 +135,7 @@ class AppPages {
       name: AppRoutes.siteDetails,
       page: () => const SiteDetailsScreen(),
       transition: Transition.noTransition,
+      binding: HomeBinding()
     ),
 
     // ── Files ─────────────────────────────────────────────

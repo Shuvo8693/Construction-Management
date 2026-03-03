@@ -3,6 +3,7 @@
 import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
+import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
@@ -43,6 +44,7 @@ class HomeController extends GetxController {
   final siteListModel     = Rxn<SiteListResponseModel>();
   final fileDetailsModel  = Rxn<FileDetailsResponseModel>();
   final workerListModel  = Rxn<WorkerListResponseModel>();
+  final taskDetailsModel  = Rxn<TaskDetailsResponseModel>();
   String? savedPath;
   DateTime date = DateTime(2025, 6, 29);
 
@@ -80,6 +82,24 @@ class HomeController extends GetxController {
         case Success<SiteListResponseModel>():
           siteListModel.value = result.data;
         case Failure<SiteListResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  // ── get details ─────────────────────────────────────────────
+  Future<void> getSiteTaskDetails() async {
+    String taskId = Get.arguments['taskId']??'';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getSiteDetails(taskId: taskId);
+
+      switch (result) {
+        case Success<TaskDetailsResponseModel>():
+          taskDetailsModel.value = result.data;
+        case Failure<TaskDetailsResponseModel>():
           showError(result.message);
       }
     } finally {
@@ -146,6 +166,26 @@ class HomeController extends GetxController {
         website: websiteCtrl.text.trim(),
         description: descriptionCtrl.text.trim(),
       );
+
+      switch (result) {
+        case Success():
+          Get.back();
+          showSuccess('Profile updated successfully');
+          Get.put(ProfileController(ProfileRepository())).getProfile();
+        case Failure():
+          showError((result as Failure).message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── Update Work Status ─────────────────────────────────
+  Future<void> updateWorkStatus({String status = 'Done'}) async {
+    String taskId = Get.arguments['taskId']??'';
+    isLoading.value = true;
+    try {
+      final result = await _repository.updateWorkStatus(status: status, taskId: taskId);
 
       switch (result) {
         case Success():

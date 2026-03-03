@@ -41,7 +41,7 @@ class _StatusBottomSheetState extends State<StatusBottomSheet> {
   late String? _selected;
 
   static const List<String> _options = [
-    'To-Do',
+    // 'To-Do',
     'In-Progress',
     'Done',
     'Remark',

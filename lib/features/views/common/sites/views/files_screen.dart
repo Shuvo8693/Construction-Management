@@ -200,7 +200,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
 
             return GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.siteDetails);
+                Get.toNamed(AppRoutes.siteDetails,arguments: {"taskId": task.id,});
               },
               child: TodoCardWidget(
                 title: task.title,

@@ -4,6 +4,10 @@ import 'package:charteur/features/views/admin/home/views/site_details/widgets/co
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/show-status_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import '../../view_models/home_controller.dart';
 
 class SiteDetailsScreen extends StatefulWidget {
   const SiteDetailsScreen({super.key});
@@ -15,12 +19,7 @@ class SiteDetailsScreen extends StatefulWidget {
 class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   int _currentImage = 0;
   final TextEditingController _commentCtrl = TextEditingController();
-
-  final List<String> _images = [
-    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800',
-    'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800',
-    'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?w=800',
-  ];
+  final _homeController = Get.find<HomeController>();
 
   final List<Map<String, String>> _comments = [
     {
@@ -57,6 +56,191 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _homeController.getSiteTaskDetails();
+  }
+
+  // ── Full-screen image dialog ───────────────────────────────────────────────
+  void _showImageDialog(BuildContext context, List<String> images, int initialIndex) {
+    int dialogCurrentImage = initialIndex;
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.all(12.w),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // ── PageView ──────────────────────────────────────────────
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.r),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 360.h,
+                    child: PageView.builder(
+                      controller: PageController(initialPage: initialIndex),
+                      itemCount: images.length,
+                      onPageChanged: (i) =>
+                          setDialogState(() => dialogCurrentImage = i),
+                      itemBuilder: (_, i) => Image.network(
+                        images[i],
+                        fit: BoxFit.contain,
+                        loadingBuilder: (_, child, progress) => progress == null
+                            ? child
+                            : const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                        errorBuilder: (_, __, ___) => const Center(
+                          child: Icon(Icons.broken_image,
+                              color: Colors.white54, size: 48),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ── Dots ──────────────────────────────────────────────────
+                if (images.length > 1)
+                  Positioned(
+                    bottom: 10.h,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        images.length,
+                            (i) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          margin: EdgeInsets.symmetric(horizontal: 3.w),
+                          width: dialogCurrentImage == i ? 18.w : 8.w,
+                          height: 6.h,
+                          decoration: BoxDecoration(
+                            color: dialogCurrentImage == i
+                                ? const Color(0xFF2E7D6B)
+                                : Colors.white.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(3.r),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // ── Close button ──────────────────────────────────────────
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: EdgeInsets.all(6.w),
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.close,
+                          color: Colors.white, size: 18.sp),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // ── File attachment dialog ─────────────────────────────────────────────────
+  void _showFileDialog(BuildContext context, String fileUrl, String fileName) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.all(12.w),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: SizedBox(
+                width: double.infinity,
+                height: 360.h,
+                child: Image.network(
+                  fileUrl,
+                  fit: BoxFit.contain,
+                  loadingBuilder: (_, child, progress) => progress == null
+                      ? child
+                      : Container(
+                    color: Colors.black,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  errorBuilder: (_, __, ___) => Container(
+                    color: Colors.black,
+                    child: const Center(
+                      child: Icon(Icons.broken_image,
+                          color: Colors.white54, size: 48),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Close
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  padding: EdgeInsets.all(6.w),
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  child:
+                  Icon(Icons.close, color: Colors.white, size: 18.sp),
+                ),
+              ),
+            ),
+            // File name label
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                decoration: const BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  fileName,
+                  style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
@@ -81,305 +265,523 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ── Site Details ──────────────────────────────────────
-                  Text(
-                    'Site Details',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1A1A2E),
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: 14.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              color: const Color(0xFF666666),
-                            ),
-                            children: [
-                              const TextSpan(text: 'Site Name : '),
-                              TextSpan(
-                                text: 'Downtown Mall Project.',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF1A1A2E),
-                                  fontSize: 13.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              color: const Color(0xFF666666),
-                            ),
-                            children: [
-                              const TextSpan(text: 'Location : '),
-                              TextSpan(
-                                text: '36 Park Street Road',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF1A1A2E),
-                                  fontSize: 13.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+      body: Obx(() {
+        final task = _homeController.taskDetailsModel.value?.data;
 
-                  SizedBox(height: 16.h),
+        // ── Loading state ────────────────────────────────────────────────
+        if (task == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-                  // ── Image Slider ──────────────────────────────────────
-                  Container(
-                    height: 200.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Stack(
-                      children: [
-                        // Images
-                        PageView.builder(
-                          itemCount: _images.length,
-                          onPageChanged: (i) =>
-                              setState(() => _currentImage = i),
-                          itemBuilder: (_, i) => ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
-                            child: Image.network(
-                              _images[i],
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              loadingBuilder: (_, child, progress) =>
-                                  progress == null
-                                  ? child
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                            ),
-                          ),
-                        ),
+        // ── Resolve values from model ─────────────────────────────────────
+        final siteName = task.siteId?.siteTitle ?? 'N/A';
+        final description = task.description ?? '';
+        final status = task.status ?? 'Unknown';
+        final images = (task.images?.isNotEmpty == true)
+            ? task.images!
+            : (task.siteId?.photos ?? []);
+        final fileId = task.fileId;
 
-                        // Status badge
-                        Positioned(
-                          bottom: 36.h,
-                          right: 12.w,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.w,
-                              vertical: 5.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE65100),
-                              borderRadius: BorderRadius.circular(6.r),
-                            ),
-                            child: Text(
-                              'In Progress',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 11.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
+        // Status badge color
+        Color statusColor;
+        // To-Do, In-Progress, Done
+        switch (status.toLowerCase()) {
+          case 'Done':
+            statusColor = const Color(0xFF2E7D6B);
+            break;
+          case 'To-Do':
+            statusColor = const Color(0xFFF9A825);
+            break;
+          case 'In-Progress':
+            statusColor = const Color(0xFFE65100);
+            break;
+          default:
+            statusColor = const Color(0xFFE65100);
+        }
 
-                        // Dots indicator
-                        Positioned(
-                          bottom: 10.h,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              _images.length,
-                              (i) => AnimatedContainer(
-                                duration: const Duration(milliseconds: 250),
-                                margin: EdgeInsets.symmetric(horizontal: 3.w),
-                                width: _currentImage == i ? 18.w : 8.w,
-                                height: 6.h,
-                                decoration: BoxDecoration(
-                                  color: _currentImage == i
-                                      ? const Color(0xFF2E7D6B)
-                                      : Colors.white.withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(3.r),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 16.h),
-
-                  // ── Description ───────────────────────────────────────
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(14.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: const Color(0xFFDDE8E5),
-                        width: 1.2,
-                      ),
-                    ),
-                    child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color(0xFF555555),
-                        height: 1.6,
-                      ),
-                    ),
-                  ),
-
-                  // ── Comments Section ──────────────────────────────────
-                  if (_showComments) ...[
-                    SizedBox(height: 20.h),
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ── Site Details ──────────────────────────────────────
                     Text(
-                      'Comments',
+                      'Site Details',
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xFF1A1A2E),
                       ),
                     ),
-                    SizedBox(height: 10.h),
-                    ..._comments.map((c) => CommentTile(comment: c)),
-                  ],
+                    SizedBox(height: 8.h),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 14.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Site name
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: const Color(0xFF666666),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Site Name : '),
+                                TextSpan(
+                                  text: siteName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1A2E),
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          // Title
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: const Color(0xFF666666),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Title : '),
+                                TextSpan(
+                                  text: task.title ?? 'N/A',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1A2E),
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          // Assigned To
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: const Color(0xFF666666),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Assigned To : '),
+                                TextSpan(
+                                  text: task.assignedTo?.name ?? 'N/A',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1A2E),
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          // Due Date
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: const Color(0xFF666666),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Due Date : '),
+                                TextSpan(
+                                  text: task.dueDate != null
+                                      ? '${task.dueDate!.day}/${task.dueDate!.month}/${task.dueDate!.year}'
+                                      : 'N/A',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF1A1A2E),
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
 
-                  SizedBox(height: 20.h),
+                    // ── Image Slider ──────────────────────────────────────
+                    if (images.isNotEmpty) ...[
+                      Container(
+                        height: 200.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Stack(
+                          children: [
+                            // Tappable PageView
+                            PageView.builder(
+                              itemCount: images.length,
+                              onPageChanged: (i) =>
+                                  setState(() => _currentImage = i),
+                              itemBuilder: (_, i) => GestureDetector(
+                                onTap: () =>
+                                    _showImageDialog(context, images, i),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      Image.network(
+                                        images[i],
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (_, child, progress) =>
+                                        progress == null
+                                            ? child
+                                            : const Center(
+                                          child:
+                                          CircularProgressIndicator(),
+                                        ),
+                                        errorBuilder: (_, __, ___) =>
+                                        const Center(
+                                          child: Icon(Icons.broken_image,
+                                              size: 40),
+                                        ),
+                                      ),
+                                      // tap-to-expand hint
+                                      Positioned(
+                                        top: 8.h,
+                                        right: 8.w,
+                                        child: Container(
+                                          padding: EdgeInsets.all(4.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black38,
+                                            borderRadius:
+                                            BorderRadius.circular(6.r),
+                                          ),
+                                          child: Icon(
+                                            Icons.fullscreen,
+                                            color: Colors.white,
+                                            size: 16.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // Status badge
+                            Positioned(
+                              bottom: 36.h,
+                              right: 12.w,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 5.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: statusColor,
+                                  borderRadius: BorderRadius.circular(6.r),
+                                ),
+                                child: Text(
+                                  status,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // Dots indicator
+                            if (images.length > 1)
+                              Positioned(
+                                bottom: 10.h,
+                                left: 0,
+                                right: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    images.length,
+                                        (i) => AnimatedContainer(
+                                      duration:
+                                      const Duration(milliseconds: 250),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 3.w),
+                                      width:
+                                      _currentImage == i ? 18.w : 8.w,
+                                      height: 6.h,
+                                      decoration: BoxDecoration(
+                                        color: _currentImage == i
+                                            ? const Color(0xFF2E7D6B)
+                                            : Colors.white.withOpacity(0.6),
+                                        borderRadius:
+                                        BorderRadius.circular(3.r),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
+
+                    // ── File Attachment ───────────────────────────────────
+                    if (fileId != null && fileId.fileUrl != null) ...[
+                      Text(
+                        'Attachment',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF1A1A2E),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      GestureDetector(
+                        onTap: () => _showFileDialog(
+                          context,
+                          fileId.fileUrl!,
+                          fileId.fileName ?? 'File',
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 14.w, vertical: 12.h),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(
+                              color: const Color(0xFFDDE8E5),
+                              width: 1.2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.03),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 44.w,
+                                height: 44.w,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFEAF3F0),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  child: Image.network(
+                                    fileId.fileUrl!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Center(
+                                      child: Icon(
+                                        Icons.insert_drive_file_outlined,
+                                        color: const Color(0xFF2E7D6B),
+                                        size: 22.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      fileId.fileName ?? 'Attached File',
+                                      style: TextStyle(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFF1A1A2E),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      'Tap to view',
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: const Color(0xFF888888),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                Icons.open_in_full_rounded,
+                                size: 16.sp,
+                                color: const Color(0xFF2E7D6B),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
+
+                    // ── Description ───────────────────────────────────────
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(14.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: const Color(0xFFDDE8E5),
+                          width: 1.2,
+                        ),
+                      ),
+                      child: Text(
+                        description.isNotEmpty
+                            ? description
+                            : 'No description provided.',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: const Color(0xFF555555),
+                          height: 1.6,
+                        ),
+                      ),
+                    ),
+
+                    // ── Comments Section ──────────────────────────────────
+                    if (_showComments) ...[
+                      SizedBox(height: 20.h),
+                      Text(
+                        'Comments',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF1A1A2E),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      ..._comments.map((c) => CommentTile(comment: c)),
+                    ],
+                    SizedBox(height: 20.h),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Bottom Buttons ────────────────────────────────────────────
+            Container(
+              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  CustomButton(
+                    onPressed: () {
+                      showStatusBottomSheet(
+                        context,
+                        onSelected: (status) {
+                          setState(() {
+                            print(status);
+                          });
+                        },
+                      );
+                    },
+                    label: 'Update Work Status',
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down_circle_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () =>
+                              setState(() => _showComments = !_showComments),
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 13.h),
+                            side: const BorderSide(color: Color(0xFFDDDDDD)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                          icon: Icon(
+                            Icons.chat_bubble_outline,
+                            size: 16.sp,
+                            color: const Color(0xFF1A1A2E),
+                          ),
+                          label: Text(
+                            'Comments',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1A2E),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => _showAddCommentSheet(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE65100),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 13.h),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+                          child: Text(
+                            'Add Comments',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-
-          // ── Bottom Buttons ────────────────────────────────────────────
-          Container(
-            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                CustomButton(
-                  onPressed: () {
-                    showStatusBottomSheet(context, onSelected: (status){
-                      setState(() {
-                        print(status);
-                      });
-                    });
-                  },
-                  label: 'Start work',
-                  suffixIcon : Icon(
-                    Icons.arrow_drop_down_circle_outlined,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: [
-                    // Comments toggle button
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () =>
-                            setState(() => _showComments = !_showComments),
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 13.h),
-                          side: const BorderSide(color: Color(0xFFDDDDDD)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                        icon: Icon(
-                          Icons.chat_bubble_outline,
-                          size: 16.sp,
-                          color: const Color(0xFF1A1A2E),
-                        ),
-                        label: Text(
-                          'Comments',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF1A1A2E),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    // Add comment button
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => _showAddCommentSheet(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE65100),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 13.h),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                        ),
-                        child: Text(
-                          'Add Comments',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 
@@ -415,7 +817,8 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
               SizedBox(height: 16.h),
               Text(
                 'Add Comment',
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
+                style:
+                TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 12.h),
               TextField(
@@ -425,23 +828,24 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                 style: TextStyle(fontSize: 13.sp),
                 decoration: InputDecoration(
                   hintText: 'Write your comment...',
-                  hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                  hintStyle:
+                  TextStyle(fontSize: 13.sp, color: Colors.grey),
                   filled: true,
                   fillColor: const Color(0xFFF5F6FA),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                    borderSide:
+                    const BorderSide(color: Color(0xFFE0E0E0)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
-                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                    borderSide:
+                    const BorderSide(color: Color(0xFFE0E0E0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.r),
                     borderSide: const BorderSide(
-                      color: Color(0xFF2E7D6B),
-                      width: 1.5,
-                    ),
+                        color: Color(0xFF2E7D6B), width: 1.5),
                   ),
                 ),
               ),
@@ -478,4 +882,3 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     );
   }
 }
-
