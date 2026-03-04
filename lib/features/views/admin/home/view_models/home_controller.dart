@@ -3,6 +3,7 @@
 import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
+import 'package:charteur/features/views/admin/home/models/remarks_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
@@ -11,10 +12,6 @@ import 'package:charteur/features/views/common/profile/repository/profile_reposi
 import 'package:charteur/features/views/common/profile/view_models/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class HomeController extends GetxController {
   final HomeRepository _repository;
@@ -45,6 +42,7 @@ class HomeController extends GetxController {
   final fileDetailsModel  = Rxn<FileDetailsResponseModel>();
   final workerListModel  = Rxn<WorkerListResponseModel>();
   final taskDetailsModel  = Rxn<TaskDetailsResponseModel>();
+  final remarkDetailsModel  = Rxn<RemarkDetailsResponseModel>();
   String? savedPath;
   DateTime date = DateTime(2025, 6, 29);
 
@@ -100,6 +98,45 @@ class HomeController extends GetxController {
         case Success<TaskDetailsResponseModel>():
           taskDetailsModel.value = result.data;
         case Failure<TaskDetailsResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── get details ─────────────────────────────────────────────
+  Future<void> getRemark() async {
+    String taskId = Get.arguments['taskId']??'';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getRemarks(taskId: taskId);
+
+      switch (result) {
+        case Success<RemarkDetailsResponseModel>():
+          remarkDetailsModel.value = result.data;
+        case Failure<RemarkDetailsResponseModel>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── get details ─────────────────────────────────────────────
+  Future<void> addRemark({String? filePath , String? fileName ,String? description}) async {
+    String taskId = Get.arguments['taskId']??'';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.addRemark(taskId: taskId, filePath: filePath, fileName: fileName, description: description);
+
+      switch (result) {
+        case Success<String>():
+          showSuccess(result.data);
+          getRemark();
+        case Failure<String>():
           showError(result.message);
       }
     } finally {

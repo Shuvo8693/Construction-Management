@@ -1,8 +1,8 @@
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/core/widgets/widgets.dart';
-import 'package:charteur/features/view_models/bottom_nav/bottom_nav_provider.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/profile/repository/profile_repository.dart';
@@ -11,7 +11,6 @@ import 'package:charteur/features/views/common/sites/widgets/site_card_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -29,10 +28,19 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((__)async{
+      getMyInfo();
       await _homeController.getSite();
       await _profileController.getProfile();
     });
+  }
 
+  String myId = '';
+  String myRole = '';
+  getMyInfo()async{
+    final payloads = await getPayloadValue();
+    myId = payloads['userId'];
+    myRole = payloads['role'];
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -80,6 +88,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(myRole=='office_admin')
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,18 +128,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             ),
           ),
 
-
-
           SizedBox(height: 20.h),
           Row(
             children: [
               CustomText(text: 'Your Sites', fontSize: 16.sp, color: AppColors.textPrimary),
               Spacer(),
-              InkWell(
-                  onTap: () {
-                    // context.read<BottomNavProvider>().setSelectedIndex(1);
-                  },
-                  child: CustomText(text: 'See All', fontSize: 16.sp, color: AppColors.textPrimary)),
+              // InkWell(
+              //     onTap: () {
+              //       // context.read<BottomNavProvider>().setSelectedIndex(1);
+              //     },
+              //     child: CustomText(text: 'See All', fontSize: 16.sp, color: AppColors.textPrimary)),
             ],
           ),
 

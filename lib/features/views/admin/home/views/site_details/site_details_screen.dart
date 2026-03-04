@@ -1,14 +1,18 @@
 import 'package:auto_route/annotations.dart';
+import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/comment_tile.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/show-status_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../view_models/home_controller.dart';
+
+///================>>>> Need Refactor <<<<=====================
 
 class SiteDetailsScreen extends StatefulWidget {
   const SiteDetailsScreen({super.key});
@@ -59,15 +63,21 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _homeController.getSiteTaskDetails();
-    getMyInfo();
+    WidgetsBinding.instance.addPostFrameCallback((__)async{
+     await getMyInfo();
+     await _homeController.getSiteTaskDetails();
+
+    });
+
   }
 
 
   String myId = '';
+  String myRole = '';
   getMyInfo()async{
     final payloads = await getPayloadValue();
     myId = payloads['userId'];
+    myRole = payloads['role'];
     setState(() {});
   }
 
@@ -297,7 +307,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
         // Status badge color
         Color statusColor;
         // To-Do, In-Progress, Done
-        switch (status.toLowerCase()) {
+        switch (status) {
           case 'Done':
             statusColor = const Color(0xFF2E7D6B);
             break;
@@ -771,9 +781,15 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => _showAddCommentSheet(context),
+                          onPressed: () {
+                            if(status =='Done'){
+                              Get.toNamed(AppRoutes.remarks,arguments: {'taskId': task.id});
+                            }else{
+                              _showAddCommentSheet(context);
+                             }
+                            } ,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFE65100),
+                            backgroundColor: status=='Done'?const Color(0xFF2E7D6B): const Color(0xFFE65100),
                             foregroundColor: Colors.white,
                             padding: EdgeInsets.symmetric(vertical: 13.h),
                             elevation: 0,
@@ -781,8 +797,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                           ),
-                          child: Text(
-                            'Add Comments',
+                          child: Text(status=='Done'?'Remarks':'Add Comments',
                             style: TextStyle(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,

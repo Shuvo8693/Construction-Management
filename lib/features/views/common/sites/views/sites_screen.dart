@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:charteur/core/helpers/helper_data.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
@@ -23,8 +24,19 @@ class _SitesScreenState extends State<SitesScreen> {
   @override
   void initState() {
     super.initState();
+    getMyInfo();
     _sitesController.getAssignedSite();
   }
+
+  String myId = '';
+  String myRole = '';
+  getMyInfo()async{
+    final payloads = await getPayloadValue();
+    myId = payloads['userId'];
+    myRole = payloads['role'];
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -34,8 +46,8 @@ class _SitesScreenState extends State<SitesScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FilteredButtonWidget(
-            selectedValue: 'Assigned Task',
-            categoryItem: HelperData.filteredItems,
+            selectedValue: myRole == 'office_admin'? 'Assigned Task' : 'My Task',
+            categoryItem: myRole == 'office_admin'? HelperData.filteredItems : HelperData.filteredItemsMyTask,
           ),
 
       Obx((){

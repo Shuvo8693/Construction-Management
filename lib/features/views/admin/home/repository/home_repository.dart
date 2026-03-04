@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
+import 'package:charteur/features/views/admin/home/models/remarks_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
@@ -20,6 +21,18 @@ class HomeRepository {
 
     if (response.isSuccess) {
       return ApiResult.success(SiteListResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Login failed');
+  }
+
+  // ── get remarks ─────────────────────────────────────────────
+  Future<ApiResult<RemarkDetailsResponseModel>> getRemarks({String taskId = ''}) async {
+    final response = await _network.getRequest(
+      url: ApiUrls.remarkUrl(taskId: taskId),
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(RemarkDetailsResponseModel.fromJson(response.responseBody));
     }
     return ApiResult.failure(response.errorMassage ?? 'Login failed');
   }
@@ -134,6 +147,30 @@ class HomeRepository {
 
     if (response.isSuccess) {
       return ApiResult.success('Task assigned successfully');
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Upload failed');
+  }
+
+  // ── add remark ──────────────────────────────────────────
+  Future<ApiResult<String>> addRemark({
+    String? filePath,
+    String? fileName,
+    String? taskId,
+    String? description,
+  }) async {
+
+    final response = await _network.multipartRequest(
+      url: ApiUrls.addRemarkUrl(taskId ?? ''),
+      body: {
+        "images": await _network.toMultipartFile(filePath!, fileName: fileName),
+        "data": jsonEncode({
+          "description": description,
+        }),
+      },
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success('remark added successfully');
     }
     return ApiResult.failure(response.errorMassage ?? 'Upload failed');
   }

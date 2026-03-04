@@ -3,6 +3,8 @@ import 'package:charteur/features/views/admin/home/view_models/home_bindings.dar
 import 'package:charteur/features/views/admin/home/views/admin_home/admin_home_screen.dart';
 import 'package:charteur/features/views/admin/home/views/assign_task/assign_task_screen.dart';
 import 'package:charteur/features/views/admin/home/views/collaborator_details/collaborator_details_screen.dart';
+import 'package:charteur/features/views/admin/home/views/remarks/remarks_screen.dart';
+import 'package:charteur/features/views/admin/home/views/site_details/remarks_screen.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
 import 'package:charteur/features/views/common/profile/view_models/profile_bindings.dart';
@@ -134,6 +136,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.siteDetails,
       page: () => const SiteDetailsScreen(),
+      transition: Transition.noTransition,
+      binding: HomeBinding()
+    ),
+    GetPage(
+      name: AppRoutes.remarks,
+      page: () => const RemarkScreen(),
       transition: Transition.noTransition,
       binding: HomeBinding()
     ),

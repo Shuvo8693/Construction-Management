@@ -44,7 +44,6 @@ class _StatusBottomSheetState extends State<StatusBottomSheet> {
     // 'To-Do',
     'In-Progress',
     'Done',
-    'Remarks',
   ];
 
   static const Color _activeColor = Color(0xFF2E8B72);

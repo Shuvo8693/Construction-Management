@@ -97,7 +97,6 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 Tab(text: 'To-do'),
                 Tab(text: 'In Progress'),
                 Tab(text: 'Done'),
-                Tab(text: 'Remarks'),
               ],
             ),
           ),
@@ -116,7 +115,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 // Done Tab
                 _buildTodoList(status: 'Done'),
                 // Remarks Tab
-                RemarksScreen(status: 'Remarks'),
+                // RemarksScreen(status: 'Remarks'),
               ],
             ),
           ),
