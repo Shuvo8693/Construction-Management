@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/comment_tile.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/show-status_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,15 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   void initState() {
     super.initState();
     _homeController.getSiteTaskDetails();
+    getMyInfo();
+  }
+
+
+  String myId = '';
+  getMyInfo()async{
+    final payloads = await getPayloadValue();
+    myId = payloads['userId'];
+    setState(() {});
   }
 
   // ── Full-screen image dialog ───────────────────────────────────────────────
@@ -274,6 +284,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
         }
 
         // ── Resolve values from model ─────────────────────────────────────
+
         final siteName = task.siteId?.siteTitle ?? 'N/A';
         final description = task.description ?? '';
         final status = task.status ?? 'Unknown';
@@ -281,6 +292,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
             ? task.images!
             : (task.siteId?.photos ?? []);
         final fileId = task.fileId;
+        final  assignedTo = task.assignedTo?.id;
 
         // Status badge color
         Color statusColor;
@@ -298,6 +310,8 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
           default:
             statusColor = const Color(0xFFE65100);
         }
+
+
 
         return Column(
           children: [
@@ -703,16 +717,18 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                   ),
                 ],
               ),
+              // ==== update work status ====
               child: Column(
                 children: [
+                  if(myId == assignedTo)
                   CustomButton(
                     onPressed: () {
                       showStatusBottomSheet(
                         context,
-                        onSelected: (status) {
-                          setState(() {
-                            print(status);
-                          });
+                        onSelected: (status)  async {
+                          if(status.isNotEmpty){
+                           await _homeController.updateWorkStatus(status: status);
+                          }
                         },
                       );
                     },

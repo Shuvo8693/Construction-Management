@@ -191,7 +191,7 @@ class HomeController extends GetxController {
         case Success():
           Get.back();
           showSuccess('Profile updated successfully');
-          Get.put(ProfileController(ProfileRepository())).getProfile();
+          getSiteTaskDetails();
         case Failure():
           showError((result as Failure).message);
       }

@@ -101,7 +101,7 @@ class HomeRepository {
     );
 
     if (response.isSuccess) {
-      return ApiResult.success(response.responseBody['data']['message']);
+      return ApiResult.success('Updated successfully');
     }
     return ApiResult.failure(response.errorMassage ?? 'Failed to update company info');
   }
