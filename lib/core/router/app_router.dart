@@ -32,5 +32,6 @@ abstract class AppRoutes {
   static const companyProfile = '/company-profile';
   static const updateProfile = '/update-profile';
   static const remarks = '/remarks';
+  static const siteLocation = '/site-location';
 }
 

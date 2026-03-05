@@ -3,9 +3,11 @@ import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/helpers/menu_show_helper.dart';
 import 'package:charteur/core/helpers/photo_picker_helper.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/field_level.dart';
 import 'package:charteur/core/widgets/files/filepath_container.dart';
 import 'package:charteur/core/widgets/search_bottom_sheet.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/view_models/location/location_provider.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +26,7 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   final  _sitesController = Get.find<SitesController>();
+  final  _locationController = Get.find<LocationController>();
 
   String _filePath ='';
 
@@ -73,32 +76,37 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
                   ),
                 ),
               ),
-              _buildTextField(
-                label: 'Location',
-                hint: 'Enter Location',
+              // ── Location ─────────────────────────────────
+              FieldLabel('Location'),
+              CustomTextField(
                 controller: _sitesController.siteLocationController,
+                hintText: '123/45 Street Road, UK',
+                validator: (v) => v!.isEmpty ? 'Required' : null,
+                suffixIcon: const Icon(Icons.location_on_outlined),
+                borderColor: Colors.grey,
+                filColor: Colors.transparent,
+                onTap: () {
+                  // open your searchBottomSheet here
+                  searchBottomSheet(
+                    context,
+                    controller: _sitesController.siteLocationController,
+                    hintText: 'Search location...',
+                    onSelected: (String placeId)async {
+                      print('Selected description: $placeId');
+                    final result = await _locationController.fetchLatLng(placeId);
+                    if (result != null) {
+                      _sitesController.lat = result.lat ;
+                      _sitesController.lng = result.lng;
+                      setState(() {});
+                    }
+                    },
+                  );
+                },
+                readOnly: true,
               ),
-              // GestureDetector(
-              //   onTap: (){
-              //     searchBottomSheet(
-              //       context,
-              //       controller: _siteLocationController,
-              //       hintText: 'Search location',
-              //     );
-              //   },
-              //   child: AbsorbPointer(
-              //     child: _buildTextField(
-              //       label: 'Site Location',
-              //       hint: 'Enter Location',
-              //       controller: _siteLocationController,
-              //       suffixIcon: Icon(
-              //         Icons.location_on_outlined,
-              //         size: 24.r,
-              //         color: AppColors.textSecondary,
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Align(
+                alignment: Alignment.bottomRight,
+                  child: Text("Lat:${_sitesController.lat}, Lng:${_sitesController.lng}")),
 
               GestureDetector(
                 onTapDown: (details) async {

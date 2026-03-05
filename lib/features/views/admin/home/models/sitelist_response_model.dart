@@ -13,12 +13,12 @@ class SiteListResponseModel {
 
   factory SiteListResponseModel.fromJson(Map<String, dynamic> json) {
     return SiteListResponseModel(
-      success: json['success'],
-      message: json['message'],
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
       meta: Meta.fromJson(json['meta']),
-      data: List<SiteData>.from(
-        json['data'].map((x) => SiteData.fromJson(x)),
-      ),
+      data: (json['data'] as List)
+          .map((e) => SiteData.fromJson(e))
+          .toList(),
     );
   }
 }
@@ -38,10 +38,10 @@ class Meta {
 
   factory Meta.fromJson(Map<String, dynamic> json) {
     return Meta(
-      total: json['total'],
-      page: json['page'],
-      limit: json['limit'],
-      totalPage: json['totalPage'],
+      total: json['total'] ?? 0,
+      page: json['page'] ?? 0,
+      limit: json['limit'] ?? 0,
+      totalPage: json['totalPage'] ?? 0,
     );
   }
 }
@@ -82,17 +82,17 @@ class SiteData {
   factory SiteData.fromJson(Map<String, dynamic> json) {
     return SiteData(
       location: Location.fromJson(json['location']),
-      id: json['_id'],
-      createdBy: json['createdBy'],
-      companyId: json['companyId'],
-      siteOwner: json['siteOwner'],
-      siteTitle: json['siteTitle'],
-      buildingType: json['buildingType'],
-      status: json['status'],
-      completionDescription: json['completionDescription'],
-      photos: List<String>.from(json['photos']),
+      id: json['_id'] ?? '',
+      createdBy: json['createdBy'] ?? '',
+      companyId: json['companyId'] ?? '',
+      siteOwner: json['siteOwner'] ?? '',
+      siteTitle: json['siteTitle'] ?? '',
+      buildingType: json['buildingType'] ?? '',
+      status: json['status'] ?? '',
+      completionDescription: json['completionDescription'] ?? '',
+      photos: List<String>.from(json['photos'] ?? []),
       endDate: DateTime.parse(json['endDate']),
-      isDeleted: json['isDeleted'],
+      isDeleted: json['isDeleted'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -111,24 +111,29 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       coordinates: Coordinates.fromJson(json['coordinates']),
-      address: json['address'],
+      address: json['address'] ?? '',
     );
   }
 }
 
 class Coordinates {
+  final String type;
   final double lat;
   final double lng;
 
   Coordinates({
+    required this.type,
     required this.lat,
     required this.lng,
   });
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
+    final List coords = json['coordinates'];
+
     return Coordinates(
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
+      type: json['type'] ?? '',
+      lng: (coords[0] as num).toDouble(),
+      lat: (coords[1] as num).toDouble(),
     );
   }
 }

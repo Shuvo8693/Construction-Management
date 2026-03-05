@@ -4,6 +4,7 @@ import 'package:charteur/features/views/admin/home/views/admin_home/admin_home_s
 import 'package:charteur/features/views/admin/home/views/assign_task/assign_task_screen.dart';
 import 'package:charteur/features/views/admin/home/views/collaborator_details/collaborator_details_screen.dart';
 import 'package:charteur/features/views/admin/home/views/remarks/remarks_screen.dart';
+import 'package:charteur/features/views/admin/home/views/site_details/location_map_screen.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/remarks_screen.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
@@ -142,6 +143,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.remarks,
       page: () => const RemarkScreen(),
+      transition: Transition.noTransition,
+      binding: HomeBinding()
+    ),
+    GetPage(
+      name: AppRoutes.siteLocation,
+      page: () => const LocationSelectionMapView(),
       transition: Transition.noTransition,
       binding: HomeBinding()
     ),

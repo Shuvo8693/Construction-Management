@@ -1,4 +1,8 @@
 class ApiUrls {
+
+  // Google map
+  static String googleBaseUrl="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  static String estimatedTimeUrl="https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&";
   //static const String baseUrl = "http://217.15.170.117";
   static const String baseUrl = "https://mihad3000.merinasib.shop/api/v1";
 

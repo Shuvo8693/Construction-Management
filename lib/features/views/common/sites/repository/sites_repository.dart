@@ -84,6 +84,8 @@ class SitesRepository {
     String? siteLocation,
     String? buildingType,
     String? filePath,
+    double? lat,
+    double? lng
   }) async {
     String  token = await PrefsHelper.getString('token');
     print(token);
@@ -99,8 +101,8 @@ class SitesRepository {
           "location": {
             "address": siteLocation,
             "coordinates": {
-              "lat": 40.7128,
-              "lng": -74.0060
+              "lat": lat,
+              "lng": lng
             }
           },
           "status": siteStatus,

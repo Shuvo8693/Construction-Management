@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/admin/home/views/remarks/remarks_screen.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
@@ -29,6 +30,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((__)async{
+      getMyInfo();
      await _sitesController.getSiteFiles();
       _tabController.addListener((){
         switch (_tabController.index) {
@@ -55,6 +57,15 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
     setState(() {
       _siteId = siteId;
     });
+  }
+
+  String myId = '';
+  String myRole = '';
+  getMyInfo()async{
+    final payloads = await getPayloadValue();
+    myId = payloads['userId'];
+    myRole = payloads['role'];
+    setState(() {});
   }
 
   @override
@@ -93,7 +104,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 fontWeight: FontWeight.w500,
               ),
               tabs: [
-                Tab(text: 'Files'),
+                if(myRole=='office_admin')Tab(text: 'Files'),
                 Tab(text: 'To-do'),
                 Tab(text: 'In Progress'),
                 Tab(text: 'Done'),
@@ -107,7 +118,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
               controller: _tabController,
               children: [
                 // Files Tab
-                _buildFilesList(),
+                if(myRole=='office_admin') _buildFilesList(),
                 // To-do Tab
                 _buildTodoList(status: 'To-Do'),
                 // In Progress Tab
@@ -121,7 +132,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
           ),
         ],
       ),
-      floatingActionButton: AnimatedBuilder(
+      floatingActionButton: myRole == 'office_admin'? AnimatedBuilder(
         animation: _tabController,
         builder: (context, _) {
           return AnimatedSwitcher(
@@ -141,7 +152,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
             ),
           );
         },
-      ),
+      ): const SizedBox.shrink(),
     );
   }
 

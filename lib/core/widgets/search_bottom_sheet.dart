@@ -90,7 +90,6 @@ void searchBottomSheet(
                   if (locationController.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-
                   if (locationController.suggestions.isEmpty) {
                     return Center(
                       child: Text(
@@ -113,7 +112,7 @@ void searchBottomSheet(
                       return ListTile(
                         onTap: () {
                           controller.text = suggestion['description']!;
-                          onSelected(suggestion['description']!); // ← callback
+                          onSelected(suggestion['placeId']!); // ← callback
                           locationController.clearSuggestions();
                           Get.back();
                         },

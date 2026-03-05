@@ -446,6 +446,12 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                               ],
                             ),
                           ),
+                          SizedBox(height: 8.h),
+                          GestureDetector(
+                             onTap: (){
+                                 Get.toNamed(AppRoutes.siteLocation,arguments: {'siteId':task.siteId?.id});
+                             },
+                              child: Text('See Site Location',style: TextStyle(color: Colors.blue,fontSize: 13.sp,fontWeight: FontWeight.w600),))
                         ],
                       ),
                     ),
@@ -715,99 +721,101 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
             ),
 
             // ── Bottom Buttons ────────────────────────────────────────────
-            Container(
-              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              // ==== update work status ====
-              child: Column(
-                children: [
-                  if(myId == assignedTo)
-                  CustomButton(
-                    onPressed: () {
-                      showStatusBottomSheet(
-                        context,
-                        onSelected: (status)  async {
-                          if(status.isNotEmpty){
-                           await _homeController.updateWorkStatus(status: status);
-                          }
-                        },
-                      );
-                    },
-                    label: 'Update Work Status',
-                    suffixIcon: Icon(
-                      Icons.arrow_drop_down_circle_outlined,
-                      color: Colors.white,
+            SafeArea(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () =>
-                              setState(() => _showComments = !_showComments),
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 13.h),
-                            side: const BorderSide(color: Color(0xFFDDDDDD)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.r),
+                  ],
+                ),
+                // ==== update work status ====
+                child: Column(
+                  children: [
+                    if(myId == assignedTo)
+                    CustomButton(
+                      onPressed: () {
+                        showStatusBottomSheet(
+                          context,
+                          onSelected: (status)  async {
+                            if(status.isNotEmpty){
+                             await _homeController.updateWorkStatus(status: status);
+                            }
+                          },
+                        );
+                      },
+                      label: 'Update Work Status',
+                      suffixIcon: Icon(
+                        Icons.arrow_drop_down_circle_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () =>
+                                setState(() => _showComments = !_showComments),
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 13.h),
+                              side: const BorderSide(color: Color(0xFFDDDDDD)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              backgroundColor: Colors.white,
                             ),
-                            backgroundColor: Colors.white,
-                          ),
-                          icon: Icon(
-                            Icons.chat_bubble_outline,
-                            size: 16.sp,
-                            color: const Color(0xFF1A1A2E),
-                          ),
-                          label: Text(
-                            'Comments',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
+                            icon: Icon(
+                              Icons.chat_bubble_outline,
+                              size: 16.sp,
                               color: const Color(0xFF1A1A2E),
                             ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if(status =='Done'){
-                              Get.toNamed(AppRoutes.remarks,arguments: {'taskId': task.id});
-                            }else{
-                              _showAddCommentSheet(context);
-                             }
-                            } ,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: status=='Done'?const Color(0xFF2E7D6B): const Color(0xFFE65100),
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 13.h),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                          ),
-                          child: Text(status=='Done'?'Remarks':'Add Comments',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
+                            label: Text(
+                              'Comments',
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF1A1A2E),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if(status =='Done'){
+                                Get.toNamed(AppRoutes.remarks,arguments: {'taskId': task.id});
+                              }else{
+                                _showAddCommentSheet(context);
+                               }
+                              } ,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: status=='Done'?const Color(0xFF2E7D6B): const Color(0xFFE65100),
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 13.h),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                            ),
+                            child: Text(status=='Done'?'Remarks':'Add Comments',
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

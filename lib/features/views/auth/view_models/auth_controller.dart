@@ -77,6 +77,7 @@ class AuthController extends GetxController {
 
   // ── Register ──────────────────────────────────────────
   Future<void> register() async {
+   String role = Get.arguments?['role'] ?? '';
     isLoading.value = true;
 
     try {
@@ -84,7 +85,7 @@ class AuthController extends GetxController {
         name: nameCtrl.text.trim(),
         email: emailCtrl.text.trim(),
         password: passCtrl.text.trim(),
-        role: role.value,
+        role: role,
         phoneNumber: phoneNumberCtrl.text.trim(),
       );
       
@@ -112,7 +113,8 @@ class AuthController extends GetxController {
       case Success():
        if(result.data.isNotEmpty){
          await PrefsHelper.setString('token', result.data);
-         Get.offAllNamed(AppRoutes.adminHome);
+         // Get.offAllNamed(AppRoutes.adminHome);
+         Get.toNamed(AppRoutes.login);
        }
       case Failure():
         _showError((result as Failure).message);
