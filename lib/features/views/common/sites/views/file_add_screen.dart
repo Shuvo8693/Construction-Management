@@ -48,9 +48,9 @@ class _FileAddScreenState extends State<FileAddScreen> {
                 text: 'Upload pdf Architectural Site Plan ',bottom: 6.h, fontWeight: FontWeight.w500,),
               GestureDetector(
                 onTap: (){
-                  PhotoPickerHelper.showPicker(
+                  FilePickerHelper.showPicker(
                     context: context,
-                    onImagePicked: (file) {
+                    onFilePicked: (file) {
                        setState(() {
                          _filePath = file.path;
                        });

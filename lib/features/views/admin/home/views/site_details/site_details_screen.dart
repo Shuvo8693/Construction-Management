@@ -296,6 +296,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
         // ── Resolve values from model ─────────────────────────────────────
 
         final siteName = task.siteId?.siteTitle ?? 'N/A';
+        final siteFileUrl = task.fileId?.fileUrl ?? '';
         final description = task.description ?? '';
         final status = task.status ?? 'Unknown';
         final images = (task.images?.isNotEmpty == true)

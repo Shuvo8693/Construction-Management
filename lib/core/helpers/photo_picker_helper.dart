@@ -1,15 +1,17 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import '../theme/app_colors.dart';
 import '../widgets/widgets.dart';
 
-class PhotoPickerHelper {
+class FilePickerHelper {
   static final ImagePicker _picker = ImagePicker();
+   late final FilePicker? _filePicker;
 
   static void showPicker({
     required BuildContext context,
-    required Function(XFile file) onImagePicked,
+    required Function(XFile file) onFilePicked,
   }) {
     showModalBottomSheet(
       context: context,
@@ -35,18 +37,24 @@ class PhotoPickerHelper {
                 children: [
                   _buildOption(
                     context,
-                    icon: Icons.camera_alt,
-                    label: 'Camera',
-                    source: ImageSource.camera,
-                    onImagePicked: onImagePicked,
+                    icon: Icons.picture_as_pdf,
+                    label: 'File',
+                    onFilePicked: onFilePicked,
                   ),
-                  _buildOption(
-                    context,
-                    icon: Icons.photo_library,
-                    label: 'Gallery',
-                    source: ImageSource.gallery,
-                    onImagePicked: onImagePicked,
-                  ),
+                  // _buildOption(
+                  //   context,
+                  //   icon: Icons.camera_alt,
+                  //   label: 'Camera',
+                  //   source: ImageSource.camera,
+                  //   onImagePicked: onImagePicked,
+                  // ),
+                  // _buildOption(
+                  //   context,
+                  //   icon: Icons.photo_library,
+                  //   label: 'Gallery',
+                  //   source: ImageSource.gallery,
+                  //   onImagePicked: onImagePicked,
+                  // ),
                 ],
               ),
              // const SizedBox(height: 16),
@@ -61,14 +69,16 @@ class PhotoPickerHelper {
       BuildContext context, {
         required IconData icon,
         required String label,
-        required ImageSource source,
-        required Function(XFile file) onImagePicked,
+         FileType? source,
+        required Function(XFile file) onFilePicked,
       }) {
     return InkWell(
       onTap: () async {
-        final XFile? file = await _picker.pickImage(source: source);
+        FilePickerResult? result = await FilePicker.platform.pickFiles(type: source?? FileType.custom, allowedExtensions:["pdf"] );
+        // final XFile? file = await _picker.pickImage(source: source);
         Navigator.pop(context);
-        if (file != null) onImagePicked(file);
+        // if (file != null) onImagePicked(file);
+        if (result != null) onFilePicked(XFile(result.files.single.path!));
       },
       borderRadius: BorderRadius.circular(12.r),
       child: Column(

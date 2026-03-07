@@ -36,6 +36,17 @@ dependencies:
   google_maps_flutter: ^2.9.0
   geolocator: ^13.0.1
   geocoding: ^3.0.0
+    # ── PDF viewing & editing ─────────────────────────────
+  syncfusion_flutter_pdfviewer:
+  syncfusion_flutter_pdf:
+
+    # ── File handling ─────────────────────────────────────
+  path_provider: ^2.1.2
+  file_save_directory: ^1.0.0
+  open_file_android: ^1.0.0
+
+    # ── Networking ────────────────────────────────────────
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:

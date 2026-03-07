@@ -1,3 +1,6 @@
+// ========================Image Pin =====================
+
+/*
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -374,6 +377,350 @@ class _PinPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter old) => false;
+}
+
+
+*/
+//========================== PDF Pin with edit ===========================
+
+import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
+import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
+import 'package:charteur/features/views/admin/home/views/assign_task/widgets/pdf_editor_bottom_sheet.dart';
+import 'package:charteur/features/views/admin/home/widgets/assign_worker_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+// ── Import the reusable PDF editor bottom sheet ───────────────────────────────
+
+
+class TaskScreen extends StatefulWidget {
+  const TaskScreen({super.key});
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  final _homeController = Get.put(HomeController(HomeRepository()));
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _homeController.getFileDetails();
+    });
+  }
+
+  // ── Open the PDF editor sheet; on save, store path & show AssignWorkerSheet ──
+
+  void _openPdfEditor(String pdfUrl) {
+    PdfEditorBottomSheet.show(
+      context,
+      pdfUrl: pdfUrl,
+      onSaved: (savedPath) {
+        // 1. Store the annotated PDF path in the controller
+        setState(() => _homeController.savedPath = savedPath);
+
+        // 2. Show the AssignWorkerSheet once the frame settles
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final canAssign = _homeController.savedPath != null &&
+              _homeController.savedPath!.isNotEmpty &&
+              _homeController.workTitleController.text.isNotEmpty &&
+              _homeController.descriptionController.text.isNotEmpty &&
+              _homeController.date.day > 0;
+
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => canAssign
+                ? AssignWorkerSheet()
+                : SafeArea(
+              child: Scaffold(
+                body: Center(
+                  child: Text(
+                    'Please fill in Work Title, Description, and Date first.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Future<void> _pickDate() async {
+    final d = await showDatePicker(
+      context: context,
+      initialDate: _homeController.date,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (d != null) setState(() => _homeController.date = d);
+  }
+
+  String get _formattedDate {
+    const m = [
+      'Jan','Feb','Mar','Apr','May','Jun',
+      'Jul','Aug','Sep','Oct','Nov','Dec'
+    ];
+    return '${m[_homeController.date.month - 1]} '
+        '${_homeController.date.day}, '
+        '${_homeController.date.year}';
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF4F6FA),
+      appBar: AppBar(
+        title: const Text('Assign Task'),
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF1A1A2E),
+        elevation: 0.5,
+      ),
+      body: Obx(() {
+        if (_homeController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final fileDetailsData = _homeController.fileDetailsModel.value?.data;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16.sp),
+          child: Column(
+            children: [
+              // ── PDF Location Card ───────────────────────────────────────
+              _PdfLocationCard(
+                savedPath: _homeController.savedPath,
+                onTap: fileDetailsData?.fileUrl != null
+                    ? () => _openPdfEditor(fileDetailsData?.fileUrl??'')
+                    : null,
+              ),
+
+              SizedBox(height: 16.h),
+
+              // ── Form card ───────────────────────────────────────────────
+              Container(
+                padding: EdgeInsets.all(16.sp),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 6)
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _field('Site Title', _homeController.siteTitleController,
+                        isReadOnly: true),
+                    SizedBox(height: 12.h),
+                    _field('Work Title', _homeController.workTitleController),
+                    SizedBox(height: 12.h),
+                    GestureDetector(
+                      onTap: _pickDate,
+                      child: AbsorbPointer(
+                        child: _field(
+                          'Date',
+                          TextEditingController(text: _formattedDate),
+                          suffix: const Icon(Icons.calendar_today,
+                              size: 16, color: Color(0xFF2E7D6B)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    _field('Description',
+                        _homeController.descriptionController,
+                        maxLines: 4),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+
+              // ── Assign button ───────────────────────────────────────────
+              CustomButton(
+                label: 'Assign the Task',
+                backgroundColor: const Color(0xFF2E7D6B),
+                // Guard: require a marked PDF before assigning
+                onPressed: fileDetailsData?.fileUrl != null
+                    ? () => _openPdfEditor(fileDetailsData?.fileUrl??'')
+                    : null,
+              ),
+
+              SizedBox(height: 32.h),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _field(
+      String label,
+      TextEditingController ctrl, {
+        int maxLines = 1,
+        Widget? suffix,
+        bool isReadOnly = false,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(
+                fontSize: 11,
+                color: Color(0xFF9E9E9E),
+                fontWeight: FontWeight.w500)),
+        SizedBox(height: 4.h),
+        TextFormField(
+          controller: ctrl,
+          maxLines: maxLines,
+          readOnly: isReadOnly,
+          style: const TextStyle(fontSize: 13, color: Color(0xFF1A1A2E)),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF5F6FA),
+            suffixIcon: suffix,
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide:
+              const BorderSide(color: Color(0xFF2E7D6B), width: 1.5),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── PDF Location Card ─────────────────────────────────────────────────────────
+//
+// Shows a tap target that opens the editor.
+// After saving, shows a green confirmation row instead of the image area.
+
+class _PdfLocationCard extends StatelessWidget {
+  final String? savedPath;
+  final VoidCallback? onTap;
+
+  const _PdfLocationCard({this.savedPath, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasSaved = savedPath != null && savedPath!.isNotEmpty;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20.sp),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: hasSaved
+                ? const Color(0xFF2E7D6B)
+                : const Color(0xFFDDE1EC),
+          ),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+        ),
+        child: hasSaved
+        // ── Saved state ─────────────────────────────────────────────
+            ? Row(
+          children: [
+            Container(
+              width: 42.w,
+              height: 42.h,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8F5E9),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: const Icon(Icons.check_circle,
+                  color: Color(0xFF2E7D6B), size: 22),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Location marked ✓',
+                      style: TextStyle(
+                          color: const Color(0xFF2E7D6B),
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w700)),
+                  SizedBox(height: 2.h),
+                  Text(
+                    savedPath!.split('/').last,
+                    style: TextStyle(
+                        fontSize: 10.sp,
+                        color: Colors.grey.shade500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.edit_location_alt_outlined,
+                color: const Color(0xFF2E7D6B), size: 20.sp),
+          ],
+        )
+        // ── Empty / tap-to-edit state ─────────────────────────────
+            : Column(
+          children: [
+            Icon(Icons.picture_as_pdf_outlined,
+                size: 48.sp, color: Colors.grey.shade400),
+            SizedBox(height: 10.h),
+            Text(
+              'Tap to open floor plan & mark location',
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Colors.grey.shade500,
+                  fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 6.h),
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16.w, vertical: 8.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFF2E7D6B),
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.location_on,
+                      color: Colors.white, size: 16),
+                  SizedBox(width: 6.w),
+                  Text('Open PDF Editor',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 

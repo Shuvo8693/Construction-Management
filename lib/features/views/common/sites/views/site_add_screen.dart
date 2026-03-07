@@ -145,9 +145,9 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
               SizedBox(height: 8.h,),
               GestureDetector(
                 onTap: (){
-                  PhotoPickerHelper.showPicker(
+                  FilePickerHelper.showPicker(
                     context: context,
-                    onImagePicked: (file) {
+                    onFilePicked: (file) {
                       setState(() {
                         _filePath = file.path;
                       });

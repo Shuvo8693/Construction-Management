@@ -71,7 +71,7 @@ class CustomImageAvatar extends StatelessWidget {
             right: 0,
             child: CustomContainer(
               onTap: () {
-                PhotoPickerHelper.showPicker(context: context, onImagePicked: onImagePicked!);
+                FilePickerHelper.showPicker(context: context, onFilePicked: onImagePicked!);
               },
               paddingAll: 6.r,
               color: AppColors.primaryColor,
