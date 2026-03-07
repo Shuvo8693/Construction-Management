@@ -248,9 +248,7 @@ class _PdfEditorBottomSheetState extends State<PdfEditorBottomSheet> {
             )
           else
             TextButton(
-              onPressed: _pdfBytes != null && _pins.isNotEmpty
-                  ? _savePdf
-                  : null,
+              onPressed: _pdfBytes != null && _pins.isNotEmpty ? _savePdf : null,
               child: Text(
                 'Save',
                 style: TextStyle(
@@ -345,7 +343,8 @@ class _PdfEditorBottomSheetState extends State<PdfEditorBottomSheet> {
                   Shadow(
                       color: Colors.black45,
                       blurRadius: 4,
-                      offset: Offset(1, 2)),
+                      offset: Offset(1, 2)
+                  ),
                 ],
               ),
             ),
