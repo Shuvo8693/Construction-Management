@@ -9,6 +9,7 @@ import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:charteur/features/views/common/profile/view_models/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -92,8 +93,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           _buildCustomListTile(title: 'Settings', leadingIcon: Assets.icons.settings.svg(), onTap: (){
                             Get.toNamed(AppRoutes.setting);
                           }),
-                          _buildCustomListTile(title: 'Language', leadingIcon: Assets.icons.language.svg(), onTap: (){
-                            Get.toNamed(AppRoutes.language);
+                          _buildCustomListTile(title: 'Language', leadingIcon: Assets.icons.language.svg(),
+                              onTap: ()async{
+                            // Get.toNamed(AppRoutes.language);
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LanguageSelectionScreen(),
+                              ),
+                            );
+                            setState(() {});
                           }),
 
                         ]

@@ -9,7 +9,6 @@ import 'package:charteur/features/views/admin/home/views/site_details/widgets/sh
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../view_models/home_controller.dart';
 
 class SiteDetailsScreen extends StatefulWidget {

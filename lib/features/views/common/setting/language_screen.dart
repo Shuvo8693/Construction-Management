@@ -3,10 +3,9 @@ import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/common/setting/widgets/profile_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-@RoutePage()
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
 
@@ -63,6 +62,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   });
                   // TODO: Implement actual language change logic here
                   // e.g., await localization.setLocale(language['locale']);
+
                 }
               },
               trailing: isSelected
@@ -79,6 +79,17 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   : null,
             );
           }),
+          // Spacer(),
+          // CustomButton(
+          //   onPressed: ()async{
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => LanguageSelectionScreen(),
+          //       ),
+          //     );
+          //     setState(() {}); // Rebuild to show new language
+          // },title: Text('Language'),)
         ],
       ),
     );

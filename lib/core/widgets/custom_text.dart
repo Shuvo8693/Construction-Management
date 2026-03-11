@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 
@@ -46,18 +47,20 @@ class CustomText extends StatelessWidget {
       child: Padding(
         padding:
             EdgeInsets.only(left: left, right: right, top: top, bottom: bottom),
-        child: Text(
-          textAlign: textAlign,
-          text,
-          maxLines: maxline,
-          overflow: textOverflow,
-          style: TextStyle(
-            decoration: decoration,
-            decorationColor: decorationColor,
-              fontSize: fontSize ?? 14.sp,
-              //fontFamily: fontName ?? FontFamily.inter,
-              fontWeight: fontWeight,
-              color: color ?? AppColors.textPrimary),
+        child: AutoTranslate(
+          child: Text(
+            textAlign: textAlign,
+            text,
+            maxLines: maxline,
+            overflow: textOverflow,
+            style: TextStyle(
+              decoration: decoration,
+              decorationColor: decorationColor,
+                fontSize: fontSize ?? 14.sp,
+                //fontFamily: fontName ?? FontFamily.inter,
+                fontWeight: fontWeight,
+                color: color ?? AppColors.textPrimary),
+          ),
         ),
       ),
     );

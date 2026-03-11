@@ -10,6 +10,7 @@ import 'package:charteur/features/views/common/sites/widgets/file_card_widget.da
 import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
