@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
+import 'package:charteur/features/views/admin/home/models/comment_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/remarks_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
@@ -175,5 +176,40 @@ class HomeRepository {
     return ApiResult.failure(response.errorMassage ?? 'Upload failed');
   }
 
+  // ── add Comments ──────────────────────────────────────────
+  Future<ApiResult<String>> addComment({
+    String? filePath,
+    String? fileName,
+    String? taskId,
+    String? description,
+  }) async {
+
+    final response = await _network.multipartRequest(
+      url: ApiUrls.addCommentUrl(taskId ?? ''),
+      body: {
+        // "images": await _network.toMultipartFile(filePath!, fileName: fileName),
+        "data": jsonEncode({
+          "message": description,
+        }),
+      },
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success('Added successfully');
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Upload failed');
+  }
+
+  // ── Get Comment ─────────────────────────────────────────────
+  Future<ApiResult<CommentsResponseModel>> getComment({String? taskId}) async {
+    final response = await _network.getRequest(
+      url: ApiUrls.getCommentUrl(taskId??''),
+    );
+
+    if (response.isSuccess) {
+      return ApiResult.success(CommentsResponseModel.fromJson(response.responseBody));
+    }
+    return ApiResult.failure(response.errorMassage ?? 'Login failed');
+  }
 
 }

@@ -44,6 +44,8 @@ class ApiUrls {
   static  String  workersOrAdminsUrl(String role) => '$baseUrl/users/?role=$role';
   static  String  assignTaskUrl(String fileId) => '$baseUrl/task/assign/$fileId';
   static  String  addRemarkUrl(String taskId) => '$baseUrl/remark/add/$taskId';
+  static  String  addCommentUrl(String taskId) => '$baseUrl/comment/add/$taskId';
+  static  String  getCommentUrl(String taskId) => '$baseUrl/comment/$taskId';
   static  String  siteFileViewUrl(String fileId) => '$baseUrl/site-file/view/$fileId';
   static  String  siteFileUrl(String siteId) => '$baseUrl/site-file/$siteId';
   static  String  siteTaskUrl(String siteStatus) => '$baseUrl/task/?status=$siteStatus';

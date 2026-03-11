@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
+import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/comment_tile.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/pdf_viewer_sheet.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/show-status_bottom_sheet.dart';
@@ -55,6 +56,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((__) async {
       await getMyInfo();
       await _homeController.getSiteTaskDetails();
+      await _homeController.getComment();
     });
   }
 
@@ -182,6 +184,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
       ),
       body: Obx(() {
         final task = _homeController.taskDetailsModel.value?.data;
+        // final comments = _homeController.commentsResponseModel.value;
 
         if (task == null) {
           return const Center(child: CircularProgressIndicator());
@@ -201,6 +204,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
           case 'In-Progress':statusColor = const Color(0xFFE65100); break;
           default:           statusColor = const Color(0xFFE65100);
         }
+
 
         return Column(
           children: [
@@ -392,7 +396,14 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                       Text('Comments',
                           style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: const Color(0xFF1A1A2E))),
                       SizedBox(height: 10.h),
-                      ..._comments.map((c) => CommentTile(comment: c)),
+                      Obx(() {
+                        final comments = _homeController.commentsResponseModel.value;
+                        return Column(
+                          children: [
+                            ...?comments?.data?.map((c) => CommentTile(comment: c)),
+                          ],
+                        );
+                      }),
                     ],
                     SizedBox(height: 20.h),
                   ],
@@ -446,7 +457,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                               if (status == 'Done') {
                                 Get.toNamed(AppRoutes.remarks, arguments: {'taskId': task.id});
                               } else {
-                                _showAddCommentSheet(context);
+                                _showAddCommentSheet(context,task);
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -489,7 +500,7 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     );
   }
 
-  void _showAddCommentSheet(BuildContext context) {
+  void _showAddCommentSheet(BuildContext context,TaskDetailsData? task) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -531,18 +542,23 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                 ),
               ),
               SizedBox(height: 12.h),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () { _addComment(); Navigator.pop(context); },
-                  style: ElevatedButton.styleFrom(
+              Obx(()=>
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                    isLoading: _homeController.isLoading.value,
+                    onPressed: () {
+                      if (_commentCtrl.text.trim().isEmpty) return;
+                      _homeController.addComment(description: _commentCtrl.text,taskId: task?.id,onSuccess: ()async{
+                        _commentCtrl.clear();
+                      });
+                      // _addComment(); Navigator.pop(context);
+                      // Navigator.pop(context);
+                      },
                     backgroundColor: const Color(0xFFE65100),
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 13.h),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                    label: 'Post Comment',
                   ),
-                  child: Text('Post Comment', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],

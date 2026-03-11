@@ -1,8 +1,10 @@
+import 'package:charteur/core/helpers/time_format.dart';
+import 'package:charteur/features/views/admin/home/models/comment_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CommentTile extends StatelessWidget {
-  final Map<String, String> comment;
+  final CommentData comment;
 
   const CommentTile({super.key, required this.comment});
 
@@ -25,17 +27,11 @@ class CommentTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // profile image
           CircleAvatar(
             radius: 18.r,
             backgroundColor: const Color(0xFF2E7D6B).withOpacity(0.15),
-            child: Text(
-              comment['name']![0],
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF2E7D6B),
-              ),
-            ),
+            backgroundImage: NetworkImage(comment.commentedBy?.profileImage??''),
           ),
           SizedBox(width: 10.w),
           Expanded(
@@ -45,23 +41,25 @@ class CommentTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // name
                     Text(
-                      comment['name']!,
+                      comment.commentedBy?.name??'',
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF1A1A2E),
                       ),
                     ),
-                    Text(
-                      comment['time']!,
+                    // time
+                    Text(TimeFormatHelper.getTimeAgo(DateTime.parse(comment.createdAt.toString())),
                       style: TextStyle(fontSize: 10.sp, color: Colors.grey),
                     ),
                   ],
                 ),
                 SizedBox(height: 4.h),
+                // comment
                 Text(
-                  comment['comment']!,
+                  comment.message??'',
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: const Color(0xFF555555),

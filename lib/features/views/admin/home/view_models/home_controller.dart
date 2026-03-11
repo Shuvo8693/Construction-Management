@@ -2,6 +2,7 @@
 
 import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
+import 'package:charteur/features/views/admin/home/models/comment_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
 import 'package:charteur/features/views/admin/home/models/remarks_response_model.dart';
 import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
@@ -38,11 +39,12 @@ class HomeController extends GetxController {
   final isLoading    = false.obs;
   Map<int, bool> isAssignLoading = <int, bool>{}.obs;
   final role         = ''.obs;
-  final siteListModel     = Rxn<SiteListResponseModel>();
+  final siteListModel    = Rxn<SiteListResponseModel>();
   final fileDetailsModel  = Rxn<FileDetailsResponseModel>();
   final workerListModel  = Rxn<WorkerListResponseModel>();
   final taskDetailsModel  = Rxn<TaskDetailsResponseModel>();
   final remarkDetailsModel  = Rxn<RemarkDetailsResponseModel>();
+  final commentsResponseModel  = Rxn<CommentsResponseModel>();
   String? savedPath;
   DateTime date = DateTime(2025, 6, 29);
 
@@ -137,6 +139,46 @@ class HomeController extends GetxController {
           showSuccess(result.data);
           getRemark();
         case Failure<String>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── Add Comment ─────────────────────────────────────────────
+  Future<void> addComment({String? filePath , String? fileName ,String? description,String? taskId, VoidCallback? onSuccess}) async {
+    // String taskId = Get.arguments['taskId']??'';
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.addComment(taskId: taskId, filePath: filePath, fileName: fileName, description: description);
+
+      switch (result) {
+        case Success<String>():
+          showSuccess(result.data);
+          getComment(taskIds: taskId);
+          onSuccess?.call();
+        case Failure<String>():
+          showError(result.message);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ── get comment ─────────────────────────────────────────────
+  Future<void> getComment({String? taskIds}) async {
+    String taskId = Get.arguments!=null? Get.arguments['taskId']: taskIds ;
+    isLoading.value = true;
+
+    try {
+      final result = await _repository.getComment(taskId: taskId);
+
+      switch (result) {
+        case Success<CommentsResponseModel>():
+          commentsResponseModel.value = result.data;
+        case Failure<CommentsResponseModel>():
           showError(result.message);
       }
     } finally {

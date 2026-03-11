@@ -12,8 +12,6 @@ import 'package:charteur/features/views/common/sites/view_models/sites_controlle
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 
 class SiteAddScreen extends StatefulWidget {
   const SiteAddScreen({super.key});
@@ -26,7 +24,7 @@ class _SiteAddScreenState extends State<SiteAddScreen> {
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   final  _sitesController = Get.find<SitesController>();
-  final  _locationController = Get.find<LocationController>();
+  final  _locationController = Get.put(LocationController());
 
   String _filePath ='';
 
