@@ -1,4 +1,5 @@
 import 'package:charteur/core/helpers/time_format.dart';
+import 'package:charteur/core/widgets/custom_text.dart';
 import 'package:charteur/features/views/admin/home/models/comment_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,10 @@ class CommentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createdAt = comment.createdAt != null
+        ? DateTime.tryParse(comment.createdAt.toString())
+        : null;
+
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       padding: EdgeInsets.all(12.w),
@@ -27,11 +32,15 @@ class CommentTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // profile image
+          // Profile image
           CircleAvatar(
             radius: 18.r,
             backgroundColor: const Color(0xFF2E7D6B).withOpacity(0.15),
-            backgroundImage: NetworkImage(comment.commentedBy?.profileImage??''),
+            backgroundImage: comment.commentedBy?.profileImage != null &&
+                comment.commentedBy!.profileImage!.isNotEmpty
+                ? NetworkImage(comment.commentedBy!.profileImage!)
+                : const AssetImage('assets/images/default_profile.png')
+            as ImageProvider,
           ),
           SizedBox(width: 10.w),
           Expanded(
@@ -41,30 +50,35 @@ class CommentTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // name
-                    Text(
-                      comment.commentedBy?.name??'',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1A1A2E),
-                      ),
+                    // Name
+                    CustomText(
+                      text: comment.commentedBy?.name ?? '',
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF1A1A2E),
+                      textAlign: TextAlign.start,
+                      maxline: 1,
+                      textOverflow: TextOverflow.ellipsis,
                     ),
-                    // time
-                    Text(TimeFormatHelper.getTimeAgo(DateTime.parse(comment.createdAt.toString())),
-                      style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                    // Time
+                    CustomText(
+                      text: createdAt != null
+                          ? TimeFormatHelper.getTimeAgo(createdAt)
+                          : '',
+                      fontSize: 10.sp,
+                      color: Colors.grey,
+                      textAlign: TextAlign.end,
                     ),
                   ],
                 ),
                 SizedBox(height: 4.h),
-                // comment
-                Text(
-                  comment.message??'',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: const Color(0xFF555555),
-                    height: 1.4,
-                  ),
+                // Comment message
+                CustomText(
+                  text: comment.message ?? '',
+                  fontSize: 12.sp,
+                  color: const Color(0xFF555555),
+                  textHeight: 1.4,
+                  textAlign: TextAlign.start,
                 ),
               ],
             ),

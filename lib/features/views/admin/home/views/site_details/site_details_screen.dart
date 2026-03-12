@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/core/widgets/custom_text.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/widgets/comment_tile.dart';
@@ -22,12 +23,10 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   int _currentImage = 0;
   final TextEditingController _commentCtrl = TextEditingController();
   final _homeController = Get.find<HomeController>();
-
   final List<Map<String, String>> _comments = [
     {'name': 'John Doe', 'comment': 'Great progress on the project!', 'time': '2h ago'},
     {'name': 'Jane Smith', 'comment': 'Make sure to follow safety protocols.', 'time': '5h ago'},
   ];
-
   bool _showComments = false;
 
   void _addComment() {
@@ -69,7 +68,6 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     setState(() {});
   }
 
-  // ── Full-screen image dialog ───────────────────────────────────────────────
   void _showImageDialog(BuildContext context, List<String> images, int initialIndex) {
     int dialogCurrentImage = initialIndex;
     showDialog(
@@ -149,10 +147,6 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     );
   }
 
-  // ── PDF bottom sheet ───────────────────────────────────────────────────────
-  //
-  // Replaces the old _showFileDialog. Streams the PDF directly from the URL
-  // using SfPdfViewer.network — no download step needed for view-only.
   void _showPdfBottomSheet(BuildContext context, String fileUrl, String fileName) {
     showModalBottomSheet(
       context: context,
@@ -161,8 +155,6 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
       builder: (_) => PdfViewerSheet(fileUrl: fileUrl, fileName: fileName),
     );
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -175,35 +167,43 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
           icon: Icon(Icons.arrow_back_ios_new, size: 18.sp, color: const Color(0xFF1A1A2E)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'See More',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: const Color(0xFF1A1A2E)),
+        title: CustomText(
+          text: 'See More',
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1A1A2E),
+          textAlign: TextAlign.center,
         ),
         centerTitle: true,
       ),
       body: Obx(() {
         final task = _homeController.taskDetailsModel.value?.data;
-        // final comments = _homeController.commentsResponseModel.value;
-
         if (task == null) {
           return const Center(child: CircularProgressIndicator());
         }
-
-        final siteName   = task.siteId?.siteTitle ?? 'N/A';
+        final siteName = task.siteId?.siteTitle ?? 'N/A';
         final description = task.description ?? '';
-        final status     = task.status ?? 'Unknown';
-        final images     = (task.images?.isNotEmpty == true) ? task.images! : (task.siteId?.photos ?? []);
-        final fileId     = task.fileId;
+        final status = task.status ?? 'Unknown';
+        final images = (task.images?.isNotEmpty == true)
+            ? task.images!
+            : (task.siteId?.photos ?? []);
+        final fileId = task.fileId;
         final assignedTo = task.assignedTo?.id;
 
         Color statusColor;
         switch (status) {
-          case 'Done':       statusColor = const Color(0xFF2E7D6B); break;
-          case 'To-Do':      statusColor = const Color(0xFFF9A825); break;
-          case 'In-Progress':statusColor = const Color(0xFFE65100); break;
-          default:           statusColor = const Color(0xFFE65100);
+          case 'Done':
+            statusColor = const Color(0xFF2E7D6B);
+            break;
+          case 'To-Do':
+            statusColor = const Color(0xFFF9A825);
+            break;
+          case 'In-Progress':
+            statusColor = const Color(0xFFE65100);
+            break;
+          default:
+            statusColor = const Color(0xFFE65100);
         }
-
 
         return Column(
           children: [
@@ -213,10 +213,14 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // ── Site Details ──────────────────────────────────────
-                    Text('Site Details',
-                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: const Color(0xFF1A1A2E))),
+                    CustomText(
+                      text: 'Site Details',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF1A1A2E),
+                      textAlign: TextAlign.start,
+                    ),
                     SizedBox(height: 8.h),
                     Container(
                       width: double.infinity,
@@ -224,7 +228,12 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.r),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))],
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2))
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,14 +244,23 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                           SizedBox(height: 8.h),
                           _richRow('Assigned To : ', task.assignedTo?.name ?? 'N/A'),
                           SizedBox(height: 8.h),
-                          _richRow('Due Date : ', task.dueDate != null
-                              ? '${task.dueDate!.day}/${task.dueDate!.month}/${task.dueDate!.year}'
-                              : 'N/A'),
+                          _richRow(
+                            'Due Date : ',
+                            task.dueDate != null
+                                ? '${task.dueDate!.day}/${task.dueDate!.month}/${task.dueDate!.year}'
+                                : 'N/A',
+                          ),
                           SizedBox(height: 8.h),
                           GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.siteLocation, arguments: {'siteId': task.siteId?.id}),
-                            child: Text('See Site Location',
-                                style: TextStyle(color: Colors.blue, fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                            onTap: () => Get.toNamed(AppRoutes.siteLocation,
+                                arguments: {'siteId': task.siteId?.id}),
+                            child: CustomText(
+                              text: 'See Site Location',
+                              color: Colors.blue,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              textAlign: TextAlign.start,
+                            ),
                           ),
                         ],
                       ),
@@ -266,16 +284,25 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                                   child: Stack(
                                     fit: StackFit.expand,
                                     children: [
-                                      Image.network(images[i], fit: BoxFit.cover,
-                                          loadingBuilder: (_, child, progress) =>
-                                          progress == null ? child : const Center(child: CircularProgressIndicator()),
-                                          errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, size: 40))),
+                                      Image.network(
+                                        images[i],
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (_, child, progress) => progress == null
+                                            ? child
+                                            : const Center(child: CircularProgressIndicator()),
+                                        errorBuilder: (_, __, ___) =>
+                                        const Center(child: Icon(Icons.broken_image, size: 40)),
+                                      ),
                                       Positioned(
-                                        top: 8.h, right: 8.w,
+                                        top: 8.h,
+                                        right: 8.w,
                                         child: Container(
                                           padding: EdgeInsets.all(4.w),
-                                          decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadius.circular(6.r)),
-                                          child: Icon(Icons.fullscreen, color: Colors.white, size: 16.sp),
+                                          decoration: BoxDecoration(
+                                              color: Colors.black38,
+                                              borderRadius: BorderRadius.circular(6.r)),
+                                          child: Icon(Icons.fullscreen,
+                                              color: Colors.white, size: 16.sp),
                                         ),
                                       ),
                                     ],
@@ -284,29 +311,44 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                               ),
                             ),
                             Positioned(
-                              bottom: 36.h, right: 12.w,
+                              bottom: 36.h,
+                              right: 12.w,
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-                                decoration: BoxDecoration(color: statusColor, borderRadius: BorderRadius.circular(6.r)),
-                                child: Text(status,
-                                    style: TextStyle(color: Colors.white, fontSize: 11.sp, fontWeight: FontWeight.w600)),
+                                decoration: BoxDecoration(
+                                    color: statusColor,
+                                    borderRadius: BorderRadius.circular(6.r)),
+                                child: CustomText(
+                                  text: status,
+                                  color: Colors.white,
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w600,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                             if (images.length > 1)
                               Positioned(
-                                bottom: 10.h, left: 0, right: 0,
+                                bottom: 10.h,
+                                left: 0,
+                                right: 0,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(images.length, (i) => AnimatedContainer(
-                                    duration: const Duration(milliseconds: 250),
-                                    margin: EdgeInsets.symmetric(horizontal: 3.w),
-                                    width: _currentImage == i ? 18.w : 8.w,
-                                    height: 6.h,
-                                    decoration: BoxDecoration(
-                                      color: _currentImage == i ? const Color(0xFF2E7D6B) : Colors.white.withOpacity(0.6),
-                                      borderRadius: BorderRadius.circular(3.r),
+                                  children: List.generate(
+                                    images.length,
+                                        (i) => AnimatedContainer(
+                                      duration: const Duration(milliseconds: 250),
+                                      margin: EdgeInsets.symmetric(horizontal: 3.w),
+                                      width: _currentImage == i ? 18.w : 8.w,
+                                      height: 6.h,
+                                      decoration: BoxDecoration(
+                                        color: _currentImage == i
+                                            ? const Color(0xFF2E7D6B)
+                                            : Colors.white.withOpacity(0.6),
+                                        borderRadius: BorderRadius.circular(3.r),
+                                      ),
                                     ),
-                                  )),
+                                  ),
                                 ),
                               ),
                           ],
@@ -315,13 +357,17 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                       SizedBox(height: 16.h),
                     ],
 
-                    // ── Attachment — now opens PDF bottom sheet ───────────
+                    // ── Attachment ────────────────────────────────────────
                     if (fileId != null && fileId.fileUrl != null) ...[
-                      Text('Attachment',
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: const Color(0xFF1A1A2E))),
+                      CustomText(
+                        text: 'Attachment',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF1A1A2E),
+                        textAlign: TextAlign.start,
+                      ),
                       SizedBox(height: 8.h),
                       GestureDetector(
-                        // ✅ Changed: was _showFileDialog, now opens PDF sheet
                         onTap: () => _showPdfBottomSheet(
                           context,
                           fileId.fileUrl!,
@@ -334,7 +380,12 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(color: const Color(0xFFDDE8E5), width: 1.2),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6, offset: const Offset(0, 2))],
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.03),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2))
+                            ],
                           ),
                           child: Row(
                             children: [
@@ -345,7 +396,6 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                                   color: const Color(0xFFEAF3F0),
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
-                                // ✅ Changed: PDF icon instead of image thumbnail
                                 child: Icon(Icons.picture_as_pdf_rounded,
                                     color: const Color(0xFF2E7D6B), size: 26.sp),
                               ),
@@ -354,19 +404,27 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      fileId.fileName ?? 'Attached File',
-                                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: const Color(0xFF1A1A2E)),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                    CustomText(
+                                      text: fileId.fileName ?? 'Attached File',
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1A2E),
+                                      textAlign: TextAlign.start,
+                                      maxline: 1,
+                                      textOverflow: TextOverflow.ellipsis,
                                     ),
                                     SizedBox(height: 3.h),
-                                    Text('Tap to view PDF',
-                                        style: TextStyle(fontSize: 11.sp, color: const Color(0xFF888888))),
+                                    CustomText(
+                                      text: 'Tap to view PDF',
+                                      fontSize: 11.sp,
+                                      color: const Color(0xFF888888),
+                                      textAlign: TextAlign.start,
+                                    ),
                                   ],
                                 ),
                               ),
-                              Icon(Icons.open_in_full_rounded, size: 16.sp, color: const Color(0xFF2E7D6B)),
+                              Icon(Icons.open_in_full_rounded,
+                                  size: 16.sp, color: const Color(0xFF2E7D6B)),
                             ],
                           ),
                         ),
@@ -383,17 +441,25 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(color: const Color(0xFFDDE8E5), width: 1.2),
                       ),
-                      child: Text(
-                        description.isNotEmpty ? description : 'No description provided.',
-                        style: TextStyle(fontSize: 13.sp, color: const Color(0xFF555555), height: 1.6),
+                      child: CustomText(
+                        text: description.isNotEmpty ? description : 'No description provided.',
+                        fontSize: 13.sp,
+                        color: const Color(0xFF555555),
+                        textAlign: TextAlign.start,
+                        textHeight: 1.6,
                       ),
                     ),
 
                     // ── Comments ──────────────────────────────────────────
                     if (_showComments) ...[
                       SizedBox(height: 20.h),
-                      Text('Comments',
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: const Color(0xFF1A1A2E))),
+                      CustomText(
+                        text: 'Comments',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF1A1A2E),
+                        textAlign: TextAlign.start,
+                      ),
                       SizedBox(height: 10.h),
                       Obx(() {
                         final comments = _homeController.commentsResponseModel.value;
@@ -416,7 +482,12 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                 padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, -2))],
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 10,
+                        offset: const Offset(0, -2))
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -430,7 +501,8 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                           });
                         },
                         label: 'Update Work Status',
-                        suffixIcon: Icon(Icons.arrow_drop_down_circle_outlined, color: Colors.white),
+                        suffixIcon:
+                        Icon(Icons.arrow_drop_down_circle_outlined, color: Colors.white),
                       ),
                     SizedBox(height: 12.h),
                     Row(
@@ -441,12 +513,19 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 13.h),
                               side: const BorderSide(color: Color(0xFFDDDDDD)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.r)),
                               backgroundColor: Colors.white,
                             ),
-                            icon: Icon(Icons.chat_bubble_outline, size: 16.sp, color: const Color(0xFF1A1A2E)),
-                            label: Text('Comments',
-                                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: const Color(0xFF1A1A2E))),
+                            icon: Icon(Icons.chat_bubble_outline,
+                                size: 16.sp, color: const Color(0xFF1A1A2E)),
+                            label: CustomText(
+                              text: 'Comments',
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1A1A2E),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                         SizedBox(width: 12.w),
@@ -454,20 +533,29 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (status == 'Done') {
-                                Get.toNamed(AppRoutes.remarks, arguments: {'taskId': task.id});
+                                Get.toNamed(AppRoutes.remarks,
+                                    arguments: {'taskId': task.id});
                               } else {
-                                _showAddCommentSheet(context,task);
+                                _showAddCommentSheet(context, task);
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: status == 'Done' ? const Color(0xFF2E7D6B) : const Color(0xFFE65100),
+                              backgroundColor: status == 'Done'
+                                  ? const Color(0xFF2E7D6B)
+                                  : const Color(0xFFE65100),
                               foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(vertical: 13.h),
                               elevation: 0,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.r)),
                             ),
-                            child: Text(status == 'Done' ? 'Remarks' : 'Add Comments',
-                                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                            child: CustomText(
+                              text: status == 'Done' ? 'Remarks' : 'Add Comments',
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ],
@@ -483,23 +571,35 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-
   Widget _richRow(String label, String value) {
     return RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: 13.sp, color: const Color(0xFF666666)),
         children: [
-          TextSpan(text: label),
-          TextSpan(
-            text: value,
-            style: TextStyle(fontWeight: FontWeight.w600, color: const Color(0xFF1A1A2E), fontSize: 13.sp),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: CustomText(
+              text: label,
+              fontSize: 13.sp,
+              color: const Color(0xFF666666),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: CustomText(
+              text: value,
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF1A1A2E),
+              textAlign: TextAlign.start,
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _showAddCommentSheet(BuildContext context,TaskDetailsData? task) {
+  void _showAddCommentSheet(BuildContext context, TaskDetailsData? task) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -518,12 +618,20 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
             children: [
               Center(
                 child: Container(
-                  width: 40.w, height: 4.h,
-                  decoration: BoxDecoration(color: const Color(0xFFDDDDDD), borderRadius: BorderRadius.circular(2.r)),
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFDDDDDD),
+                      borderRadius: BorderRadius.circular(2.r)),
                 ),
               ),
               SizedBox(height: 16.h),
-              Text('Add Comment', style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700)),
+              CustomText(
+                text: 'Add Comment',
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+                textAlign: TextAlign.start,
+              ),
               SizedBox(height: 12.h),
               TextField(
                 controller: _commentCtrl,
@@ -535,25 +643,35 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
                   hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
                   filled: true,
                   fillColor: const Color(0xFFF5F6FA),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r), borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r), borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
-                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r), borderSide: const BorderSide(color: Color(0xFF2E7D6B), width: 1.5)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                      borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                      borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                      borderSide:
+                      const BorderSide(color: Color(0xFF2E7D6B), width: 1.5)),
                 ),
               ),
               SizedBox(height: 12.h),
-              Obx(()=>
-                SizedBox(
+              Obx(
+                    () => SizedBox(
                   width: double.infinity,
                   child: CustomButton(
                     isLoading: _homeController.isLoading.value,
                     onPressed: () {
                       if (_commentCtrl.text.trim().isEmpty) return;
-                      _homeController.addComment(description: _commentCtrl.text,taskId: task?.id,onSuccess: ()async{
-                        _commentCtrl.clear();
-                      });
-                      // _addComment(); Navigator.pop(context);
-                      // Navigator.pop(context);
-                      },
+                      _homeController.addComment(
+                        description: _commentCtrl.text,
+                        taskId: task?.id,
+                        onSuccess: () async {
+                          _commentCtrl.clear();
+                        },
+                      );
+                      Navigator.pop(context);
+                    },
                     backgroundColor: const Color(0xFFE65100),
                     foregroundColor: Colors.white,
                     label: 'Post Comment',
@@ -567,4 +685,3 @@ class _SiteDetailsScreenState extends State<SiteDetailsScreen> {
     );
   }
 }
-

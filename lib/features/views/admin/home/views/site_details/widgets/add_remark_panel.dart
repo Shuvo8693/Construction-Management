@@ -1,14 +1,9 @@
+import 'package:charteur/core/widgets/custom_text.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-
-
-/// ================ Need Refactor ===============
-
-// ─── Add Remark Panel ─────────────────────────────────────────────────────────
+import 'package:get/get.dart';
 
 class AddRemarkPanel extends StatefulWidget {
   const AddRemarkPanel({super.key});
@@ -21,17 +16,23 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
   final TextEditingController _controller = TextEditingController();
   List<PlatformFile> _selectedFiles = [];
   final _homeController = Get.find<HomeController>();
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _handleSend()async {
+  void _handleSend() async {
     final text = _controller.text.trim();
     if (text.isEmpty && _selectedFiles.isEmpty) return;
-    // TODO: pass remark + files up via callback / bloc / provider
-    await _homeController.addRemark(filePath: _selectedFiles[0].path, fileName: _selectedFiles[0].name, description: text);
+
+    await _homeController.addRemark(
+      filePath: _selectedFiles[0].path,
+      fileName: _selectedFiles[0].name,
+      description: text,
+    );
+
     _controller.clear();
     setState(() => _selectedFiles = []);
     FocusScope.of(context).unfocus();
@@ -46,9 +47,9 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
-          // Merge new files, avoid duplicates by name
           final existingNames = _selectedFiles.map((f) => f.name).toSet();
-          final newFiles = result.files.where((f) => !existingNames.contains(f.name));
+          final newFiles =
+          result.files.where((f) => !existingNames.contains(f.name));
           _selectedFiles = [..._selectedFiles, ...newFiles];
         });
       }
@@ -140,27 +141,26 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Title (right-aligned to match design)
+
+          /// Title
           Padding(
             padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 0),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                'Add  Your Remark',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
+              child: CustomText(
+                text: 'Add Your Remark',
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+                textAlign: TextAlign.start,
               ),
             ),
           ),
 
           Divider(height: 14.h, thickness: 0.8, color: Colors.grey[200]),
 
-          // Multiline text field
+          /// Text Field
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: TextField(
@@ -178,38 +178,36 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
             ),
           ),
 
-          // ── Attached Files Container ──────────────────────────────────────
+          /// Attached Files
           if (_selectedFiles.isNotEmpty) ...[
             Divider(height: 1, thickness: 0.8, color: Colors.grey[200]),
+
             Container(
               constraints: BoxConstraints(maxHeight: 160.h),
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: Colors.grey[50],
-              ),
+              color: Colors.grey[50],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
+
                   Row(
                     children: [
-                      Icon(
-                        Icons.attach_file_rounded,
-                        size: 13.sp,
-                        color: Colors.grey[500],
-                      ),
+                      Icon(Icons.attach_file_rounded,
+                          size: 13.sp, color: Colors.grey[500]),
                       SizedBox(width: 4.w),
-                      Text(
+                      CustomText(
+                        text:
                         '${_selectedFiles.length} file${_selectedFiles.length > 1 ? 's' : ''} attached',
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w500,
-                        ),
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[500],
+                        textAlign: TextAlign.start,
                       ),
                     ],
                   ),
+
                   SizedBox(height: 6.h),
+
                   Flexible(
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -222,20 +220,15 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
 
                         return Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 7.h,
-                          ),
+                              horizontal: 10.w, vertical: 7.h),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8.r),
-                            border: Border.all(
-                              color: Colors.grey[200]!,
-                              width: 1,
-                            ),
+                            border: Border.all(color: Colors.grey[200]!),
                           ),
                           child: Row(
                             children: [
-                              // File type icon
+
                               Container(
                                 width: 32.w,
                                 height: 32.w,
@@ -243,55 +236,50 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
                                   color: iconColor.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(6.r),
                                 ),
-                                child: Icon(
-                                  _fileIcon(ext),
-                                  size: 16.sp,
-                                  color: iconColor,
-                                ),
+                                child: Icon(_fileIcon(ext),
+                                    size: 16.sp, color: iconColor),
                               ),
+
                               SizedBox(width: 10.w),
 
-                              // File info
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // File name
-                                    Text(
-                                      file.name,
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+
+                                    CustomText(
+                                      text: file.name,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                      maxline: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
                                     ),
+
                                     SizedBox(height: 2.h),
-                                    // File path
-                                    Text(
-                                      file.path ?? 'Path unavailable',
-                                      style: TextStyle(
-                                        fontSize: 10.sp,
-                                        color: Colors.grey[500],
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+
+                                    CustomText(
+                                      text: file.path ?? 'Path unavailable',
+                                      fontSize: 10.sp,
+                                      color: Colors.grey[500],
+                                      maxline: 1,
+                                      textOverflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.start,
                                     ),
+
                                     SizedBox(height: 1.h),
-                                    // File size
-                                    Text(
-                                      _formatSize(file.size),
-                                      style: TextStyle(
-                                        fontSize: 10.sp,
-                                        color: Colors.grey[400],
-                                      ),
+
+                                    CustomText(
+                                      text: _formatSize(file.size),
+                                      fontSize: 10.sp,
+                                      color: Colors.grey[400],
+                                      textAlign: TextAlign.start,
                                     ),
                                   ],
                                 ),
                               ),
 
-                              // Remove button
                               GestureDetector(
                                 onTap: () => _removeFile(index),
                                 child: Container(
@@ -300,11 +288,8 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
                                     color: Colors.grey[100],
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(
-                                    Icons.close_rounded,
-                                    size: 12.sp,
-                                    color: Colors.grey[500],
-                                  ),
+                                  child: Icon(Icons.close_rounded,
+                                      size: 12.sp, color: Colors.grey[500]),
                                 ),
                               ),
                             ],
@@ -321,47 +306,19 @@ class _AddRemarkPanelState extends State<AddRemarkPanel> {
           SizedBox(height: 8.h),
           Divider(height: 1, thickness: 0.8, color: Colors.grey[200]),
 
-          // Action bar: attachment + send
+          /// Action Bar
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: _handleAttach,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Icon(
-                        Icons.attach_file_rounded,
-                        size: 22.sp,
-                        color: _selectedFiles.isNotEmpty
-                            ? const Color(0xFF2196F3)
-                            : Colors.grey[600],
-                      ),
-                      if (_selectedFiles.isNotEmpty)
-                        Positioned(
-                          top: -4,
-                          right: -4,
-                          child: Container(
-                            width: 14.w,
-                            height: 14.w,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF2196F3),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${_selectedFiles.length}',
-                                style: TextStyle(
-                                  fontSize: 8.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
+                  child: Icon(
+                    Icons.attach_file_rounded,
+                    size: 22.sp,
+                    color: _selectedFiles.isNotEmpty
+                        ? const Color(0xFF2196F3)
+                        : Colors.grey[600],
                   ),
                 ),
                 const Spacer(),
