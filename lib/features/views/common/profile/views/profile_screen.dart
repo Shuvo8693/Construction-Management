@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   onConfirm: () async{
                     await PrefsHelper.remove('token');
-                    Get.offAllNamed(AppRoutes.login);
+                    Get.offAllNamed(AppRoutes.splash);
                   },
                 ),
               );

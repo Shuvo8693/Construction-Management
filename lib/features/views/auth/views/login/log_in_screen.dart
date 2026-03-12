@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/clickable_richtext.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/auth/view_models/auth_controller.dart';
 import 'package:flutter/gestures.dart';
@@ -67,26 +68,16 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 32.h),
               Obx(()=> CustomButton(isLoading: _authController.isLoading.value,label: "Sign In", onPressed: _onLogin)),
               SizedBox(height: 18.h),
-              RichText(text: TextSpan(
-                style: TextStyle(
-                  color: AppColors.appGreyColor,
-                  fontSize: 14.sp
-                ),
-                text: "Don't have an account?",
-                children: [
-                  TextSpan(
-                      style: TextStyle(
-                          color: AppColors.primaryColor,
-                      ),
-                      text: ' Sign Up',
-                      recognizer: TapGestureRecognizer()..onTap = (){
-                        Get.toNamed(AppRoutes.role);
-                      }
-                  )
-                ]
-              )),
+              ClickableRichText(
+                normalText: "Don't have an account? ",
+                actionText: "Sign Up",
+                normalColor: AppColors.appGreyColor,
+                actionColor: AppColors.primaryColor,
+                onTap: () {
+                  Get.toNamed(AppRoutes.role);
+                },
+              ),
               SizedBox(height: 16.h),
-
             ],
           ),
         ),

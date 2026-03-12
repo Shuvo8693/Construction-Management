@@ -2,7 +2,8 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-@RoutePage()
+import 'package:charteur/core/widgets/custom_text.dart';
+
 class CollaboratorDetailsScreen extends StatelessWidget {
   const CollaboratorDetailsScreen({super.key});
 
@@ -14,16 +15,18 @@ class CollaboratorDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0.5,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, size: 18.sp, color: const Color(0xFF1A1A2E)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Collaborator Details',
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 18.sp,
             color: const Color(0xFF1A1A2E),
           ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const CustomText(
+          text: 'Collaborator Details',
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF1A1A2E),
         ),
         centerTitle: true,
       ),
@@ -114,7 +117,11 @@ class CollaboratorDetailsScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, -2)),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.06),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
               ],
             ),
             child: Row(
@@ -127,13 +134,11 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                       side: const BorderSide(color: Color(0xFF2E7D6B)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
                     ),
-                    child: Text(
-                      'Back',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF2E7D6B),
-                      ),
+                    child: const CustomText(
+                      text: 'Back',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF2E7D6B),
                     ),
                   ),
                 ),
@@ -148,9 +153,10 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
                     ),
-                    child: Text(
-                      'Assign Task',
-                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    child: const CustomText(
+                      text: 'Assign Task',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -171,13 +177,11 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
-        color: const Color(0xFF1A1A2E),
-      ),
+    return CustomText(
+      text: title,
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w700,
+      color: const Color(0xFF1A1A2E),
     );
   }
 }
@@ -232,26 +236,22 @@ class _InfoRow extends StatelessWidget {
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  style: TextStyle(fontSize: 13.sp, color: const Color(0xFF444444)),
                   children: [
-                    TextSpan(
-                      text: text,
-                      style: isLink
-                          ? TextStyle(
-                        color: const Color(0xFF2E7D6B),
-                        decoration: TextDecoration.underline,
-                        decorationColor: const Color(0xFF2E7D6B),
+                    WidgetSpan(
+                      child: CustomText(
+                        text: text,
                         fontSize: 13.sp,
-                      )
-                          : null,
+                        color: isLink ? const Color(0xFF2E7D6B) : const Color(0xFF444444),
+                        decoration: isLink ? TextDecoration.underline : TextDecoration.none,
+                      ),
                     ),
                     if (boldSuffix != null)
-                      TextSpan(
-                        text: boldSuffix,
-                        style: TextStyle(
+                      WidgetSpan(
+                        child: CustomText(
+                          text: boldSuffix!,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFF1A1A2E),
-                          fontSize: 13.sp,
                         ),
                       ),
                   ],
@@ -270,6 +270,6 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(height: 1, thickness: 0.8, color: const Color(0xFFF0F0F0));
+    return const Divider(height: 1, thickness: 0.8, color: Color(0xFFF0F0F0));
   }
 }

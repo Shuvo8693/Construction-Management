@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:charteur/core/widgets/custom_text.dart';
 
 class AssignWorkerSheet extends StatefulWidget {
   const AssignWorkerSheet({super.key});
@@ -16,7 +17,6 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
   final TextEditingController _searchCtrl = TextEditingController();
   final _homeController = Get.find<HomeController>();
 
-  // ── Fix: consistent casing ────────────────────────────
   String _selectedFilter = 'all';
   final List<String> _filters = ['all', 'office_admin', 'worker'];
 
@@ -50,24 +50,23 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 16.h),
-                Text('Filter',
-                    style: TextStyle(
-                        fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                CustomText(
+                  text: 'Filter',
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
                 SizedBox(height: 12.h),
                 ..._filters.map((role) {
                   final isSelected = _selectedFilter == role;
                   return Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 16.w, vertical: 5.h),
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
                     child: GestureDetector(
                       onTap: () async {
                         setState(() => _selectedFilter = role);
                         setInner(() {});
                         Navigator.pop(ctx);
-                        // ── Fix: pass 'all' correctly ──
-                        await _homeController.getWorkersOrAdmins(
-                          role: role,
-                        );
+                        await _homeController.getWorkersOrAdmins(role: role);
                       },
                       child: Container(
                         width: double.infinity,
@@ -84,15 +83,11 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                           ),
                         ),
                         child: Center(
-                          child: Text(
-                            role,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                              color: isSelected
-                                  ? Colors.white
-                                  : const Color(0xFF1A1A2E),
-                            ),
+                          child: CustomText(
+                            text: role,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: isSelected ? Colors.white : const Color(0xFF1A1A2E),
                           ),
                         ),
                       ),
@@ -121,7 +116,6 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
         ),
         child: Column(
           children: [
-            // ── Handle ──────────────────────────────────
             SizedBox(height: 12.h),
             Container(
               width: 40.w,
@@ -132,8 +126,6 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
               ),
             ),
             SizedBox(height: 16.h),
-
-            // ── Search + Filter Row ──────────────────────
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Row(
@@ -148,17 +140,14 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                       ),
                       child: TextField(
                         controller: _searchCtrl,
-                        onChanged: (_) => setState(() {}), // local search filter
+                        onChanged: (_) => setState(() {}),
                         style: TextStyle(fontSize: 13.sp),
                         decoration: InputDecoration(
                           hintText: 'Search',
-                          hintStyle: TextStyle(
-                              fontSize: 13.sp, color: Colors.grey),
-                          prefixIcon: Icon(Icons.search,
-                              size: 18.sp, color: Colors.grey),
+                          hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                          prefixIcon: Icon(Icons.search, size: 18.sp, color: Colors.grey),
                           border: InputBorder.none,
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 12.h),
+                          contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                         ),
                       ),
                     ),
@@ -174,57 +163,45 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                             ? const Color(0xFF2E7D6B)
                             : const Color(0xFFF5F6FA),
                         borderRadius: BorderRadius.circular(10.r),
-                        border:
-                        Border.all(color: const Color(0xFFE0E0E0)),
+                        border: Border.all(color: const Color(0xFFE0E0E0)),
                       ),
                       child: Icon(
                         Icons.tune,
                         size: 20.sp,
-                        color: _selectedFilter != 'all'
-                            ? Colors.white
-                            : Colors.grey,
+                        color: _selectedFilter != 'all' ? Colors.white : Colors.grey,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-
-            // ── Active Filter Chip ───────────────────────
             if (_selectedFilter != 'all')
               Padding(
                 padding: EdgeInsets.only(left: 16.w, top: 8.h),
                 child: Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                       decoration: BoxDecoration(
-                        color:
-                        const Color(0xFF2E7D6B).withOpacity(0.1),
+                        color: const Color(0xFF2E7D6B).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            _selectedFilter,
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              color: const Color(0xFF2E7D6B),
-                              fontWeight: FontWeight.w500,
-                            ),
+                          CustomText(
+                            text: _selectedFilter,
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF2E7D6B),
                           ),
                           SizedBox(width: 4.w),
                           GestureDetector(
                             onTap: () async {
                               setState(() => _selectedFilter = 'all');
-                              // ── Fix: refetch all when cleared ──
                               await _homeController.getWorkersOrAdmins();
                             },
-                            child: Icon(Icons.close,
-                                size: 12.sp,
-                                color: const Color(0xFF2E7D6B)),
+                            child: Icon(Icons.close, size: 12.sp, color: const Color(0xFF2E7D6B)),
                           ),
                         ],
                       ),
@@ -232,29 +209,24 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                   ],
                 ),
               ),
-
             SizedBox(height: 12.h),
-
-            // ── Worker List ──────────────────────────────
             Expanded(
               child: Obx(() {
                 if (_homeController.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CupertinoActivityIndicator());
                 }
 
-                // ── Fix: apply local search on top of API data ──
                 final allWorkers = _homeController.workerListModel.value?.data ?? [];
 
                 final workersData = allWorkers.where((w) {
                   final query = _searchCtrl.text.toLowerCase();
                   if (query.isEmpty) return true;
                   return (w.name?.toLowerCase().contains(query) ?? false) ||
-                      (w.expertiseArea?.toLowerCase().contains(query) ??
-                          false);
+                      (w.expertiseArea?.toLowerCase().contains(query) ?? false);
                 }).toList();
 
                 if (workersData.isEmpty) {
-                  return const Center(child: Text('No workers available'));
+                  return const Center(child: CustomText(text: 'No workers available'));
                 }
 
                 return ListView.separated(
@@ -269,8 +241,7 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.r),
-                        border:
-                        Border.all(color: const Color(0xFFEEEEEE)),
+                        border: Border.all(color: const Color(0xFFEEEEEE)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.04),
@@ -281,51 +252,38 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                       ),
                       child: Row(
                         children: [
-                          // ── Avatar ─────────────────────
                           CircleAvatar(
                             radius: 26.r,
-                            backgroundImage: NetworkImage(
-                                worker.profileImage ?? ''),
+                            backgroundImage: NetworkImage(worker.profileImage ?? ''),
                             onBackgroundImageError: (_, __) {},
-                            child: worker.profileImage == null
-                                ? const Icon(Icons.person)
-                                : null,
+                            child: worker.profileImage == null ? const Icon(Icons.person) : null,
                           ),
                           SizedBox(width: 12.w),
-
-                          // ── Info ───────────────────────
                           Expanded(
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      worker.name ?? '',
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF1A1A2E),
-                                      ),
+                                    CustomText(
+                                      text: worker.name ?? '',
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF1A1A2E),
                                     ),
                                     GestureDetector(
                                       onTap: () => Get.toNamed(
-                                          AppRoutes.collaboratorDetails,
-                                          arguments: {'worker': worker}),
-                                      child: Text(
-                                        'Details',
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: const Color(0xFF2E7D6B),
-                                          fontWeight: FontWeight.w500,
-                                          decoration:
-                                          TextDecoration.underline,
-                                          decorationColor:
-                                          const Color(0xFF2E7D6B),
-                                        ),
+                                        AppRoutes.collaboratorDetails,
+                                        arguments: {'worker': worker},
+                                      ),
+                                      child: CustomText(
+                                        text: 'Details',
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF2E7D6B),
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: const Color(0xFF2E7D6B),
                                       ),
                                     ),
                                   ],
@@ -333,68 +291,56 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                                 SizedBox(height: 2.h),
                                 Row(
                                   children: [
-                                    Text(
-                                      'Charteur · ',
-                                      style: TextStyle(
-                                          fontSize: 11.sp,
-                                          color: Colors.grey),
+                                    CustomText(
+                                      text: 'Charteur · ',
+                                      fontSize: 11.sp,
+                                      color: Colors.grey,
                                     ),
-                                    Text(
-                                      worker.role ?? '',
-                                      style: TextStyle(
-                                          fontSize: 11.sp,
-                                          color: Colors.grey),
+                                    CustomText(
+                                      text: worker.role ?? '',
+                                      fontSize: 11.sp,
+                                      color: Colors.grey,
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 6.h),
                                 Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      worker.expertiseArea ??
-                                          'Constructor',
-                                      style: TextStyle(
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: const Color(0xFF1A1A2E),
-                                      ),
+                                    CustomText(
+                                      text: worker.expertiseArea ?? 'Constructor',
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF1A1A2E),
                                     ),
-                                    Obx((){
-                                      if(_homeController.isAssignLoading[i]==true){
+                                    Obx(() {
+                                      if (_homeController.isAssignLoading[i] == true) {
                                         return const Center(child: CupertinoActivityIndicator());
                                       }
                                       return GestureDetector(
                                         onTap: () async {
-                                          // Navigator.pop(context, worker);
                                           await _homeController.assignTask(
-                                              i: i,
-                                              fileId: _homeController.fileDetailsModel.value?.data?.id,
-                                              assignedTo: worker.id,
-                                              fileName: _homeController.fileDetailsModel.value?.data?.fileName
+                                            i: i,
+                                            fileId: _homeController.fileDetailsModel.value?.data?.id,
+                                            assignedTo: worker.id,
+                                            fileName: _homeController.fileDetailsModel.value?.data?.fileName,
                                           );
                                         },
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.w,
-                                              vertical: 4.h),
+                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                                           decoration: BoxDecoration(
                                             color: const Color(0xFF2E7D6B).withOpacity(0.12),
                                             borderRadius: BorderRadius.circular(20.r),
                                           ),
-                                          child: Text(
-                                            'Assign Task',
-                                            style: TextStyle(
-                                              fontSize: 11.sp,
-                                              color: const Color(0xFF2E7D6B),
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                          child: CustomText(
+                                            text: 'Assign Task',
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF2E7D6B),
                                           ),
                                         ),
                                       );
-                                      }
-                                    ),
+                                    }),
                                   ],
                                 ),
                               ],
@@ -407,7 +353,6 @@ class _AssignWorkerSheetState extends State<AssignWorkerSheet> {
                 );
               }),
             ),
-
             SizedBox(height: 20.h),
           ],
         ),

@@ -1,4 +1,5 @@
 // ========================Image Pin =====================
+// ========================Image Pin =====================
 
 /*
 import 'dart:io';
@@ -384,6 +385,7 @@ class _PinPainter extends CustomPainter {
 //========================== PDF Pin with edit ===========================
 
 import 'package:charteur/core/widgets/custom_button.dart';
+import 'package:charteur/core/widgets/custom_text.dart';
 import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
 import 'package:charteur/features/views/admin/home/views/assign_task/widgets/pdf_editor_bottom_sheet.dart';
@@ -392,11 +394,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-// ── Import the reusable PDF editor bottom sheet ───────────────────────────────
-
-
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
+
   @override
   State<TaskScreen> createState() => _TaskScreenState();
 }
@@ -412,17 +412,13 @@ class _TaskScreenState extends State<TaskScreen> {
     });
   }
 
-  // ── Open the PDF editor sheet; on save, store path & show AssignWorkerSheet ──
-
   void _openPdfEditor(String pdfUrl) {
     PdfEditorBottomSheet.show(
       context,
       pdfUrl: pdfUrl,
       onSaved: (savedPath) {
-        // 1. Store the annotated PDF path in the controller
         setState(() => _homeController.savedPath = savedPath);
 
-        // 2. Show the AssignWorkerSheet once the frame settles
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final canAssign = _homeController.savedPath != null &&
               _homeController.savedPath!.isNotEmpty &&
@@ -439,10 +435,11 @@ class _TaskScreenState extends State<TaskScreen> {
                 : SafeArea(
               child: Scaffold(
                 body: Center(
-                  child: Text(
+                  child: CustomText(
+                    text:
                     'Please fill in Work Title, Description, and Date first.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14.sp),
+                    fontSize: 14.sp,
                   ),
                 ),
               ),
@@ -465,22 +462,33 @@ class _TaskScreenState extends State<TaskScreen> {
 
   String get _formattedDate {
     const m = [
-      'Jan','Feb','Mar','Apr','May','Jun',
-      'Jul','Aug','Sep','Oct','Nov','Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${m[_homeController.date.month - 1]} '
         '${_homeController.date.day}, '
         '${_homeController.date.year}';
   }
 
-  // ── Build ─────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
       appBar: AppBar(
-        title: const Text('Assign Task'),
+        title: const CustomText(
+          text: 'Assign Task',
+          fontWeight: FontWeight.w600,
+        ),
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF1A1A2E),
         elevation: 0.5,
@@ -496,17 +504,15 @@ class _TaskScreenState extends State<TaskScreen> {
           padding: EdgeInsets.all(16.sp),
           child: Column(
             children: [
-              // ── PDF Location Card ───────────────────────────────────────
               _PdfLocationCard(
                 savedPath: _homeController.savedPath,
                 onTap: fileDetailsData?.fileUrl != null
-                    ? () => _openPdfEditor(fileDetailsData?.fileUrl??'')
+                    ? () => _openPdfEditor(fileDetailsData?.fileUrl ?? '')
                     : null,
               ),
-
               SizedBox(height: 16.h),
 
-              // ── Form card ───────────────────────────────────────────────
+              /// Form Card
               Container(
                 padding: EdgeInsets.all(16.sp),
                 decoration: BoxDecoration(
@@ -545,13 +551,11 @@ class _TaskScreenState extends State<TaskScreen> {
 
               SizedBox(height: 20.h),
 
-              // ── Assign button ───────────────────────────────────────────
               CustomButton(
                 label: 'Assign the Task',
                 backgroundColor: const Color(0xFF2E7D6B),
-                // Guard: require a marked PDF before assigning
                 onPressed: fileDetailsData?.fileUrl != null
-                    ? () => _openPdfEditor(fileDetailsData?.fileUrl??'')
+                    ? () => _openPdfEditor(fileDetailsData?.fileUrl ?? '')
                     : null,
               ),
 
@@ -573,11 +577,13 @@ class _TaskScreenState extends State<TaskScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF9E9E9E),
-                fontWeight: FontWeight.w500)),
+        CustomText(
+          text: label,
+          fontSize: 11.sp,
+          color: const Color(0xFF9E9E9E),
+          fontWeight: FontWeight.w500,
+          textAlign: TextAlign.start,
+        ),
         SizedBox(height: 4.h),
         TextFormField(
           controller: ctrl,
@@ -594,15 +600,6 @@ class _TaskScreenState extends State<TaskScreen> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide:
-              const BorderSide(color: Color(0xFF2E7D6B), width: 1.5),
-            ),
           ),
         ),
       ],
@@ -610,11 +607,7 @@ class _TaskScreenState extends State<TaskScreen> {
   }
 }
 
-// ── PDF Location Card ─────────────────────────────────────────────────────────
-//
-// Shows a tap target that opens the editor.
-// After saving, shows a green confirmation row instead of the image area.
-
+/// PDF Location Card
 class _PdfLocationCard extends StatelessWidget {
   final String? savedPath;
   final VoidCallback? onTap;
@@ -634,14 +627,12 @@ class _PdfLocationCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: hasSaved
-                ? const Color(0xFF2E7D6B)
-                : const Color(0xFFDDE1EC),
+            color:
+            hasSaved ? const Color(0xFF2E7D6B) : const Color(0xFFDDE1EC),
           ),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
         ),
         child: hasSaved
-        // ── Saved state ─────────────────────────────────────────────
             ? Row(
           children: [
             Container(
@@ -659,19 +650,21 @@ class _PdfLocationCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Location marked ✓',
-                      style: TextStyle(
-                          color: const Color(0xFF2E7D6B),
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w700)),
+                  CustomText(
+                    text: 'Location marked ✓',
+                    color: const Color(0xFF2E7D6B),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w700,
+                    textAlign: TextAlign.start,
+                  ),
                   SizedBox(height: 2.h),
-                  Text(
-                    savedPath!.split('/').last,
-                    style: TextStyle(
-                        fontSize: 10.sp,
-                        color: Colors.grey.shade500),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  CustomText(
+                    text: savedPath!.split('/').last,
+                    fontSize: 10.sp,
+                    color: Colors.grey,
+                    maxline: 1,
+                    textOverflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
                   ),
                 ],
               ),
@@ -680,24 +673,21 @@ class _PdfLocationCard extends StatelessWidget {
                 color: const Color(0xFF2E7D6B), size: 20.sp),
           ],
         )
-        // ── Empty / tap-to-edit state ─────────────────────────────
             : Column(
           children: [
             Icon(Icons.picture_as_pdf_outlined,
                 size: 48.sp, color: Colors.grey.shade400),
             SizedBox(height: 10.h),
-            Text(
-              'Tap to open floor plan & mark location',
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  color: Colors.grey.shade500,
-                  fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+            CustomText(
+              text: 'Tap to open floor plan & mark location',
+              fontSize: 13.sp,
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
             ),
             SizedBox(height: 6.h),
             Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 16.w, vertical: 8.h),
+              padding:
+              EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: const Color(0xFF2E7D6B),
                 borderRadius: BorderRadius.circular(20.r),
@@ -708,11 +698,12 @@ class _PdfLocationCard extends StatelessWidget {
                   const Icon(Icons.location_on,
                       color: Colors.white, size: 16),
                   SizedBox(width: 6.w),
-                  Text('Open PDF Editor',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600)),
+                  CustomText(
+                    text: 'Open PDF Editor',
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ],
               ),
             ),
@@ -722,5 +713,4 @@ class _PdfLocationCard extends StatelessWidget {
     );
   }
 }
-
 

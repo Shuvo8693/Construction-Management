@@ -4,12 +4,12 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-@RoutePage()
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -36,42 +36,53 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Icon(Icons.language, color: AppColors.primaryColor, size: 24.r),
+                SizedBox(width: 4.w),
                 CustomText(
-                  text: 'Eng',
+                  text: 'Language',
+                  onTap: ()async{
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LanguageSelectionScreen(),
+                      ),
+                    );
+                    setState(() {});
+                  },
                   color: !en ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(0.5),
                   fontWeight: !en ? FontWeight.w600 : FontWeight.w400,
                 ),
-                SizedBox(width: 4.w),
-                Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: en,
-                    thumbColor: WidgetStateProperty.resolveWith<Color>(
-                          (Set<WidgetState> states) {
-                        return AppColors.primaryColor;
-                      },
-                    ),
-                    trackColor: WidgetStateProperty.resolveWith<Color>(
-                          (Set<WidgetState> states) {
-                        return AppColors.primaryColor.withOpacity(0.3);
-                      },
-                    ),
-                    trackOutlineColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    splashRadius: 0,
-                    onChanged: (bool value) {
-                      setState(() {
-                        en = value;
-                      });
-                    },
-                  ),
-                ),
-                SizedBox(width: 4.w),
-                CustomText(
-                  text: 'French',
-                  color: en ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(0.5),
-                  fontWeight: en ? FontWeight.w600 : FontWeight.w400,
-                ),
+                // SizedBox(width: 4.w),
+                // Transform.scale(
+                //   scale: 0.8,
+                //   child: Switch(
+                //     value: en,
+                //     thumbColor: WidgetStateProperty.resolveWith<Color>(
+                //           (Set<WidgetState> states) {
+                //         return AppColors.primaryColor;
+                //       },
+                //     ),
+                //     trackColor: WidgetStateProperty.resolveWith<Color>(
+                //           (Set<WidgetState> states) {
+                //         return AppColors.primaryColor.withOpacity(0.3);
+                //       },
+                //     ),
+                //     trackOutlineColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+                //     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                //     splashRadius: 0,
+                //     onChanged: (bool value) {
+                //       setState(() {
+                //         en = value;
+                //       });
+                //     },
+                //   ),
+                // ),
+                // SizedBox(width: 4.w),
+                // CustomText(
+                //   text: 'French',
+                //   color: en ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(0.5),
+                //   fontWeight: en ? FontWeight.w600 : FontWeight.w400,
+                // ),
               ],
             ),
           ),

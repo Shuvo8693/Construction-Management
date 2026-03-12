@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 
+import 'custom_text.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
@@ -60,14 +62,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           )
               : null),
       title: title != null && title!.isNotEmpty
-          ? Text(
-        title!,
-        style: TextStyle(
-         // fontFamily: FontFamily.inter,
-          fontWeight: FontWeight.w500,
-          fontSize: titleSize.sp,
-          color: AppColors.appBarTitleColor,
-        ),
+          ? CustomText(
+        text: title ?? '',
+        fontWeight: FontWeight.w500,
+        fontSize: titleSize.sp,
+        color: AppColors.appBarTitleColor,
       )
           : titleWidget,
       actions: actions,

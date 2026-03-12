@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:charteur/assets/assets.gen.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
+import 'package:charteur/core/widgets/clickable_richtext.dart';
 import 'package:charteur/core/widgets/widgets.dart';
 import 'package:charteur/features/views/auth/view_models/auth_controller.dart';
 import 'package:flutter/gestures.dart';
@@ -90,26 +91,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: 18.h),
 
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    color: AppColors.appGreyColor,
-                    fontSize: 14.sp,
-                  ),
-                  text: "Already have an account? ",
-                  children: [
-                    TextSpan(
-                      style: TextStyle(color: AppColors.primaryColor),
-                      text: ' Sign In',
-                      recognizer:
-                          TapGestureRecognizer()
-                            ..onTap = () {
-                        Get.toNamed(AppRoutes.login);
-                            },
-                    ),
-                  ],
-                ),
-              ),
+            ClickableRichText(
+              normalText: "Already have an account? ",
+              actionText: "Sign In",
+              normalColor: AppColors.appGreyColor,
+              actionColor: AppColors.primaryColor,
+              onTap: () {
+                Get.toNamed(AppRoutes.login);
+              },
+            ),
               SizedBox(height: 18.h),
             ],
           ),
