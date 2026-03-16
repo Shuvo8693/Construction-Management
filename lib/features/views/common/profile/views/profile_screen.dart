@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      bottomNavigationBar: BottomNavScreen(menuIndex: 3),
+      bottomNavigationBar: BottomNavScreen(menuIndex: 2),
       appBar: CustomAppBar(title: 'Profile'),
       body: Column(
         children: [

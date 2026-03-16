@@ -37,13 +37,17 @@ class TodoCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image Section
-          CustomNetworkImage(
-            borderRadius: 4.r,
-            imageUrl: imageUrl ?? '',
-            width: 83.w,
-            height: 120.h,
-            fit: BoxFit.cover,
-          ),
+          // CustomNetworkImage(
+          //   borderRadius: 4.r,
+          //   imageUrl: imageUrl ?? '',
+          //   width: 83.w,
+          //   height: 120.h,
+          //   fit: BoxFit.cover,
+          // ),
+          SizedBox(
+              width: 83.w,
+              height: 120.h,
+              child: Icon(Icons.picture_as_pdf,size: 40,color: Colors.red,)),
 
           SizedBox(width: 12.w),
 

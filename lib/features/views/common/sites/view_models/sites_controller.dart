@@ -132,6 +132,7 @@ class SitesController extends GetxController {
       switch (result) {
         case Success<String>():
           showSuccess(result.data);
+          getSiteFiles();
         case Failure<String>():
           showError(result.message);
       }

@@ -1,14 +1,27 @@
 import 'package:charteur/core/theme/app_theme.dart';
+import 'package:charteur/services/get_fcm_token.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'core/router/app_router.gr.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await TranslationService().init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  final firebaseService = FirebaseService();
+  await firebaseService.initializeNotifications();
+  await firebaseService.setupFirebaseMessaging();
   runApp(MyApp());
 }
 

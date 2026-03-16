@@ -7,29 +7,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-
-class BottomNavScreen extends StatefulWidget {
+class BottomNavScreen extends StatelessWidget {
   final int menuIndex;
+
   const BottomNavScreen({super.key, this.menuIndex = 0});
 
-  @override
-  State<BottomNavScreen> createState() => _BottomNavScreenState();
-}
+  static const List<Map<String, dynamic>> _navItems = [
+    {"label": "Home"},
+    {"label": "Sites"},
+    {"label": "Profile"},
+  ];
 
-class _BottomNavScreenState extends State<BottomNavScreen> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.menuIndex;
-  }
-
-  void _onItemTapped(int index) {
-    if (_selectedIndex == index) return;
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index, int selectedIndex) {
+    if (selectedIndex == index) return;
 
     switch (index) {
       case 0:
@@ -44,19 +34,14 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     }
   }
 
-  final List<Map<String, dynamic>> _navItems = [
-    {"icon": Assets.icons.home.path, "label": "Home"},
-    {"icon": Assets.icons.plan.path, "label": "Sites"},
-    // {"icon": Assets.icons.assing.path, "label": "Assign Task"},
-    {"icon": Assets.icons.person.path, "label": "Profile"},
-  ];
-
-  final List<Map<String, dynamic>> _navItemsF = [
-    {"icon": Assets.icons.homeF.path, "label": "Home"},
-    {"icon": Assets.icons.planF.path, "label": "Sites"},
-    // {"icon": Assets.icons.assingF.path, "label": "Assign Task"},
-    {"icon": Assets.icons.personF.path, "label": "Profile"},
-  ];
+  String _getIcon(int index, bool isSelected) {
+    final icons = [
+      isSelected ? Assets.icons.homeF.path : Assets.icons.home.path,
+      isSelected ? Assets.icons.planF.path : Assets.icons.plan.path,
+      isSelected ? Assets.icons.personF.path : Assets.icons.person.path,
+    ];
+    return icons[index];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +71,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   }
 
   Widget _buildNavItem(int index) {
-    final bool isSelected = _selectedIndex == index;
+    final bool isSelected = menuIndex == index;
 
     return GestureDetector(
-      onTap: () => _onItemTapped(index),
+      onTap: () => _onItemTapped(index, menuIndex),
       child: CustomContainer(
         paddingAll: 4.r,
         shape: BoxShape.circle,
@@ -97,7 +82,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              isSelected ? _navItemsF[index]["icon"] : _navItems[index]["icon"],
+              _getIcon(index, isSelected),
               width: 20.r,
               height: 20.r,
               colorFilter: ColorFilter.mode(

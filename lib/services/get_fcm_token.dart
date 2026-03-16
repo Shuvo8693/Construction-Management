@@ -132,3 +132,102 @@
 //     }
 //   }
 // }
+
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
+class FirebaseService {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+  Future<String?> getFCMToken() async {
+    try {
+      return await _firebaseMessaging.getToken();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setupFirebaseMessaging() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    // ✅ Required for foreground notifications on iOS
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  Future<void> initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const DarwinInitializationSettings initializationSettingsIOS =
+    DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {},
+
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        // ✅ Only show local notification on Android
+        // iOS already shows it via setForegroundNotificationPresentationOptions
+        if (Platform.isAndroid) {
+          _showNotification(message.notification!);
+        }
+      }
+    });
+  }
+
+  Future<void> _showNotification(RemoteNotification notification) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      channelDescription: 'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      sound: 'default',
+      badgeNumber: 1,
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+
+      id: 0,
+      title: notification.title,
+      body: notification.body,
+      notificationDetails:
+      const NotificationDetails(android: androidDetails, iOS: iosDetails),
+    );
+  }
+}

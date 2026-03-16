@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "699551928181",
+    "project_id": "charteur-15102",
+    "storage_bucket": "charteur-15102.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699551928181:android:37b2d282eb74548ab60d3c",
+        "android_client_info": {
+          "package_name": "com.example.charteur"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyxn7VDQMHfQy8kOAbr7imhEsIzswaJSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

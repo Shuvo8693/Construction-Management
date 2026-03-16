@@ -4,16 +4,12 @@ import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/jwt_decoder/payload_value.dart';
 import 'package:charteur/core/widgets/widgets.dart';
-import 'package:charteur/features/views/admin/home/views/remarks/remarks_screen.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_controller.dart';
 import 'package:charteur/features/views/common/sites/widgets/file_card_widget.dart';
 import 'package:charteur/features/views/common/sites/widgets/todo_card_widget.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_auto_translate/flutter_auto_translate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 
 class FilesScreen extends StatefulWidget {
   const FilesScreen({super.key});
@@ -22,61 +18,141 @@ class FilesScreen extends StatefulWidget {
   State<FilesScreen> createState() => _FilesScreenState();
 }
 
-class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final  _sitesController = Get.find<SitesController>();
+class _FilesScreenState extends State<FilesScreen> with TickerProviderStateMixin {
+   TabController? _tabController;
+  final _sitesController = Get.find<SitesController>();
+
   String _siteId = '';
+  String myId = '';
+  String myRole = '';
+  bool _isInitialized = false;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((__)async{
-      getMyInfo();
-     await _sitesController.getSiteFiles();
-      _tabController.addListener((){
-        switch (_tabController.index) {
-          case 0:
-            _sitesController.getSiteFiles();
-            break;
-          case 1:
-            _sitesController.getSiteTask(status: "To-Do");
-            break;
-          case 2:
-            _sitesController.getSiteTask(status: "In-Progress");
-            break;
-          case 3:
-            _sitesController.getSiteTask(status: "Done");
-            break;
-        }
-      });
-      getSiteId();
+    _getSiteId();
+
+    // Temporary controller to avoid LateInitializationError
+    // _tabController = TabController(length: 3, vsync: this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _getMyInfo();
+      _setupTabController();
     });
   }
 
-  getSiteId(){
-    String siteId = Get.arguments['siteId'] ?? '' ;
-    setState(() {
-      _siteId = siteId;
-    });
+  void _getSiteId() {
+    final siteId = Get.arguments?['siteId'] ?? '';
+    setState(() => _siteId = siteId);
   }
 
-  String myId = '';
-  String myRole = '';
-  getMyInfo()async{
+  Future<void> _getMyInfo() async {
     final payloads = await getPayloadValue();
-    myId = payloads['userId'];
-    myRole = payloads['role'];
-    setState(() {});
+    setState(() {
+      myId = payloads['userId'];
+      myRole = payloads['role'];
+    });
+  }
+
+  void _setupTabController() {
+    // Dispose old temp controller
+    _tabController?.dispose();
+
+    final isAdmin = myRole == 'office_admin';
+    final tabCount = isAdmin ? 4 : 3;
+
+    _tabController = TabController(length: tabCount, vsync: this);
+
+    // Load data for initial tab
+    _loadDataForTab(0);
+
+    // Load data on tab change
+    _tabController?.addListener(() {
+      if (!_tabController!.indexIsChanging) {
+        _loadDataForTab(_tabController!.index);
+      }
+    });
+
+    setState(() => _isInitialized = true);
+  }
+
+  void _loadDataForTab(int index) {
+    final isAdmin = myRole == 'office_admin';
+
+    // ✅ Clear data before loading new tab data
+    _sitesController.fileListModel.value = null;
+    _sitesController.taskListModel.value = null;
+
+    if (isAdmin) {
+      switch (index) {
+        case 0:
+          _sitesController.getSiteFiles();
+          break;
+        case 1:
+          _sitesController.getSiteTask(status: "To-Do");
+          break;
+        case 2:
+          _sitesController.getSiteTask(status: "In-Progress");
+          break;
+        case 3:
+          _sitesController.getSiteTask(status: "Done");
+          break;
+      }
+    } else {
+      // Worker role
+      switch (index) {
+        case 0:
+          _sitesController.getSiteTask(status: "To-Do");
+          break;
+        case 1:
+          _sitesController.getSiteTask(status: "In-Progress");
+          break;
+        case 2:
+          _sitesController.getSiteTask(status: "Done");
+          break;
+      }
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
+  }
+
+  /// Build tabs based on role
+  List<Tab> get _tabs {
+    final isAdmin = myRole == 'office_admin';
+    return [
+      if (isAdmin) const Tab(text: 'Files'),
+      const Tab(text: 'To-Do'),
+      const Tab(text: 'In Progress'),
+      const Tab(text: 'Done'),
+    ];
+  }
+
+  /// Build tab views based on role
+  List<Widget> get _tabViews {
+    final isAdmin = myRole == 'office_admin';
+    return [
+      if (isAdmin) _buildFilesList(),
+      _buildTodoList(status: 'To-Do'),
+      _buildTodoList(status: 'In-Progress'),
+      _buildTodoList(status: 'Done'),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    // Show loader until role is fetched and controller is ready
+    if (!_isInitialized) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final isAdmin = myRole == 'office_admin';
+
     return CustomScaffold(
       appBar: CustomAppBar(title: 'All Files'),
       body: Column(
@@ -84,7 +160,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
           // Tab Bar
           CustomContainer(
             verticalMargin: 12.h,
-              color: AppColors.primaryColor.withAlpha(20),
+            color: AppColors.primaryColor.withAlpha(20),
             radiusAll: 8.r,
             child: TabBar(
               controller: _tabController,
@@ -104,12 +180,7 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
-              tabs: [
-                if(myRole=='office_admin')Tab(text: 'Files'),
-                Tab(text: 'To-do'),
-                Tab(text: 'In Progress'),
-                Tab(text: 'Done'),
-              ],
+              tabs: _tabs,
             ),
           ),
 
@@ -117,32 +188,23 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                // Files Tab
-                if(myRole=='office_admin') _buildFilesList(),
-                // To-do Tab
-                _buildTodoList(status: 'To-Do'),
-                // In Progress Tab
-                _buildTodoList(status: 'In-Progress'),
-                // Done Tab
-                _buildTodoList(status: 'Done'),
-                // Remarks Tab
-                // RemarksScreen(status: 'Remarks'),
-              ],
+              children: _tabViews,
             ),
           ),
         ],
       ),
-      floatingActionButton: myRole == 'office_admin'? AnimatedBuilder(
-        animation: _tabController,
+      floatingActionButton: isAdmin
+          ? AnimatedBuilder(
+        animation: _tabController!,
         builder: (context, _) {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
-            child: _tabController.index == 4
-                ? const SizedBox.shrink()
-                : FloatingActionButton.extended(
+            child: FloatingActionButton.extended(
               key: const ValueKey('fab'),
-              onPressed: () => Get.toNamed(AppRoutes.fileAdd,arguments: {"siteId": _siteId}),
+              onPressed: () => Get.toNamed(
+                AppRoutes.fileAdd,
+                arguments: {"siteId": _siteId},
+              ),
               backgroundColor: AppColors.primaryColor,
               label: const CustomText(
                 text: 'Add File',
@@ -153,66 +215,65 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
             ),
           );
         },
-      ): const SizedBox.shrink(),
+      ) : const SizedBox.shrink(),
     );
   }
 
   Widget _buildFilesList() {
-    return Obx((){
-      final fileData = _sitesController.fileListModel.value?.data??[];
-      if(_sitesController.isLoading.value){
-        return Center(child: CircularProgressIndicator());
+    return Obx(() {
+      final fileData = _sitesController.fileListModel.value?.data ?? [];
+
+      if (_sitesController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
       }
-      else if( fileData.isEmpty){
-        return Center(child: Text('No Data Found'));
+
+      if (fileData.isEmpty) {
+        return const Center(child: Text('No Data Found'));
       }
+
       return RefreshIndicator(
-        onRefresh: () async {
-          await _sitesController.getSiteFiles();
-        },
+        onRefresh: () async => await _sitesController.getSiteFiles(),
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: fileData.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (context, index) {
             return FileCardWidget(
-                onTap: () {
-                  Get.toNamed(AppRoutes.task,arguments: {"fileId": fileData[index].id});
-                },
-                fileData: fileData[index]
+              onTap: () => Get.toNamed(
+                AppRoutes.task,
+                arguments: {"fileId": fileData[index].id},
+              ),
+              fileData: fileData[index],
             );
           },
         ),
       );
-     }
-    );
+    });
   }
-  Widget _buildTodoList({String? status }) {
+
+  Widget _buildTodoList({required String status}) {
     return Obx(() {
-      // Get task list from controller
       final taskData = _sitesController.taskListModel.value?.data ?? [];
 
-      // Show empty indicator if no tasks
       if (_sitesController.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
-      } else if (taskData.isEmpty) {
+      }
+
+      if (taskData.isEmpty) {
         return const Center(child: Text("No tasks available"));
       }
 
       return RefreshIndicator(
-        onRefresh: () async {
-          // Call API again to refresh tasks
-          await _sitesController.getSiteTask(status: status??'');
-        },
+        onRefresh: () async => await _sitesController.getSiteTask(status: status),
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           itemCount: taskData.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (context, index) {
             final task = taskData[index];
-
             return GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRoutes.siteDetails,arguments: {"taskId": task.id,});
-              },
+              onTap: () => Get.toNamed(
+                AppRoutes.siteDetails,
+                arguments: {"taskId": task.id},
+              ),
               child: TodoCardWidget(
                 title: task.title,
                 category: task.fileId.fileType,
@@ -228,7 +289,4 @@ class _FilesScreenState extends State<FilesScreen> with SingleTickerProviderStat
       );
     });
   }
-
-
 }
-
