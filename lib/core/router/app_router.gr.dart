@@ -8,6 +8,7 @@ import 'package:charteur/features/views/admin/home/views/site_details/location_m
 import 'package:charteur/features/views/admin/home/views/site_details/remarks_screen.dart';
 import 'package:charteur/features/views/admin/home/views/site_details/site_details_screen.dart';
 import 'package:charteur/features/views/auth/view_models/auth_bindings.dart';
+import 'package:charteur/features/views/common/notifications/view_models/notification_bindings.dart';
 import 'package:charteur/features/views/common/profile/view_models/profile_bindings.dart';
 import 'package:charteur/features/views/common/profile/views/edit_profile_screen.dart';
 import 'package:charteur/features/views/common/sites/view_models/sites_bindings.dart';
@@ -21,7 +22,7 @@ import 'package:charteur/features/views/auth/views/login/log_in_screen.dart';
 import 'package:charteur/features/views/auth/views/otp/otp_screen.dart';
 import 'package:charteur/features/views/auth/views/reset_pass/reset_password_screen.dart';
 import 'package:charteur/features/views/auth/views/sign_up/sign_up_screen.dart';
-import 'package:charteur/features/views/common/notifications/notifications_screen.dart';
+import 'package:charteur/features/views/common/notifications/views/notifications_screen.dart';
 import 'package:charteur/features/views/common/setting/about_screen.dart';
 import 'package:charteur/features/views/common/setting/change%20password/setting_change_password.dart';
 import 'package:charteur/features/views/common/setting/language_screen.dart';
@@ -182,8 +183,9 @@ class AppPages {
     // ── Notifications ─────────────────────────────────────
     GetPage(
       name: AppRoutes.notifications,
-      page: () => const NotificationsScreen(),
+      page: () =>  NotificationsScreen(),
       transition: Transition.noTransition,
+      binding: NotificationBindings(),
     ),
 
     // ── Profile ───────────────────────────────────────────

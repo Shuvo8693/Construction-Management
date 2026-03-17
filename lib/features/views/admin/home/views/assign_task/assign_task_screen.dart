@@ -7,8 +7,8 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/annotations.dart';
 import 'package:charteur/core/widgets/custom_button.dart';
-import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
-import 'package:charteur/features/views/admin/home/view_models/home_controller.dart';
+import 'package:charteur/features/views/admin/home/repository/notification_repository.dart';
+import 'package:charteur/features/views/admin/home/view_models/notification_controller.dart';
 import 'package:charteur/features/views/admin/home/widgets/assign_worker_sheet.dart';
 import 'package:charteur/features/views/bottom_nav/bottom_nav.dart';
 import 'package:flutter/material.dart';

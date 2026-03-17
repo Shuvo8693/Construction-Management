@@ -31,6 +31,7 @@ class ApiUrls {
   static  const String  updateProfile = '/users/update-profile';
   static  const String  parentCreate = '/parents/parent';
   static  const String  siteUrl = '$baseUrl/site/';
+  static  const String  notificationsUrl = '$baseUrl/notification/';
   static  const String  assignedSiteUrl = '$baseUrl/office-admin/assigned-sites';
   static  const String  siteFileUploadUrl = '$baseUrl/site-file/upload';
   static  const String  siteCreateUrl = '$baseUrl/site/create';

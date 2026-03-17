@@ -1,10 +1,13 @@
+import 'package:charteur/core/helpers/time_format.dart';
 import 'package:charteur/core/theme/app_colors.dart';
 import 'package:charteur/core/widgets/widgets.dart';
+import 'package:charteur/features/views/common/notifications/models/notification_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationCardWidget extends StatelessWidget {
-  const NotificationCardWidget({super.key});
+  const NotificationCardWidget({super.key, required this.notificationData});
+  final NotificationData notificationData;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class NotificationCardWidget extends StatelessWidget {
                   textAlign: TextAlign.start,
                   text: 'New Project Assigned',
                 ),
+                //
                 CustomText(
                   maxline: 2,
                   textOverflow: TextOverflow.ellipsis,
@@ -49,9 +53,10 @@ class NotificationCardWidget extends StatelessWidget {
               ],
             ),
           ),
+          // date time
           CustomText(
             left: 6.w,
-              text: '30 Mins ago', fontSize: 10.sp, color: AppColors.textPrimary),
+              text: TimeFormatHelper.getTimeAgo(DateTime.parse(notificationData.createdAt.toString())), fontSize: 10.sp, color: AppColors.textPrimary),
         ],
       ),
     );
