@@ -5,6 +5,7 @@ import 'package:charteur/core/network/api_results.dart';
 import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/services/api_urls.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AuthRepository {
   final _network = NetworkCaller.instance;
@@ -13,10 +14,11 @@ class AuthRepository {
   Future<ApiResult<String>> login({
     required String email,
     required String password,
+    required String fcmToken,
   }) async {
     final response = await _network.postRequest(
       url: ApiUrls.login,
-      body: {'email': email, 'password': password},
+      body: {'email': email, 'password': password, 'fcmToken':fcmToken},
     );
 
     if (response.isSuccess) {

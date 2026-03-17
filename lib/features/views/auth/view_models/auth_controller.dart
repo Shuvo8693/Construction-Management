@@ -7,6 +7,7 @@ import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/core/router/app_router.dart';
 import 'package:charteur/features/views/auth/models/user_model.dart';
 import 'package:charteur/features/views/auth/repository/auth_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -54,11 +55,13 @@ class AuthController extends GetxController {
   // ── Login ─────────────────────────────────────────────
   Future<void> login() async {
     isLoading.value = true;
+    final fcmToken = await FirebaseMessaging.instance.getToken();
 
     try {
       final result = await _repository.login(
         email: emailCtrl.text.trim(),
         password: passCtrl.text.trim(),
+        fcmToken: fcmToken??'',
       );
 
       switch (result) {

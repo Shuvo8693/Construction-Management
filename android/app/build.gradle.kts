@@ -42,7 +42,7 @@ android {
         }
     }
 }
-
+// ✅ OUTSIDE android block
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "com.android.tools" &&
@@ -51,7 +51,7 @@ configurations.all {
         }
     }
 }
-
+// ✅ OUTSIDE android block
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
