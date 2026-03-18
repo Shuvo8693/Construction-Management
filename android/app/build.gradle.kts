@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.charteur"
+    namespace = "com.billal.charteur.app01"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.charteur"
+        applicationId = "com.billal.charteur.app01"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
         versionCode = flutter.versionCode
