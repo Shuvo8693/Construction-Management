@@ -36,17 +36,17 @@ class NotificationCardWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Type
                 CustomText(
                   textAlign: TextAlign.start,
-                  text: 'New Project Assigned',
+                  text: notificationData.type??'',
                 ),
-                //
+                // Message
                 CustomText(
                   maxline: 2,
                   textOverflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.start,
-                  text:
-                      'You have been assigned to the "Downtown Mall Projects". Please check the details and get started.',
+                  text: notificationData.message ?? '',
                   fontSize: 10.sp,
                   color: AppColors.textSecondary,
                 ),

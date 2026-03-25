@@ -1,12 +1,34 @@
-import 'package:auto_route/annotations.dart';
+
+import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:charteur/core/widgets/custom_text.dart';
 
-class CollaboratorDetailsScreen extends StatelessWidget {
+class CollaboratorDetailsScreen extends StatefulWidget {
   const CollaboratorDetailsScreen({super.key});
 
+  @override
+  State<CollaboratorDetailsScreen> createState() => _CollaboratorDetailsScreenState();
+}
+
+class _CollaboratorDetailsScreenState extends State<CollaboratorDetailsScreen> {
+  WorkerData? workerData;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((__){
+      getWorkerData();
+    });
+  }
+
+  getWorkerData(){
+    workerData = Get.arguments['worker'] as WorkerData?;
+    setState(() {});
+    print("=============Worker Data: ${workerData?.id}");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +61,6 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 24.h),
-
                   // ── Avatar ──────────────────────────────────────────────
                   Center(
                     child: Container(
@@ -50,8 +71,8 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                       ),
                       child: CircleAvatar(
                         radius: 48.r,
-                        backgroundImage: const NetworkImage(
-                          'https://randomuser.me/api/portraits/men/32.jpg',
+                        backgroundImage: NetworkImage(
+                          workerData?.profileImage??'',
                         ),
                       ),
                     ),
@@ -63,19 +84,19 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                   _SectionTitle('Profile Info'),
                   SizedBox(height: 8.h),
                   _InfoCard(
-                    children: [
+                    children:[
                       _InfoRow(icon: Icons.person_outline, text: 'Leslie Alexander'),
                       _Divider(),
                       _InfoRow(
                         icon: Icons.phone_outlined,
-                        text: '+00 123 456 798',
+                        text:  workerData?.phoneNumber??'',
                         isLink: true,
-                        onTap: () => launchUrl(Uri.parse('tel:+00123456798')),
+                        onTap: () => launchUrl(Uri.parse('tel:${workerData?.phoneNumber??''}')),
                       ),
                       _Divider(),
-                      _InfoRow(icon: Icons.mail_outline, text: 'example@gmail.com'),
+                      _InfoRow(icon: Icons.mail_outline, text: workerData?.email??''),
                       _Divider(),
-                      _InfoRow(icon: Icons.location_on_outlined, text: '124/25 LA, Australia'),
+                      _InfoRow(icon: Icons.location_on_outlined, text: workerData?.address??''),
                     ],
                   ),
 
@@ -86,24 +107,28 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                   SizedBox(height: 8.h),
                   _InfoCard(
                     children: [
-                      _InfoRow(icon: Icons.settings_outlined, text: 'Role : ', boldSuffix: 'Painter'),
+                      _InfoRow(icon: Icons.settings_outlined, text: 'Role : ', boldSuffix: workerData?.role??''),
                       _Divider(),
-                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Experience : ', boldSuffix: '3 Years.'),
+                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Experience : ', boldSuffix: '${workerData?.experience??''} Years.'),
+                      _Divider(),
+                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Employment Type : ', boldSuffix: workerData?.employmentType??''),
+                      _Divider(),
+                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Experience Area : ', boldSuffix: workerData?.expertiseArea??''),
                     ],
                   ),
 
                   SizedBox(height: 20.h),
 
                   // ── Work Assignment Details ─────────────────────────────
-                  _SectionTitle('Work Assignment Details'),
-                  SizedBox(height: 8.h),
-                  _InfoCard(
-                    children: [
-                      _InfoRow(icon: Icons.assignment_outlined, text: 'Last Project: ', boldSuffix: 'Down Town Mall Project.'),
-                      _Divider(),
-                      _InfoRow(icon: Icons.construction_outlined, text: 'Currently Working: ', boldSuffix: 'No'),
-                    ],
-                  ),
+                  // _SectionTitle('Work Assignment Details'),
+                  // SizedBox(height: 8.h),
+                  // _InfoCard(
+                  //   children: [
+                  //     _InfoRow(icon: Icons.assignment_outlined, text: 'Last Project : ', boldSuffix: 'Down Town Mall'),
+                  //     _Divider(),
+                  //     _InfoRow(icon: Icons.construction_outlined, text: 'Currently Working: ', boldSuffix: 'No'),
+                  //   ],
+                  // ),
 
                   SizedBox(height: 30.h),
                 ],
@@ -142,24 +167,24 @@ class CollaboratorDetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E7D6B),
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-                    ),
-                    child: const CustomText(
-                      text: 'Assign Task',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                // SizedBox(width: 12.w),
+                // Expanded(
+                //   child: ElevatedButton(
+                //     onPressed: () {},
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color(0xFF2E7D6B),
+                //       foregroundColor: Colors.white,
+                //       padding: EdgeInsets.symmetric(vertical: 14.h),
+                //       elevation: 0,
+                //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+                //     ),
+                //     child: const CustomText(
+                //       text: 'Assign Task',
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w600,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
