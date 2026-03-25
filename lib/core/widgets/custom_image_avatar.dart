@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:charteur/core/helpers/photo_picker_helper.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:charteur/core/theme/app_colors.dart';
@@ -48,16 +49,14 @@ class CustomImageAvatar extends StatelessWidget {
             child: CircleAvatar(
               radius: radius.r,
               backgroundColor: Colors.grey.shade200,
-              child: fileImage != null
-                  ? ClipOval(
+              child: fileImage != null ? ClipOval(
                 child: Image.file(
                   fileImage!,
                   width: 2 * radius.r,
                   height: 2 * radius.r,
                   fit: BoxFit.cover,
                 ),
-              )
-                  : CustomNetworkImage(
+              ) : CustomNetworkImage(
                 boxShape: BoxShape.circle,
                 imageUrl: (image != null && image!.isNotEmpty)
                     ? "$image"
@@ -70,8 +69,8 @@ class CustomImageAvatar extends StatelessWidget {
             bottom: 8.h,
             right: 0,
             child: CustomContainer(
-              onTap: () {
-                FilePickerHelper.showPicker(context: context, onFilePicked: onImagePicked!);
+              onTap: (){
+                FilePickerHelper.showPicker(context: context, onFilePicked: onImagePicked!,fileType: FileType.image);
               },
               paddingAll: 6.r,
               color: AppColors.primaryColor,

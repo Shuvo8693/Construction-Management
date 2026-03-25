@@ -54,12 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   SizedBox(height: 28.h),
                   CustomImageAvatar(
-                    fileImage: imageFile,
-                    onImagePicked: (file) {
-                      imageFile = File(file.path);
-                      setState(() {
-                      });
-                    },
+                    onImagePicked: null,
                     showBorder: true,
                     image: profileData.profileImage,
                     radius: 50.r,

@@ -111,9 +111,9 @@ class _CollaboratorDetailsScreenState extends State<CollaboratorDetailsScreen> {
                       _Divider(),
                       _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Experience : ', boldSuffix: '${workerData?.experience??''} Years.'),
                       _Divider(),
-                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Employment Type : ', boldSuffix: workerData?.employmentType??''),
+                      _InfoRow(icon: Icons.work_history, text: 'Employment Type : ', boldSuffix: workerData?.employmentType??''),
                       _Divider(),
-                      _InfoRow(icon: Icons.workspace_premium_outlined, text: 'Experience Area : ', boldSuffix: workerData?.expertiseArea??''),
+                      _InfoRow(icon: Icons.person_pin_circle_outlined, text: 'Experience Area : ', boldSuffix: workerData?.expertiseArea??''),
                     ],
                   ),
 

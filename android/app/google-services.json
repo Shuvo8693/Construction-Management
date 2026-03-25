@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:699551928181:android:37b2d282eb74548ab60d3c",
+        "mobilesdk_app_id": "1:699551928181:android:ea664253e454d950b60d3c",
         "android_client_info": {
-          "package_name": "com.example.charteur"
+          "package_name": "com.billal.charteur.app01"
         }
       },
       "oauth_client": [],

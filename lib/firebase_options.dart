@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDyxn7VDQMHfQy8kOAbr7imhEsIzswaJSk',
-    appId: '1:699551928181:android:37b2d282eb74548ab60d3c',
+    appId: '1:699551928181:android:ea664253e454d950b60d3c',
     messagingSenderId: '699551928181',
     projectId: 'charteur-15102',
     storageBucket: 'charteur-15102.firebasestorage.app',
@@ -59,11 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDl51WKdKJHimMVH6LfRW3oYEnH43A5nvI',
-    appId: '1:699551928181:ios:d86e5b710fd202d9b60d3c',
+    appId: '1:699551928181:ios:0b3a8629ac69610db60d3c',
     messagingSenderId: '699551928181',
     projectId: 'charteur-15102',
     storageBucket: 'charteur-15102.firebasestorage.app',
-    iosBundleId: 'com.example.charteur',
+    iosBundleId: 'com.billal.charteur.app01',
   );
-
 }

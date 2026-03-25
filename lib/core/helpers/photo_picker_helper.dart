@@ -12,6 +12,7 @@ class FilePickerHelper {
   static void showPicker({
     required BuildContext context,
     required Function(XFile file) onFilePicked,
+    FileType fileType = FileType.custom
   }) {
     showModalBottomSheet(
       context: context,
@@ -37,9 +38,10 @@ class FilePickerHelper {
                 children: [
                   _buildOption(
                     context,
-                    icon: Icons.picture_as_pdf,
-                    label: 'File',
+                    icon: fileType == FileType.custom ? Icons.picture_as_pdf: Icons.image,
+                    label: fileType == FileType.custom ? 'File': 'Image',
                     onFilePicked: onFilePicked,
+                    fileType: fileType
                   ),
                   // _buildOption(
                   //   context,
@@ -69,12 +71,12 @@ class FilePickerHelper {
       BuildContext context, {
         required IconData icon,
         required String label,
-         FileType? source,
+         FileType? fileType,
         required Function(XFile file) onFilePicked,
       }) {
     return InkWell(
       onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(type: source?? FileType.custom, allowedExtensions:["pdf"] );
+        FilePickerResult? result = await FilePicker.platform.pickFiles(type: fileType?? FileType.custom, /*allowedExtensions:["pdf"]*/ );
         // final XFile? file = await _picker.pickImage(source: source);
         Navigator.pop(context);
         // if (file != null) onImagePicked(file);
