@@ -63,6 +63,11 @@ dev_dependencies:
   flutter_gen_runner:
   flutter_launcher_icons: ^0.14.4
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/charteur_logo.png"  # your logo path
+
 
 flutter_gen:
   output: lib/assets/ # Optional (default: lib/gen/)
