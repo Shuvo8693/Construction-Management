@@ -1,19 +1,8 @@
 // features/auth/view_models/auth_controller.dart
-
 import 'package:charteur/core/helpers/show_response_toast.dart';
 import 'package:charteur/core/network/api_results.dart';
-import 'package:charteur/features/views/admin/home/models/comment_response_model.dart';
-import 'package:charteur/features/views/admin/home/models/file_details_view_model.dart';
-import 'package:charteur/features/views/admin/home/models/remarks_response_model.dart';
-import 'package:charteur/features/views/admin/home/models/site_details_responsemodel.dart';
-import 'package:charteur/features/views/admin/home/models/sitelist_response_model.dart';
-import 'package:charteur/features/views/admin/home/models/workerlist_response_model.dart';
-import 'package:charteur/features/views/admin/home/repository/home_repository.dart';
 import 'package:charteur/features/views/common/notifications/models/notification_response_model.dart';
 import 'package:charteur/features/views/common/notifications/repository/notification_repository.dart';
-import 'package:charteur/features/views/common/profile/repository/profile_repository.dart';
-import 'package:charteur/features/views/common/profile/view_models/profile_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends GetxController {

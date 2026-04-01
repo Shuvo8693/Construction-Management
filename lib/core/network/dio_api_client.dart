@@ -1,8 +1,9 @@
 import 'package:charteur/core/config/app_constants.dart';
 import 'package:charteur/core/helpers/prefs_helper.dart';
-import 'package:charteur/core/network/network_response_model.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+
+import 'network_response_model.dart';
 
 // ============================================================================
 // LOGGER CONFIGURATION

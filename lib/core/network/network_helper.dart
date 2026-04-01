@@ -220,7 +220,7 @@ class _ErrorInterceptor extends Interceptor {
 
 /// ====================== example ===========================
 
-example()async{
+void example()async{
   // Simple GET
   final response = await DioHelper.get('posts', queryParameters: {'page': 1});
 
