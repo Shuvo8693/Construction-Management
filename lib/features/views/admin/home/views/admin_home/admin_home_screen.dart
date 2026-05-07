@@ -11,6 +11,7 @@ import 'package:charteur/features/views/common/sites/widgets/site_card_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:smart_svg_image/smart_svg_image.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -127,12 +128,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               ],
             ),
           ),
-
+          // SmartSvgImage(svgAssetPath:'assets/images/kario_img.svg'),
           SizedBox(height: 20.h),
           Row(
             children: [
               CustomText(text: 'Your Sites', fontSize: 16.sp, color: AppColors.textPrimary),
               Spacer(),
+
               // InkWell(
               //     onTap: () {
               //       // context.read<BottomNavProvider>().setSelectedIndex(1);

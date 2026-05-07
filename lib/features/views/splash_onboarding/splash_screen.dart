@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:smart_svg_image/smart_svg_image.dart';
 
-@RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -50,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
           SizedBox(),
           Center(child: Assets.icons.slpashLogo.svg(height: 44.h, width: 299.w)),
           CircleLoader(),
+
         ],
       ),
     );

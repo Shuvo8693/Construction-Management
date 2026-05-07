@@ -1485,6 +1485,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  smart_svg_image:
+    dependency: "direct main"
+    description:
+      name: smart_svg_image
+      sha256: fecdae6dce95c42ffafaacebbffccffdfc5f6cb577083e3c4173ca4816ed7c3e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   smooth_page_indicator:
     dependency: "direct main"
     description:

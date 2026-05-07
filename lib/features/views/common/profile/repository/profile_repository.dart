@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:charteur/core/network/api_results.dart';
@@ -6,19 +5,20 @@ import 'package:charteur/core/network/dio_api_client.dart';
 import 'package:charteur/features/views/common/profile/models/profile_response_model.dart';
 import 'package:charteur/services/api_urls.dart';
 
-
-
 class ProfileRepository {
   final _network = NetworkCaller.instance;
 
   Future<ApiResult<ProfileResponseModel>> getProfile() async {
     final response = await _network.getRequest(url: ApiUrls.profileUrl);
     if (response.isSuccess) {
-      return ApiResult.success(ProfileResponseModel.fromJson(response.responseBody));
+      return ApiResult.success(
+        ProfileResponseModel.fromJson(response.responseBody),
+      );
     }
-    return ApiResult.failure(response.errorMassage ?? 'Failed to get profile');
+    return ApiResult.failure(response.errorMassage);
   }
-// {
+
+  // {
   //   "name": "John Doe",
   //   "phoneNumber": "+1234567890",
   //   "address": "123 Main Street, New York, USA",
@@ -47,13 +47,13 @@ class ProfileRepository {
         if (filePath != null)
           "image": await _network.toMultipartFile(filePath, fileName: fileName),
         "data": jsonEncode({
-          "name":           fullName,
-          "phone":          phone,
-          "email":          email,
-          "address":        address,
+          "name": fullName,
+          "phone": phone,
+          "email": email,
+          "address": address,
           "employmentType": employmentType,
-          "expertiseArea":  expertise,
-          "experience":     experience,
+          "expertiseArea": expertise,
+          "experience": experience,
         }),
       },
     );
